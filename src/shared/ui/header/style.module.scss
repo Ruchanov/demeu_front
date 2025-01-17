@@ -1,0 +1,44 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+  
+.nav {
+    margin-left: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    gap: 32px;
+}
+  
+.navLink {
+    font-size: 25px;
+    text-decoration: none;
+    color: #3E7D82;
+    transition: color 0.2s;
+}
+
+  
+.languageSwitcher {
+    display: flex;
+    gap: 16px;
+  
+    button {
+        background-color: transparent;
+        font-size: 20px;
+        padding: 8px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s;
+        color: #76D0C2;
+  
+        &.active {
+            background-color: #00a99d;
+            color: #fff;
+            border-radius: 4px;
+            padding: 8px 16px;
+        }
+    }
+}
+  
