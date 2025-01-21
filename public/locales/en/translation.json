@@ -1,6 +1,17 @@
 {
   "news": "News",
   "search": "Search",
-  "info": "Information"
+  "info": "Information",
+  "enter_email": "Enter Email",
+  "enter_password": "Enter the password",
+  "forgot_password": "Forgot your password?",
+  "loading...": "Loading...",
+  "login": "Login",
+  "enter_name": "Enter your name",
+  "enter_surname": "Enter your surname",
+  "enter_phone_number": "Enter phone number",
+  "confirm_password": "Confirm password",
+  "register": "Register",
+  "passwords_do_not_match": "Passwords do not match"
 }
   

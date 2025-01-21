@@ -4,9 +4,11 @@ import RegisterForm from '../../components/registerForm/registerFrom';
 import styles from './authorization.module.scss';
 import Header from '../../shared/ui/header';
 import IconSvg from '../../shared/assets/icons/Icon';
+import { useTranslation } from 'react-i18next';
 
 const AuthorizationPage = () => {
   const [isLogin, setIsLogin] = useState(true); 
+  const {t} = useTranslation();
 
   const handleTabClick = (isLoginTab: boolean) => {
     setIsLogin(isLoginTab);
@@ -20,13 +22,13 @@ const AuthorizationPage = () => {
             className={`${styles.tab} ${isLogin ? styles.active : ''}`}
             onClick={() => handleTabClick(true)}
           >
-            Кіру
+            {t('login')}
           </button>
           <button
             className={`${styles.tab} ${!isLogin ? styles.active : ''}`}
             onClick={() => handleTabClick(false)}
           >
-            Тіркелу
+            {t('register')}
           </button>
         </div>
         <div className={styles.form}>
@@ -34,9 +36,12 @@ const AuthorizationPage = () => {
         </div>
       </div>
       <div className={styles.rightSide}>
-        <IconSvg name={'demeu_logo'} width="150px" height="150px" />
-        <div className={`${styles.semicircles} ${styles.semicircle1}`} />
-        <div className={`${styles.semicircles} ${styles.semicircle2}`} />
+        <div className={`${styles.circle} ${styles.circle1}`} />
+        <div className={`${styles.circle} ${styles.circle2}`} />
+        <div className={`${styles.circle} ${styles.circle3}`} />
+        <div className={styles.rightSideContent}>
+          <IconSvg name="demeu_logo" width="380px" height="350px" />
+        </div>
       </div>
     </div>
   );

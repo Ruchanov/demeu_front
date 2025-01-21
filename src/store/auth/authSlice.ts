@@ -24,11 +24,11 @@ export const login = createAsyncThunk<
 
 export const register = createAsyncThunk<
   any,
-  { email: string; password: string; phone: string },
+  { name: string; surname: string; email: string; password: string; confirmPassword: string },
   { rejectValue: RejectValue }
->('auth/register', async ({ email, password, phone }, thunkAPI) => {
+>('auth/register', async ({ name, surname, email, password, confirmPassword }, thunkAPI) => {
   try {
-    const response = await registerRequest(email, password, phone);
+    const response = await registerRequest(name, surname, email, password, confirmPassword);
     return response;
   } catch (err: any) {
     return thunkAPI.rejectWithValue(err.response?.data?.message || 'Ошибка регистрации');

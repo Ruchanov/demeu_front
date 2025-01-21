@@ -1,6 +1,17 @@
 {
   "news": "Новости",
   "search": "Поиск",
-  "info": "Информация"
+  "info": "Информация",
+  "enter_email": "Введите Email",
+  "enter_password": "Введите пароль",
+  "forgot_password": "Забыли пароль?",
+  "loading...": "Загрузка...",
+  "login": "Войти",
+  "enter_name": "Введите имя",
+  "enter_surname": "Введите фамилию",
+  "enter_phone_number": "Введите номер телефона",
+  "confirm_password": "Подтвердите пароль",
+  "register": "Зарегистрироваться",
+  "passwords_do_not_match": "Пароли не совпадают"
 }
   

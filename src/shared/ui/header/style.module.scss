@@ -3,6 +3,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 5px;
+    position: relative;
+    z-index: 5;
 }
   
 .nav {
@@ -13,7 +15,7 @@
 }
   
 .navLink {
-    font-size: 25px;
+    font-size: 20px;
     text-decoration: none;
     color: #3E7D82;
     transition: color 0.2s;
@@ -26,7 +28,7 @@
   
     button {
         background-color: transparent;
-        font-size: 20px;
+        font-size: 18px;
         padding: 8px;
         border: none;
         cursor: pointer;
