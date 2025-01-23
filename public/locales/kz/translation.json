@@ -12,7 +12,12 @@
   "enter_phone_number": "Телефон нөмірін енгізіңіз",
   "confirm_password": "Құпиясөзді растаңыз",
   "register": "Тіркелу",
-  "passwords_do_not_match": "Құпиясөздер сәйкес келмейді"
-
+  "passwords_do_not_match": "Құпиясөздер сәйкес келмейді",
+  "profile": "Профиль",
+  "aboutUs": "Біз туралы",
+  "settings": "Параметрлер",
+  "privacy_rules": "Құпиялылық саясаты және пайдалану шарттары",
+  "tech_support": "Техникалық қолдау",
+  "logout": "Шығу"
 }
   

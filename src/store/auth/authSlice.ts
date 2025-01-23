@@ -1,8 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import { loginRequest, registerRequest } from './authApi';
+import store from "../../app/store";
+
 
 interface AuthState {
-  user: any; 
+  isAuthenticated: boolean;
+  user: any | null;
+
   loading: boolean;
   error: string | null;
 }
@@ -16,7 +20,9 @@ export const login = createAsyncThunk<
 >('auth/login', async ({ email, password }, thunkAPI) => {
   try {
     const response = await loginRequest(email, password);
-    return response;
+    localStorage.setItem('token', response.token);
+    dispatch(login(response.user));
+    return response.user;
   } catch (err: any) {
     return thunkAPI.rejectWithValue(err.response?.data?.message || 'Ошибка входа');
   }
@@ -37,6 +43,7 @@ export const register = createAsyncThunk<
 
 
 const initialState: AuthState = {
+  isAuthenticated: false,
   user: null,
   loading: false,
   error: null,
@@ -47,9 +54,13 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    login(state, action: PayloadAction<any>) {
+      state.isAuthenticated = true;
+      state.user = action.payload;
+    },
     logout(state) {
+      state.isAuthenticated = false;
       state.user = null;
-      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -60,7 +71,10 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
+        state.isAuthenticated = true;
         state.user = action.payload;
+        localStorage.setItem('user', JSON.stringify(action.payload));
+        localStorage.setItem('token', action.payload.token);
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

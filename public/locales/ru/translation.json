@@ -12,6 +12,12 @@
   "enter_phone_number": "Введите номер телефона",
   "confirm_password": "Подтвердите пароль",
   "register": "Зарегистрироваться",
-  "passwords_do_not_match": "Пароли не совпадают"
+  "passwords_do_not_match": "Пароли не совпадают",
+  "profile": "Профиль",
+  "aboutUs": "О нас",
+  "settings": "Параметры",
+  "privacy_rules": "Политика конфиденциальности и условия использования",
+  "tech_support": "Техническая поддержка",
+  "logout": "Выйти"
 }
   
