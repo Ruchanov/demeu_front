@@ -5,10 +5,12 @@ import styles from './authorization.module.scss';
 import Header from '../../shared/ui/header';
 import IconSvg from '../../shared/assets/icons/Icon';
 import { useTranslation } from 'react-i18next';
+import {useSelector} from "react-redux";
 
 const AuthorizationPage = () => {
-  const [isLogin, setIsLogin] = useState(true); 
+  const [isLogin, setIsLogin] = useState(true);
   const {t} = useTranslation();
+  const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
 
   const handleTabClick = (isLoginTab: boolean) => {
     setIsLogin(isLoginTab);

@@ -12,6 +12,12 @@
   "enter_phone_number": "Enter phone number",
   "confirm_password": "Confirm password",
   "register": "Register",
-  "passwords_do_not_match": "Passwords do not match"
+  "passwords_do_not_match": "Passwords do not match",
+  "profile": "Profile",
+  "aboutUs": "About us",
+  "settings": "Settings",
+  "privacy_rules": "Privacy Policy and terms of use",
+  "tech_support": "Technical support",
+  "logout": "Logout"
 }
   
