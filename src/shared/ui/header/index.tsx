@@ -11,17 +11,17 @@ import {AppDispatch} from "../../../app/store";
 export const Header = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
-  // const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
-  const isAuthenticated = true
+  const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
+  // const isAuthenticated = true
   const user = useSelector((state: any) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Удаляем токен из localStorage
-    dispatch(logout()); // Обновляем состояние в Redux
-    setIsMenuOpen(false); // Закрываем меню
-    navigate('/'); // Перенаправляем на главную страницу
+    localStorage.removeItem('token');
+    dispatch(logout());
+    setIsMenuOpen(false);
+    navigate('/');
   };
   const handleToggleMenu = () => {
         setIsMenuOpen((prev) => !prev);
