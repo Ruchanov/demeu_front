@@ -2,22 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import './app/locales/i18n'
+import './app/locales/i18n';
 import 'virtual:svg-icons-register';
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './app/store';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </React.StrictMode>
 );
-

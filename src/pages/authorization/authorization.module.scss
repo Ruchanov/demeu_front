@@ -1,98 +1,166 @@
 .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: calc(100vh - 80px);
-    position: relative; 
-    overflow: hidden; 
-    z-index: 1;
-}
-  
-.leftSide {
-    width: 50%;
-    display: flex;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: calc(100vh - 80px);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+
+  @media (max-width: 768px) {
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding-top: 4rem;
+    height: 100vh;
+    padding: 0 10px;
+  }
 }
-  
+
+/* Левая часть (форма входа) */
+.leftSide {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Верхняя часть с кнопками входа/регистрации */
 .tabs {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    margin-left: 5rem;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    gap: 12px;
+    margin-bottom: 15px;
+  }
 }
-  
+
 .tab {
-    font-size: 20px;
-    color: #aaa;
-    border: none;
-    background: none;
-    cursor: pointer;
-    position: relative;
+  font-size: 20px;
+  color: #aaa;
+  border: none;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 }
-  
+
 .tab:hover {
-    color: #0078be;
+  color: #0078be;
 }
-  
+
 .active {
-    color: #0078be;
-    font-weight: bold;
+  color: #0078be;
+  font-weight: bold;
+  text-decoration: underline;
 }
-  
-  
+
+/* Форма */
 .form {
-    margin-top: 24px;
+  width: 100%;
+  max-width: 400px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 }
-  
+
+.button {
+  background-color: #0078be;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background 0.3s;
+
+  &:hover {
+    background-color: #005f9e;
+  }
+}
+
+.forgotPassword {
+  color: #0078be;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: right;
+  margin-top: -10px;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #005f9e;
+  }
+}
+.rightSide {
+  height: 100%;
+  width: 50%;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+
+}
 
 .rightSideContent {
-    z-index: 4;
-    margin-top: 10vh;
+  z-index: 4;
+  margin-top: 5vh;
 
-  }
-  
-  .circle {
-    position: absolute;
-    z-index: 0;
-  }
-  
-  .circle1 {
-    width: 60vw;
-    height: 100vh;
-    top: 0;
-    right: -50%;
-    border-radius: 50%;
-    background-color: #C4EBE4;
-    z-index: 1;
-  }
-  
-  .circle3 {
-    width: 60vw;
-    height: 100vh;
-    top: 0;
-    right: -70%;
-    border-radius: 50%;
-    background-color: #76D0C2;
-    z-index: 3;
-  }
-  .circle2 {
-    width: 60vw;
-    height: 100vh;
-    top: 0;
-    right: -60%;
-    border-radius: 50%;
-    background-color: #99DDD0;
-    z-index: 2;
-  }
-  .rightSide {
-    height: 100%;
-    width: 50%;
-    position: relative;
-    display: flex;
-    justify-content: flex-end;
-    align-items:center;
-    overflow: hidden;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 1;
+
+}
+
+.circle1 {
+  width: 60vw;
+  height: 100vh;
+  top: 0;
+  right: -50%;
+  background-color: #C4EBE4;
+  z-index: 1;
+
+}
+
+.circle2 {
+  width: 60vw;
+  height: 100vh;
+  top: 0;
+  right: -60%;
+  background-color: #99DDD0;
+  z-index: 2;
+
+}
+
+.circle3 {
+  width: 60vw;
+  height: 100vh;
+  top: 0;
+  right: -70%;
+  background-color: #76D0C2;
+  z-index: 3;
+
 }
