@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import LoginForm from '../../components/loginForm/loginForm';
-import RegisterForm from '../../components/registerForm/registerFrom';
+import RegisterForm from '../../components/registerForm/registerForm';
 import styles from './authorization.module.scss';
 import Header from '../../shared/ui/header';
 import IconSvg from '../../shared/assets/icons/Icon';
 import { useTranslation } from 'react-i18next';
-import {useSelector} from "react-redux";
+import {useAuthStore} from "../../store/authStore";
+import {useNavigate} from "react-router-dom";
+import useCheckMobileScreen from "../../shared/lib/mobile_check";
 
 const AuthorizationPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const {t} = useTranslation();
-  const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
-
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+  const isMobile = useCheckMobileScreen();
   const handleTabClick = (isLoginTab: boolean) => {
     setIsLogin(isLoginTab);
   };
+  useEffect(() => {
+    console.log('isAuthenticated:', isAuthenticated);
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
 
   return (
     <div className={styles.container}>
@@ -37,14 +47,17 @@ const AuthorizationPage = () => {
           {isLogin ? <LoginForm /> : <RegisterForm />}
         </div>
       </div>
-      <div className={styles.rightSide}>
-        <div className={`${styles.circle} ${styles.circle1}`} />
-        <div className={`${styles.circle} ${styles.circle2}`} />
-        <div className={`${styles.circle} ${styles.circle3}`} />
-        <div className={styles.rightSideContent}>
-          <IconSvg name="demeu_logo" width="380px" height="350px" />
-        </div>
-      </div>
+      {!isMobile &&(
+          <div className={styles.rightSide}>
+            <div className={`${styles.circle} ${styles.circle1}`} />
+            <div className={`${styles.circle} ${styles.circle2}`} />
+            <div className={`${styles.circle} ${styles.circle3}`} />
+            <div className={styles.rightSideContent}>
+              <IconSvg name="demeu_logo" width="380px" height="350px" />
+            </div>
+          </div>
+      )}
+
     </div>
   );
 };

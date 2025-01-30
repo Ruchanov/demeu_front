@@ -6,26 +6,29 @@
     position: relative;
     z-index: 5;
     background-color: #76D0C2;
-
+    @media(max-width: 768px) {
+        width: 100vw;
+        min-width: 100%;
+    }
 }
-  
 .nav {
     margin-left: 1.5rem;
     flex-grow: 1;
     display: flex;
     gap: 32px;
     flex-grow: 1;
-
+    @media(max-width: 768px) {
+        margin-left: 0;
+        gap: 15px;
+        justify-content: space-evenly;
+    }
 }
-  
 .navLink {
     font-size: 20px;
     text-decoration: none;
     transition: color 0.2s;
     color: white;
 }
-
-
 
 .authLink {
     color: white;
@@ -35,15 +38,16 @@
     text-decoration: none;
     transition: color 0.2s;
 }
+
 .userMenu {
     position: relative;
 }
+
 .userMenuButton {
     background: none;
     border: none;
     cursor: pointer;
 }
-
 
 .dropdownMenu {
     position: absolute;
@@ -56,7 +60,6 @@
     min-width: 200px;
     display: flex;
     flex-direction: column;
-    //padding: 10px 0;
 }
 
 .dropdownItem {
@@ -80,6 +83,7 @@
     }
 }
 .logoutItem {
+    border-radius: 15px;
     border: none;
     font-size: 16px;
     padding: 10px 0px 10px 10px;
@@ -103,26 +107,72 @@
         flex-shrink: 0;
     }
 }
-
 .languageSwitcher {
-    display: flex;
-    gap: 16px;
-  
-    button {
+    position: relative;
+    display: inline-block;
+
+    .currentLanguage {
         background-color: transparent;
         font-size: 18px;
         padding: 8px;
         border: none;
         cursor: pointer;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         transition: background-color 0.2s, color 0.2s;
-        color: #76D0C2;
 
-        &.active {
-            background-color: #00a99d;
+        &::after {
+            content: '▼';
+            font-size: 17px;
+            margin-left: -1vw;
             color: #fff;
-            border-radius: 4px;
+        }
+
+        &:hover {
+            color: #00a99d;
+        }
+    }
+
+    .languageMenu {
+        position: absolute;
+        top: 100%;
+        right: 1vw;
+        background-color: #C4EBE4;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        min-width: 120px;
+        z-index: 10;
+        &.open {
+            display: block;
+        }
+
+        .languageOption {
             padding: 8px 16px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &:hover {
+                background-color: #76D0C2;
+                color: #fff;
+            }
+
+            &.active {
+                font-weight: bold;
+                color: #00a99d;
+
+                &::after {
+                    content: '✔';
+                    font-size: 12px;
+                    margin-left: auto;
+                }
+            }
         }
     }
 }
-  

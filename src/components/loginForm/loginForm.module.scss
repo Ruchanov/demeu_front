@@ -3,7 +3,12 @@
     max-width: 500px;
     margin: 0 auto;
     padding: 40px;
-}
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+
+
+  }
   
 .form {
     display: flex;  
