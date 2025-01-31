@@ -1,0 +1,157 @@
+.container {
+  background: #C4EBE4;
+  padding: 20px;
+  border-radius: 20px;
+  max-width: 677px;
+  margin: auto;
+  text-align: center;
+  position: relative;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+}
+
+.backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.linkContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.linkInput {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 1rem;
+}
+
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #0078be;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #005f9a;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    fill: white;
+  }
+}
+
+
+.description {
+  margin: 15px 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+}
+
+.socialIcons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.socialButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 25px;
+  color: #000;
+  transition: all 0.2s;
+  width: 100%;
+  justify-content: flex-start;
+  text-decoration: none;
+
+  &:hover {
+    color: #0078be;
+    transform: scale(1.05);
+  }
+
+  svg {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.footerText {
+  font-size: 20px;
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 10px;
+  }
+
+  .socialIcons {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .copyButton {
+    font-size: 0.8rem;
+    padding: 8px 15px;
+  }
+
+  .socialButton {
+    font-size: 20px;
+  }
+
+  .footerText {
+    font-size: 18px;
+  }
+}

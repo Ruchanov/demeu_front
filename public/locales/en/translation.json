@@ -20,6 +20,24 @@
   "tech_support": "Technical support",
   "logout": "Logout",
   "categories": "Categories",
-  "favorites": "Favorites"
+  "favorites": "Favorites",
+  "charity_for_categories": "Charity Categories on Demeu",
+  "description": "Explore ways to raise funds on Demeu.",
+  "medical": "Medical",
+  "emergency": "Emergency",
+  "charity": "Charity",
+  "education": "Education",
+  "ecology": "Ecology",
+  "sports": "Sports",
+  "animals": "Animals",
+  "cancer": "Cancer",
+  "general_fundraising": "General Fundraising",
+  "share_message": "\uD83E\uDD1D Share the good! \uD83E\uDDE1 Support our charity campaign and help those who need your help. ✨ For details, follow the link:",
+  "copy_link": "Copy link",
+  "share": "Share",
+  "link_copied_success": "Link copied successfully!",
+  "link_copied_failure": "Failed to copy link. Please try again.",
+  "share_description": "Share the post and help!",
+  "footer_text": "Sharing this post will help notify kind people about those who need support. One share – one hope!"
 }
   

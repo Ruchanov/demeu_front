@@ -1,0 +1,132 @@
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 1s ease-in-out; // Плавная смена фона
+}
+
+
+.overlay {
+  background: rgba(255, 255, 255, 0.8); // Белый полупрозрачный фон
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  max-width: 80%;
+  text-align: center;
+  margin-top: 20px; // Отступ от хедера
+}
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.subtitle {
+  font-size: 16px;
+  line-height: 24px;
+  color: #555;
+  //margin-bottom: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.categoryWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px; /* 69px по вертикали, 68px по горизонтали */
+  justify-content: center; /* Центрируем карточки */
+  margin: 69px auto; /* Отступы сверху и снизу */
+  padding: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+}
+
+.categoryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7FE0C9, #49C2A7); // Градиент
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media (max-width: 960px) {
+  .categoryWrapper {
+    grid-template-columns: repeat(2, 1fr); /* Переход на 2 колонки */
+    justify-content: center; /* Центрируем карточки */
+  }
+}
+@media (max-width: 720px) {
+  .categoryWrapper {
+    grid-template-columns: repeat(2, 1fr); /* Переход на 2 колонки */
+  }
+}
+
+@media (max-width: 425px) {
+  .categoryWrapper {
+    grid-template-columns: repeat(2, 1fr); /* Две колонки */
+    justify-content: center; /* Центрируем карточки */
+    padding: 0 90px; /* Отступы от краёв экрана */
+  }
+}
+
+@media (max-width: 375px) {
+  .categoryWrapper {
+    grid-template-columns: repeat(2, 1fr); /* Две колонки */
+    justify-content: center; /* Центрируем карточки */
+    padding: 0 120px; /* Отступы от краёв экрана */
+  }
+}
+
+@media (max-width: 320px) {
+  .categoryWrapper {
+    grid-template-columns: repeat(2, 1fr); /* Две колонки */
+    justify-content: center; /* Центрируем карточки */
+    padding: 0 160px; /* Отступы от краёв экрана */
+  }
+}
+.categoryCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Увеличение тени при наведении */
+}
+
+.icon {
+  font-size: 24px; /* Размер иконки */
+  //margin-bottom: 10px; /* Отступ между иконкой и текстом */
+  margin-top: 20px; /* Добавляем отступ сверху */
+  color: #0078be; /* Цвет иконки */
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px); // Подпрыгивание вверх
+  }
+}
+
+.centerText {
+  grid-column: 2 / span 1; /* Разместить текст в центральной колонке */
+  grid-row: 2; /* Разместить текст на второй строке */
+  align-self: center; /* Вертикальное центрирование */
+  font-family: "Montserrat", sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #0078be;
+  text-align: center;
+  margin: 0;
+}
