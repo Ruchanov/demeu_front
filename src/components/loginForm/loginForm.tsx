@@ -4,6 +4,7 @@ import Button from '../../shared/ui/button/button';
 import styles from './loginForm.module.scss';
 import { useTranslation } from 'react-i18next';
 import {useAuthStore} from "../../store/authStore";
+import {Link} from "react-router-dom";
 
 const LoginForm = () => {
     const { t } = useTranslation();
@@ -39,7 +40,9 @@ const LoginForm = () => {
                     iconName="passwordIcon"
                 />
                 <div className={styles.submitTools}>
-                    <h3>{t('forgot_password')}</h3>
+                    <Link to="/forgot-password">
+                        <h3>{t('forgot_password')}</h3>
+                    </Link>
                     <Button type="submit" disabled={loading}>
                         {loading ? t('loading...') : t('login')}
                     </Button>

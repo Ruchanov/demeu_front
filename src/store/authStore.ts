@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { loginRequest, registerRequest } from '../api/authApi';
+import {loginRequest, registerRequest, requestPasswordReset, resetPasswordRequest} from '../api/authApi';
 
 interface AuthState {
     user: any | null;
@@ -11,6 +11,11 @@ interface AuthState {
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, surname: string, email: string, password: string, confirmPassword: string) => Promise<void>;
     logout: () => void;
+    requestPasswordReset: (email: string) => Promise<void>;
+    resetPassword: (token: string, newPassword: string, confirmPassword: string) => Promise<void>;
+
+
+
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -48,5 +53,27 @@ export const useAuthStore = create<AuthState>((set) => ({
     logout: () => {
         localStorage.removeItem('token');
         set({ user: null, token: null, isAuthenticated: false });
+    },
+    requestPasswordReset: async (email) => {
+        set({ loading: true, error: null, successMessage: null });
+        try {
+            const response = await requestPasswordReset(email);
+            set({ successMessage: response.message, loading: false });
+            return response;
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'Password reset request failed';
+            set({ error: errorMessage, loading: false });
+            return { success: false, err: errorMessage };
+        }
+    },
+
+    resetPassword: async (token, newPassword, confirmPassword) => {
+        set({ loading: true, error: null, successMessage: null });
+        try {
+            await resetPasswordRequest(token, newPassword, confirmPassword);
+            set({ successMessage: "Password has been reset successfully.", loading: false });
+        } catch (error) {
+            set({ error: error.message || 'Password reset failed', loading: false });
+        }
     }
 }));
