@@ -26,11 +26,24 @@ export const registerRequest = async (first_name: string, last_name: string, ema
   }
 };
 
-export const refreshTokenRequest = async (refreshToken: string) => {
+
+export const requestPasswordReset = async (email: string) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/token/refresh/`, { refresh: refreshToken });
+    const response = await axios.post(`${API_BASE_URL}/request-password-reset/`, { email });
     return response.data;
   } catch (error) {
-    throw error.response?.data || 'Token refresh failed';
+    throw error.response?.data || 'Password reset request failed';
+  }
+};
+
+export const resetPasswordRequest = async (token: string, newPassword: string, confirmPassword: string) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/reset-password/${token}/`, {
+      new_password: newPassword,
+      confirm_password: confirmPassword,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || 'Password reset failed';
   }
 };
