@@ -1,0 +1,256 @@
+.container {
+  display: flex;
+  border-bottom: 2px solid #ddd;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.profileContent {
+  display: flex;
+  width: 90%;
+  max-width: 1100px;
+  border-radius: 12px;
+  padding: 20px;
+  align-items: stretch;
+}
+
+.leftSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 2px solid #ddd;
+  height: 100%;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0px;
+}
+
+h2 {
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.userLocation {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 8px;
+  margin-top: 0px;
+}
+
+.createPostContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.createPost {
+  background: linear-gradient(90deg, #49C2A7, #3E7D82);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.plusIcon {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35px;
+  height: 35px;
+  background: #99DDD0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.createPostContainer:hover {
+  opacity: 0.9;
+}
+
+.rightSide {
+  flex: 2;
+  padding-left: 40px;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  height: 100%;
+}
+
+.contactInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contactInfo p {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.birthDate {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.userBio {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  align-self: end;
+  padding-top: 30px;
+}
+
+.socialIcons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  transition: 0.3s;
+}
+
+.socialIcons a:hover {
+  transform: scale(1.1);
+}
+
+.changeIcon {
+  cursor: pointer;
+  margin-left: 10px;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.changeIcon:hover {
+  opacity: 1;
+}
+
+.postsContainer {
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+  border-top: 2px solid #ddd;
+}
+
+.postsContainer h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.postsPlaceholder {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  color: #aaa;
+  font-size: 18px;
+}
+
+.desktopOnly {
+  display: flex;
+}
+
+.desktopEdit{
+  display: flex;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.mobileEdit{
+  display: none;
+  position: absolute;
+  top: 90px;
+  right: 50px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .profileContent {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: none;
+  }
+
+  .leftSide {
+    border: none;
+  }
+
+  .rightSide {
+    padding-left: 0;
+    margin-top: 10px;
+  }
+
+  .contactInfo {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .socialIcons {
+    justify-content: center;
+    gap: 30px;
+    padding-top: 20px;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: flex;
+    order: 2;
+    margin-top: 30px;
+    justify-content: center;
+  }
+
+  .desktopEdit{
+    display: none
+  }
+
+  .mobileEdit{
+    display: flex;
+  }
+}

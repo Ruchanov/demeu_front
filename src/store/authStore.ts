@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { loginRequest, registerRequest } from '../api/authApi';
+import { loginRequest, registerRequest, fetchUserProfile } from '../api/authApi';
 
 interface AuthState {
     user: any | null;
@@ -11,6 +11,7 @@ interface AuthState {
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, surname: string, email: string, password: string, confirmPassword: string) => Promise<void>;
     logout: () => void;
+    fetchUserProfile: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -48,5 +49,5 @@ export const useAuthStore = create<AuthState>((set) => ({
     logout: () => {
         localStorage.removeItem('token');
         set({ user: null, token: null, isAuthenticated: false });
-    }
+    },
 }));

@@ -1,0 +1,238 @@
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background: white;
+  width: 700px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup::-webkit-scrollbar {
+  width: 8px;
+}
+
+.popup::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.closeButton {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.closeButton:hover {
+  color: #222;
+  transform: scale(1.1);
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.avatarSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 4px solid #ddd;
+}
+
+.avatarLabel {
+  font-size: 14px;
+  cursor: pointer;
+  color: #0078be;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+}
+
+.formRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  border: none;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(73, 194, 167, 0.4);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.select {
+  appearance: none;
+  cursor: pointer;
+  background: white url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='gray' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
+  background-size: 18px;
+}
+
+.input:focus,
+.select:focus {
+  box-shadow: 0px 0px 10px rgba(0, 120, 190, 0.3);
+}
+
+.socialRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.socialInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(73, 194, 167, 0.4);
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.socialInput input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 8px;
+  background: transparent;
+}
+
+.socialInput:hover {
+  box-shadow: 0px 4px 12px rgba(73, 194, 167, 0.6);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  max-height: 200px;
+  resize: vertical;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(73, 194, 167, 0.4);
+  font-size: 16px;
+  line-height: 1.5;
+  outline: none;
+}
+
+.textarea:focus {
+  box-shadow: 0px 0px 10px rgba(0, 120, 190, 0.3);
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  //background: white;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  //box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #49C2A7, #3E7D82);
+  color: white;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .popup {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .inputWrapper {
+    width: 100%;
+  }
+
+  .select {
+    width: 100%;
+  }
+
+  .submitButton {
+    position: static;
+    margin-top: 10px;
+  }
+}

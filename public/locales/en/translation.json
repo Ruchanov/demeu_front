@@ -38,6 +38,25 @@
   "link_copied_success": "Link copied successfully!",
   "link_copied_failure": "Failed to copy link. Please try again.",
   "share_description": "Share the post and help!",
-  "footer_text": "Sharing this post will help notify kind people about those who need support. One share – one hope!"
+  "footer_text": "Sharing this post will help notify kind people about those who need support. One share – one hope!",
+  "email": "Email",
+  "phone": "Phone",
+  "birth_date": "Birth Date",
+  "create_post": "Create Post",
+  "not_provided": "Not provided",
+  "update": "Update",
+  "first_name": "First Name",
+  "last_name": "Last Name",
+  "email": "Email",
+  "phone": "Phone Number",
+  "birth_date": "Birth Date",
+  "country": "Country",
+  "region": "Region",
+  "choose_country": "Choose country",
+  "choose_region": "Choose region",
+  "social_networks": "Social Networks",
+  "additional_info": "Additional Information",
+  "save": "Save",
+  "upload_photo": "Upload Photo"
 }
   
