@@ -102,7 +102,7 @@ export const Header = () => {
             </button>
             {isMenuOpen &&(
                 <div className={styles.dropdownMenu}>
-                  <Link to="/profile" className={styles.dropdownItem} onClick={handleMenuItemClick}>
+                  <Link to="/profile/me" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="personIcon" width="30px" height="30px"></IconSvg>
                     {t('profile')}
                   </Link>
@@ -114,9 +114,9 @@ export const Header = () => {
                     <IconSvg name="settingsIcon" width="30px" height="30px"></IconSvg>
                     {t('settings')}
                   </Link>
-                  <Link to="/support" className={styles.dropdownItem} onClick={handleMenuItemClick}>
+                  <Link to="/contact_us" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="techSupportIcon" width="30px" height="30px"></IconSvg>
-                    {t('tech_support')}
+                    {t('contact_us')}
                   </Link>
                   <Link to="/rules" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="rulesIcon" width="30px" height="30px"></IconSvg>

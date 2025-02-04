@@ -1,0 +1,68 @@
+.postCard {
+  display: flex;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  width: 100%;
+  max-width: 600px; /* Чтобы было ровно */
+}
+
+.postCard:hover {
+  transform: translateY(-3px);
+}
+
+.postImage {
+  width: 200px; /* Чуть шире */
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px 0 0 12px;
+}
+
+.postContent {
+  padding: 15px;
+  flex: 1;
+}
+
+.postTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.postGoal {
+  font-size: 14px;
+  color: #555;
+}
+
+.postActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: #0078be;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #005e99;
+  }
+}
+
+/* 📌 Посты теперь в 2 колонки */
+.postsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-content: center;
+}
+
+.noPosts {
+  text-align: center;
+  color: #777;
+}
