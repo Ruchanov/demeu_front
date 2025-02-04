@@ -62,17 +62,23 @@ const ProfileEditPopup = ({ onClose }) => {
                 }
             });
 
-            console.log("Отправляемые данные:", [...formDataToSend.entries()]);
+            console.log("📌 Отправляемые данные:", [...formDataToSend.entries()]);
 
             const updatedUser = await updateUserProfile(formDataToSend);
             await fetchUserProfile();
 
-            setFormData((prev) => ({ ...prev, avatar: updatedUser.avatar }));
+            // 🔥 ОБНОВЛЯЕМ ВСЕ ПОЛЯ, А НЕ ТОЛЬКО АВАТАР
+            setFormData((prev) => ({
+                ...prev,
+                ...updatedUser, // Обновляем все поля, которые вернулись с сервера
+            }));
+
             onClose();
         } catch (error) {
-            console.error("Ошибка при обновлении профиля:", error);
+            console.error("❌ Ошибка при обновлении профиля:", error);
         }
     };
+
 
     return (
         <div className={styles.popupOverlay}>

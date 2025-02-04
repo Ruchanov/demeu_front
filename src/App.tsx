@@ -26,7 +26,6 @@ const App = () => {
           <Route path="/create_publication" element={<PublicationCreatingPage />} />
       </Routes>
     </div>
-
   );
 };
 
