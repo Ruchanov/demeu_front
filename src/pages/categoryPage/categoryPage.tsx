@@ -31,7 +31,7 @@ const CategoryPage: React.FC = () => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
         }, 5000); // Меняем каждые 5 секунд
 
-        return () => clearInterval(interval); // Очищаем таймер при размонтировании
+        return () => clearInterval(interval);
     }, []);
 
     return (

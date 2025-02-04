@@ -29,7 +29,7 @@ const ResetPasswordForm = () => {
         if (response.success) {
             navigate('/auth');
         } else {
-            setError(response.error);
+            setError(response.error || t('error_occurred'));
         }
     };
 
