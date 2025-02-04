@@ -75,7 +75,8 @@
   "required_field": "Это поле обязательно для заполнения",
   "please_wait": "Пожалуйста, подождите...",
   "successfully_saved": "Успешно сохранено",
-  "error_occurred": "Произошла ошибка"
+  "error_occurred": "Произошла ошибка",
+  "error_creating_publication": "Произошла ошибка при создании публикации"
 
 }
   
