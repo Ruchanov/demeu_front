@@ -75,6 +75,7 @@
   "required_field": "Бұл өріс толтырылуы қажет",
   "please_wait": "Күте тұрыңыз...",
   "successfully_saved": "Сәтті сақталды",
-  "error_occurred": "Қате орын алды"
+  "error_occurred": "Қате орын алды",
+  "error_creating_publication": "Хабарландыруды жасау аясында қателік орын алды"
 }
   
