@@ -18,6 +18,7 @@
   "settings": "Settings",
   "privacy_rules": "Privacy Policy and terms of use",
   "tech_support": "Technical support",
+  "contact_us": "Contact us",
   "logout": "Logout",
   "categories": "Categories",
   "favorites": "Favorites",
@@ -47,7 +48,6 @@
   "update": "Update",
   "first_name": "First Name",
   "last_name": "Last Name",
-  "email": "Email",
   "phone": "Phone Number",
   "birth_date": "Birth Date",
   "country": "Country",
@@ -57,6 +57,15 @@
   "social_networks": "Social Networks",
   "additional_info": "Additional Information",
   "save": "Save",
-  "upload_photo": "Upload Photo"
+  "upload_photo": "Upload Photo",
+  "contact_us": "Contact Us",
+  "contact_subtitle": "If you have any questions, we are always ready to answer.",
+  "subject": "Subject",
+  "full_name": "Full Name",
+  "phone": "Phone Number",
+  "message": "Message",
+  "message_placeholder": "Leave your message here",
+  "upload_file": "Upload File",
+  "send": "Send"
 }
   
