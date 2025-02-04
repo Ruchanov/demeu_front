@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { loginRequest, registerRequest, fetchUserProfile } from '../api/authApi';
+import { loginRequest, registerRequest} from '../api/authApi';
+import {loginRequest, registerRequest, requestPasswordReset, resetPasswordRequest} from '../api/authApi';
 
 interface AuthState {
     user: any | null;
@@ -12,6 +13,8 @@ interface AuthState {
     register: (name: string, surname: string, email: string, password: string, confirmPassword: string) => Promise<void>;
     logout: () => void;
     fetchUserProfile: () => Promise<void>;
+    requestPasswordReset: (email: string) => Promise<void>;
+    resetPassword: (token: string, newPassword: string, confirmPassword: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -49,5 +52,37 @@ export const useAuthStore = create<AuthState>((set) => ({
     logout: () => {
         localStorage.removeItem('token');
         set({ user: null, token: null, isAuthenticated: false });
+    },
+
+    requestPasswordReset: async (email) => {
+        set({ loading: true, error: null, successMessage: null });
+        try {
+            const response = await requestPasswordReset(email);
+            set({ successMessage: response.message, loading: false });
+            return response;
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'Password reset request failed';
+            set({ error: errorMessage, loading: false });
+            return { success: false, err: errorMessage };
+        }
+    },
+
+    resetPassword: async (token, newPassword, confirmPassword) => {
+        set({ loading: true, error: null, successMessage: null });
+        try {
+            const response = await resetPasswordRequest(token, newPassword, confirmPassword);
+
+            if (response.message) {
+                set({ successMessage: "Password has been reset successfully.", loading: false });
+                return { success: true };
+            } else {
+                return { success: false, error: "Unknown error occurred." };
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'Password reset failed';
+            set({ error: errorMessage, loading: false });
+
+            return { success: false, error: errorMessage };
+        }
     },
 }));

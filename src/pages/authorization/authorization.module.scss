@@ -119,6 +119,9 @@
   justify-content: flex-end;
   align-items: center;
   overflow: hidden;
+  @media (max-width: 768px) {
+    display: none;
+  }
 
 }
 

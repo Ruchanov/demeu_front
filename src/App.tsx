@@ -6,6 +6,9 @@ import CategoryPage from "./pages/categoryPage/categoryPage";
 import SharePopup from "./components/sharePopup/SharePopup";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ContactPage from "./pages/contactUs/ContactPage";
+import ForgotPasswordForm from "./components/forgotPasswordForm/forgotPassword";
+import ResetPasswordForm from "./components/ResetPasswordForm/resetPasswordForm";
+import PublicationCreatingPage from "./pages/publicationCreatingPage";
 
 const App = () => {
   return (
@@ -18,6 +21,9 @@ const App = () => {
           <Route path="/share" element={<SharePopup />}/>
           <Route path="/profile/me" element={<ProfilePage />}/>
           <Route path="/contact_us" element={<ContactPage />}/>
+          <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+          <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
+          <Route path="/create_publication" element={<PublicationCreatingPage />} />
       </Routes>
     </div>
 
