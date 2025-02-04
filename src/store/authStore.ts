@@ -70,10 +70,20 @@ export const useAuthStore = create<AuthState>((set) => ({
     resetPassword: async (token, newPassword, confirmPassword) => {
         set({ loading: true, error: null, successMessage: null });
         try {
-            await resetPasswordRequest(token, newPassword, confirmPassword);
-            set({ successMessage: "Password has been reset successfully.", loading: false });
+            const response = await resetPasswordRequest(token, newPassword, confirmPassword);
+
+            if (response.message) {
+                set({ successMessage: "Password has been reset successfully.", loading: false });
+                return { success: true };
+            } else {
+                return { success: false, error: "Unknown error occurred." };
+            }
         } catch (error) {
-            set({ error: error.message || 'Password reset failed', loading: false });
+            const errorMessage = error.response?.data?.error || 'Password reset failed';
+            set({ error: errorMessage, loading: false });
+
+            return { success: false, error: errorMessage };
         }
-    }
+    },
+
 }));
