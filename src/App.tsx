@@ -9,15 +9,16 @@ import ContactPage from "./pages/contactUs/ContactPage";
 import ForgotPasswordForm from "./components/forgotPasswordForm/forgotPassword";
 import ResetPasswordForm from "./components/ResetPasswordForm/resetPasswordForm";
 import PublicationCreatingPage from "./pages/publicationCreatingPage";
+import MainPage from "./pages/mainPage";
 
 const App = () => {
   return (
     <div>
       <Header></Header>
       <Routes>
-        <Route path="/auth" element={<AuthorizationPage />} />
-        <Route path="/" element={<div>Главная страница</div>} />
-        <Route path="/categories" element={<CategoryPage />}/>
+          <Route path="/auth" element={<AuthorizationPage />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/categories" element={<CategoryPage />}/>
           <Route path="/share" element={<SharePopup />}/>
           <Route path="/profile/me" element={<ProfilePage />}/>
           <Route path="/contact_us" element={<ContactPage />}/>
