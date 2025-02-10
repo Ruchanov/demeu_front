@@ -1,10 +1,9 @@
 import { useTranslation } from "react-i18next";
 import Footer from "../../components/footer/footer";
 import styles from "./aboutUs.module.scss";
-import logo from "@/shared/assets/icons/demeu_logo.svg";
 import useCheckMobileScreen from "../../shared/lib/mobile_check";
-import IconSvg from "../../shared/assets/icons/Icon";
 import React from "react";
+import IconSvg from "../../shared/assets/icons/Icon";
 
 const About = () => {
     const { t } = useTranslation();
@@ -20,7 +19,7 @@ const About = () => {
                 {!isMobile &&(
                     <>
                         <div className={styles.heroLogo}>
-                            <img src={logo} alt="Demeu Logo"/>
+                            <IconSvg name="demeu_logo"></IconSvg>
                         </div>
                         <div className={styles.circle + " " + styles.circle1}></div>
                         <div className={styles.circle + " " + styles.circle2}></div>
