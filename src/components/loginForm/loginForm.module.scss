@@ -38,4 +38,27 @@
     color: red;
     font-size: 14px;
 }
-  
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0;
+  color: #3e7d82;
+  font-size: 20px;
+  font-weight: 500;
+  gap: 10px;
+}
+
+.line {
+  flex-grow: 1;
+  height: 3px;
+  background-color: #3E7D82;
+  border-radius: 20px;
+
+}
+
+.text {
+  white-space: nowrap;
+}

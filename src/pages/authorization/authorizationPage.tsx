@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import {useAuthStore} from "../../store/authStore";
 import {useNavigate} from "react-router-dom";
 import useCheckMobileScreen from "../../shared/lib/mobile_check";
+import GoogleLoginButton from "../../components/googleLoginButton";
 
 const AuthorizationPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -45,6 +46,10 @@ const AuthorizationPage = () => {
         </div>
         <div className={styles.form}>
           {isLogin ? <LoginForm /> : <RegisterForm />}
+          {/*{isLogin && (*/}
+          {/*    <GoogleLoginButton />*/}
+
+          {/*)}*/}
         </div>
       </div>
       {!isMobile &&(

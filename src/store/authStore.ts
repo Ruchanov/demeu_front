@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { loginRequest, registerRequest} from '../api/authApi';
 import {loginRequest, registerRequest, requestPasswordReset, resetPasswordRequest} from '../api/authApi';
+import axios from "axios";
 
 interface AuthState {
     user: any | null;
@@ -8,7 +9,7 @@ interface AuthState {
     isAuthenticated: boolean;
     loading: boolean;
     error: string | null;
-
+    login_google: (token: string) => void;
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, surname: string, email: string, password: string, confirmPassword: string) => Promise<void>;
     logout: () => void;
@@ -23,7 +24,10 @@ export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: !!localStorage.getItem('token'),
     loading: false,
     error: null,
-
+    login_google: (token) => {
+        localStorage.setItem("token", token);
+        set({ token, isAuthenticated: true });
+    },
     login: async (email, password) => {
         set({ loading: true, error: null });
         try {
