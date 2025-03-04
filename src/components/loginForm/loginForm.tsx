@@ -5,6 +5,7 @@ import styles from './loginForm.module.scss';
 import { useTranslation } from 'react-i18next';
 import {useAuthStore} from "../../store/authStore";
 import {Link} from "react-router-dom";
+import GoogleLoginButton from "../googleLoginButton";
 
 const LoginForm = () => {
     const { t } = useTranslation();
@@ -47,6 +48,12 @@ const LoginForm = () => {
                         {loading ? t('loading...') : t('login')}
                     </Button>
                 </div>
+                <div className={styles.divider}>
+                    <span className={styles.line}></span>
+                    <span className={styles.text}>{t("or")}</span>
+                    <span className={styles.line}></span>
+                </div>
+                <GoogleLoginButton />
             </form>
             {error && <p className={styles.error}>{error}</p>}
         </div>
