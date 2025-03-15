@@ -2,10 +2,11 @@ import axios from 'axios';
 
 const API_URL = 'http://127.0.0.1:8000/publications/';
 
-export const getPublications = async () => {
-    const response = await axios.get(API_URL);
+export const getPublications = async (queryParams = '') => {
+    const response = await axios.get(`${API_URL}?${queryParams}`);
     return response.data;
 };
+
 
 export const getPublicationById = async (id: number) => {
     const response = await axios.get(`${API_URL}${id}/`);
