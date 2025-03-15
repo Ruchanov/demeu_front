@@ -6,9 +6,11 @@ import IconSvg from "../../shared/assets/icons/Icon";
 import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup";
 import UserPostList from "../../components/userPosts/UserPostList";
 import { useTranslation } from 'react-i18next';
+import PublicationCard from "../../components/publicationCard/index";
+
 
 const ProfilePage = () => {
-    const { user, isAuthenticated, fetchUserProfile } = useProfileStore();
+    const { user, isAuthenticated, fetchUserProfile, userPosts, fetchUserPosts, loading } = useProfileStore();
     const [isPopupOpen, setPopupOpen] = useState(false);
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -18,11 +20,12 @@ const ProfilePage = () => {
             navigate("/auth");
         } else {
             fetchUserProfile();
+            fetchUserPosts();
         }
-    }, [isAuthenticated, fetchUserProfile, navigate]);
+    }, [isAuthenticated, fetchUserProfile, fetchUserPosts, navigate]);
 
     if (!user) {
-        return <p>Загрузка...</p>;
+        return <p>{t("loading")}...</p>;
     }
 
     return (
@@ -56,7 +59,9 @@ const ProfilePage = () => {
                         </div>
                     </div>
                     <p className={styles.birthDate}><strong>{t('birth_date')}:</strong> {user.birth_date || t('not_provided')}</p>
-                    <p className={styles.userBio}>{user.bio || "Пользователь пока не добавил описание."}</p>
+                    <p className={styles.userBio}>
+                        {typeof user.bio === "string" ? user.bio : JSON.stringify(user.bio)}
+                    </p>
 
                     <div className={styles.socialIcons}>
                         {user.instagram && <a href={user.instagram}><IconSvg name="instagram_icon" width="40px" height="40px" /></a>}
@@ -75,11 +80,24 @@ const ProfilePage = () => {
             {isPopupOpen && <ProfileEditPopup onClose={() => setPopupOpen(false)} />}
 
             <div className={styles.postsContainer}>
-                <h2>Жазбалар:</h2>
-                <div className={styles.postsPlaceholder}>
-                    <UserPostList />
-                </div>
+                <h2>{t("user_posts")}</h2>
+                {loading ? (
+                    <p>{t("loading")}...</p>
+                ) : !userPosts || userPosts.length === 0 ? (
+                    <p>{t("no_posts")}</p>
+                ) : (
+                    <div className={styles.grid}>
+                        {userPosts.map((post) => (
+                            <PublicationCard
+                                key={post.id}
+                                publication={post}
+                                onClick={() => navigate(`/about-post/${post.id}`)}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
+
         </div>
     );
 };

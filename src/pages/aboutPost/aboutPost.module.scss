@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.mainContent {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+.leftColumn {
+  flex: 2;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.rightColumn {
+  flex: 1;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.postHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+.postDate {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.postStats {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.postStats svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.postStats span {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.postTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.postTitle h1 {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.editButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.editButton:hover {
+  background: none;
+  transform: scale(1.2);
+}
+
+.image {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.cardSpacing {
+  margin-top: 30px;
+  width: 100%;
+}

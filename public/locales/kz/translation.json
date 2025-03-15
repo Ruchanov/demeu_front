@@ -134,6 +134,24 @@
   "footer_email": "Электрондық пошта: support@demeu.kz",
   "footer_phone": "Телефон: +7 (XXX) XXX-XX-XX",
   "login_with_google": "Google арқылы кіру",
-  "or": "немесе"
+  "or": "немесе",
+  "goal": "Мақсат",
+  "views": "Көрілімдер",
+  "collected": "жиналды",
+  "daysLeft": "Қалған күн",
+  "days": "күн",
+  "leave_comment": "Пікір қалдыру",
+  "enter_your_comment": "Сіздің пікіріңіз...",
+  "edit": "Өзгерту",
+  "no_comments": "Әзірге пікір жоқ",
+  "top_donors": "Топ көмектесуші",
+  "no_donations": "Донаттар әлі жоқ",
+  "today": "Бүгін",
+  "yesterday": "Кеше",
+  "days_ago": "{{count}} күн бұрын",
+  "related_posts": "Ұқсас посттар",
+  "no_posts": "Посттар әлі жоқ",
+  "no_date": "Күні көрсетілмеген",
+  "locale": "kk-KZ"
 }
   

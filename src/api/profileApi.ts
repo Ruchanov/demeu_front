@@ -57,6 +57,3 @@ export const fetchUserPosts = async (token: string) => {
         throw error;
     }
 };
-
-
-

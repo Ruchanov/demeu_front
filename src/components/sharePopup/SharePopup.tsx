@@ -56,40 +56,30 @@ const SharePopup: React.FC<SharePopupProps> = ({ onClose }) => {
     ];
 
     return (
-        <div className={styles.container}>
-            <button className={styles.backButton} onClick={onClose} aria-label="Close">
-                <IconSvg name="back_icon" width="20px" height="20px" />
-            </button>
-            <h2 className={styles.title}>{t('share')}</h2>
-            <div className={styles.linkContainer}>
-                <input
-                    type="text"
-                    readOnly
-                    value={shareLink}
-                    className={styles.linkInput}
-                />
-                <button className={styles.copyButton} onClick={handleCopyLink}>
-                    <IconSvg name="copy_icon" width="16px" height="16px" />
-                    <span>{t('copy_link')}</span>
+        <div className={styles.backdrop} onClick={onClose}> {/* Затемненный фон */}
+            <div className={styles.container} onClick={(e) => e.stopPropagation()}> {/* Остановка всплытия */}
+                <button className={styles.backButton} onClick={onClose} aria-label="Close">
+                    <IconSvg name="back_icon" width="20px" height="20px" />
                 </button>
+                <h2 className={styles.title}>{t('share')}</h2>
+                <div className={styles.linkContainer}>
+                    <input type="text" readOnly value={shareLink} className={styles.linkInput} />
+                    <button className={styles.copyButton} onClick={handleCopyLink}>
+                        <IconSvg name="copy_icon" width="16px" height="16px" />
+                        {t('copy_link')}
+                    </button>
+                </div>
+                <p className={styles.description}>{t('share_description')}</p>
+                <div className={styles.socialIcons}>
+                    {socialLinks.map((link) => (
+                        <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className={styles.socialButton}>
+                            <IconSvg name={link.icon} width="30px" height="30px" />
+                            {link.name}
+                        </a>
+                    ))}
+                </div>
+                <p className={styles.footerText}>{t('footer_text')}</p>
             </div>
-
-            <p className={styles.description}>{t('share_description')}</p>
-            <div className={styles.socialIcons}>
-                {socialLinks.map((link) => (
-                    <a
-                        key={link.name}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.socialButton}
-                    >
-                        <IconSvg name={link.icon} width="30px" height="30px" />
-                        {link.name}
-                    </a>
-                ))}
-            </div>
-            <p className={styles.footerText}>{t('footer_text')}</p>
         </div>
     );
 };

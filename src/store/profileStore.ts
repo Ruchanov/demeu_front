@@ -25,7 +25,7 @@ interface ProfileState {
     isAuthenticated: boolean;
     loading: boolean;
     error: string | null;
-    posts: any[];
+    userPosts: [];
 
     fetchUserProfile: () => Promise<void>;
     updateUserProfile: (updatedData: FormData) => Promise<void>;
@@ -80,6 +80,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
         }
     },
 
+
     fetchUserPosts: async () => {
         set({ loading: true, error: null });
         try {
@@ -87,9 +88,10 @@ export const useProfileStore = create<ProfileState>((set) => ({
             if (!token) throw new Error("No token found");
 
             const userPosts = await fetchUserPosts(token);
-            set({ posts: userPosts, loading: false });
+            set({ userPosts: userPosts, loading: false }); // ✅ Используем userPosts
         } catch (error: any) {
             set({ error: error.message || "Failed to fetch posts", loading: false });
         }
     },
+
 }));

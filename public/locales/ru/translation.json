@@ -134,6 +134,24 @@
   "footer_email": "Электронная почта: support@demeu.kz",
   "footer_phone": "Телефон: +7 (XXX) XXX-XX-XX",
   "login_with_google": "Войти через Google",
-  "or": "или"
+  "or": "или",
+  "goal": "Цель",
+  "views": "Просмотры",
+  "collected": "Собрано",
+  "daysLeft": "Осталось дней",
+  "days": "дней",
+  "leave_comment": "Оставить комментарий",
+  "enter_your_comment": "Введите ваш комментарий...",
+  "edit": "Редактировать",
+  "no_comments": "Пока нет комментариев",
+  "top_donors": "Топ помощников",
+  "no_donations": "Донатов пока нет",
+  "today": "Сегодня",
+  "yesterday": "Вчера",
+  "days_ago": "{{count}} дней назад",
+  "related_posts": "Похожие посты",
+  "no_posts": "Постов пока нет",
+  "no_date": "Дата не указана",
+  "locale": "ru-RU"
 }
   

@@ -141,6 +141,23 @@
   "footer_email": "Email: support@demeu.kz",
   "footer_phone": "Phone: +7 (XXX) XXX-XX-XX",
   "login_with_google": "Sign in with Google",
-  "or": "or"
+  "or": "or",
+  "goal": "Goal",
+  "views": "Views",
+  "collected": "Collected",
+  "daysLeft": "Days left",
+  "days": "days",
+  "leave_comment": "Leave a comment",
+  "enter_your_comment": "Enter your comment...",
+  "no_comments": "No comments yet",
+  "top_donors": "Top Donors",
+  "no_donations": "No donations yet",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "days_ago": "{{count}} days ago",
+  "related_posts": "Related Posts",
+  "no_posts": "No posts yet",
+  "no_date": "No date provided",
+  "locale": "en-US"
 }
   

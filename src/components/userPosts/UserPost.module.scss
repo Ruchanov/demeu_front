@@ -54,7 +54,6 @@
   }
 }
 
-/* 📌 Посты теперь в 2 колонки */
 .postsContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

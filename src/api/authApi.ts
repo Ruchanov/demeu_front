@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const API_BASE_URL = 'http://127.0.0.1:8000/accounts';
-// const PROFILE_API_URL = "http://127.0.0.1:8000/profiles/me/";
 
 export const loginRequest = async (email: string, password: string) => {
   try {
@@ -48,15 +47,3 @@ export const resetPasswordRequest = async (token: string, newPassword: string, c
     throw error.response?.data || 'Password reset failed';
   }
 };
-
-// export const fetchUserProfile = async (token: string) => {
-//   try {
-//     const response = await axios.get(PROFILE_API_URL, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Profile fetch error:", error);
-//     throw error.response?.data || "Profile request failed";
-//   }
-// };
