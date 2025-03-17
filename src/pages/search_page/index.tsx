@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Button from "../../shared/ui/button/button";
 
 const SearchPage = () => {
-    const { publications, loading, fetchPublications } = usePublicationsStore();
+    const { publications, loading, fetchPublications, fetchFavorites} = usePublicationsStore();
     const resultsRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation();
 
@@ -33,6 +33,7 @@ const SearchPage = () => {
     const handleSearch = (query: string) => {
         setFilters(prev => ({ ...prev, search: query }));
         setIsSearched(true);
+        handleScrollToResults();
     };
 
     const handleCategorySelect = (category: string) => {
@@ -49,16 +50,36 @@ const SearchPage = () => {
     };
 
     const applyFilters = () => {
+        const finalFilters = { ...filters };
+
+        if (!finalFilters.amount__gte) {
+            finalFilters.amount__gte = '0';
+        }
+
+        if (!finalFilters.amount__lte) {
+            finalFilters.amount__lte = '9999999';
+        }
+
+        if (!finalFilters.created_at__gte) {
+            finalFilters.created_at__gte = '1970-01-01';
+        }
+
+        if (!finalFilters.created_at__lte) {
+            finalFilters.created_at__lte = new Date().toISOString().split('T')[0];
+        }
         fetchPublications(filters);
         setIsSearched(true);
         handleScrollToResults();
     };
 
     useEffect(() => {
-        if (filters.ordering && isSearched) {
-            fetchPublications(filters);
-        }
-    }, [filters.ordering]);
+        const fetchData = async () => {
+            await fetchPublications(filters);
+            await fetchFavorites();
+        };
+
+        fetchData();
+    }, [filters]); // 👈 ВАЖНО добавить filters в зависимости
 
     return (
         <div className={styles.container}>
@@ -118,7 +139,7 @@ const SearchPage = () => {
                             <div className={styles.publicationsGrid}>
                                 {publications.map((pub) => (
                                     <PublicationCard
-                                        key={pub.id}
+                                        // key={pub.id}
                                         id={pub.id}
                                         title={pub.title}
                                         category={pub.category}
@@ -129,6 +150,8 @@ const SearchPage = () => {
                                         views={pub.total_views}
                                         donations={pub.total_donated}
                                         created_at={pub.created_at}
+                                        author_name={pub.author_name}
+                                        is_favorite={pub.is_favorite}
                                     />
                                 ))}
                             </div>

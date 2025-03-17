@@ -41,3 +41,4 @@ export const deletePublication = async (id: number, token: string) => {
     });
     return response.data;
 };
+

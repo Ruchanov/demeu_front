@@ -5,6 +5,9 @@
   background: white;
   border-radius: 25px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .input {
@@ -15,6 +18,9 @@
   padding: 10px;
   border-radius: 20px;
   margin-bottom: 0;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 }
 
 .button {
@@ -28,6 +34,9 @@
   font-size: 16px;
   transition: background 0.3s;
   margin: 0;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 
   &:hover {
     background-color: #005f9e;

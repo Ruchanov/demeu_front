@@ -2,24 +2,25 @@ import React, { useState, useEffect } from 'react';
 import styles from './styles.module.scss';
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { Publication } from "../../store/publicationStore";
+import {Publication, usePublicationsStore} from "../../store/publicationStore";
+import IconSvg from "../../shared/assets/icons/Icon";
 
 const PublicationCard: React.FC<Publication> = ({
                                                     id,
                                                     title,
                                                     category,
                                                     images,
-                                                    description,
                                                     amount,
                                                     donations,
                                                     views,
                                                     created_at,
-                                                    authorName = 'Автор',
+                                                    author_name,
+                                                    is_favorite,
                                                 }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const percentage = Math.min(Math.round((donations / amount) * 100), 100);
-
+    const { toggleFavorite } = usePublicationsStore();
     const [isHovered, setIsHovered] = useState(false);
     const [animatedOffset, setAnimatedOffset] = useState(2 * Math.PI * 50);
 
@@ -45,7 +46,10 @@ const PublicationCard: React.FC<Publication> = ({
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
-
+    const handleFavoriteClick = async (e: React.MouseEvent) => {
+        // e.stopPropagation(); // предотвращает переход на страницу при клике на избранное
+        await toggleFavorite(id);
+    };
     const handleClick = () => {
         navigate(`/publications/${id}`);
     };
@@ -53,7 +57,6 @@ const PublicationCard: React.FC<Publication> = ({
     return (
         <div
             className={styles.card}
-            onClick={handleClick}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
@@ -62,10 +65,18 @@ const PublicationCard: React.FC<Publication> = ({
                 <div className={styles.overlay}>
                     <div className={styles.topInfo}>
                         <div className={styles.author}>
-                            <span className={styles.avatar}>👤</span>
-                            <span>{authorName}</span>
+                            <div className={styles.Circle}>
+                                <IconSvg name="authorIcon" />
+                            </div>
+                            <span>{author_name}</span>
                         </div>
-                        <button className={styles.favorite}>🔖</button>
+                        <div className={styles.favoriteButton} onClick={handleFavoriteClick}>
+                            {is_favorite ? (
+                                <IconSvg name="filledFavoritesIcon"/>
+                            ) : (
+                                <IconSvg name="favoritesIcon" />
+                            )}
+                        </div>
                     </div>
                     {isHovered && (
                         <div className={styles.progressCircle}>
@@ -97,7 +108,7 @@ const PublicationCard: React.FC<Publication> = ({
                     <span className={styles.category}>{category}</span>
                 </div>
             </div>
-            <div className={styles.details}>
+            <div className={styles.details} onClick={handleClick}>
                 <div className={styles.dateViews}>
                     <span>👁 {views}</span>
                     <span>{new Date(created_at).toLocaleDateString('kk-KZ', { day: 'numeric', month: 'long', year: 'numeric' })}</span>

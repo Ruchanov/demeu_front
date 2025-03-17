@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { getPublications, getPublicationById, createPublication, updatePublication, deletePublication } from '../api/publicationsAPI';
 import {useAuthStore} from "./authStore";
+import {addFavoritePublication, getFavoritePublications, removeFavoritePublication} from "../api/favoritesApi";
+// import {get} from "https";
 interface Image {
     id: number;
     image: string;
@@ -20,16 +22,20 @@ export interface Publication {
     videos: string[];
     created_at: string;
     updated_at: string;
-    author: number;
+    author_name: string;
+    author_email: string;
     total_views: any;
     total_donated: any;
+    is_favorite?: boolean;
 }
 
 interface PublicationState {
     publications: Publication[];
+    favoritePublications: Publication[];
     loading: boolean;
     error: string | null;
     fetchPublications: (p: {}) => Promise<void>;
+    fetchFavorites: () => Promise<void>;
     getPublication: (id: number) => Promise<Publication | null>;
     addPublication: (formData: FormData) => Promise<void>;
     editPublication: (id: number, formData: FormData) => Promise<void>;
@@ -46,10 +52,11 @@ interface Filters {
 }
 
 
-export const usePublicationsStore = create<PublicationState>((set) => ({
+export const usePublicationsStore = create<PublicationState>((set, get) => ({
     publications: [],
     loading: false,
     error: null,
+    favoritePublications: [],
 
     fetchPublications: async (filters?: Filters) => {
         set({ loading: true, error: null });
@@ -67,9 +74,55 @@ export const usePublicationsStore = create<PublicationState>((set) => ({
             if (filters?.ordering) queryParams.append('ordering', filters.ordering);
 
             const response = await getPublications(queryParams.toString());
-            set({ publications: response, loading: false });
+            const favoriteIds = new Set(get().favoritePublications.map(fav => fav.id));
+            set({
+                publications: response.map((pub: Publication) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
+                loading: false
+            });
         } catch (error) {
             set({ error: 'Failed to fetch publications', loading: false });
+        }
+    },
+    fetchFavorites: async () => {
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+
+        try {
+            const favorites = await getFavoritePublications(token);
+            const favoriteIds = new Set(favorites.map((fav: any) => fav.publication.id));
+
+            set((state) => ({
+                favoritePublications: favorites.map((fav: any) => fav.publication),
+                publications: state.publications.map((pub) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
+            }));
+        } catch (error) {
+            console.error("Ошибка загрузки избранных:", error);
+        }
+    },
+
+    toggleFavorite: async (id: number) => {
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+
+        const isCurrentlyFavorite = get().favoritePublications.some(pub => pub.id === id);
+        console.log('toggleFavorite ID:', id, 'isCurrentlyFavorite:', isCurrentlyFavorite);
+
+        try {
+            if (isCurrentlyFavorite) {
+                await removeFavoritePublication(id, token);
+            } else {
+                await addFavoritePublication(id, token);
+            }
+            await get().fetchFavorites();
+
+        } catch (error) {
+            console.error('Ошибка переключения избранного:', error);
         }
     },
 
