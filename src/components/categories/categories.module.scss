@@ -1,0 +1,40 @@
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 20px;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 200px;
+  height: 60px;
+  border: none;
+  &.selected {
+    background-color: #76d0c2;
+    color: white;
+    border-color: #76d0c2;
+    &:hover{
+      background-color: #76d0c2;
+    }
+  }
+
+  &:hover {
+    background: #C4EBE4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 120, 190, 0.3);
+  }
+}
+
+.icon {
+  margin-right: 8px;
+}

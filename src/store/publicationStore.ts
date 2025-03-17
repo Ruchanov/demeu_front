@@ -11,6 +11,7 @@ import {
 } from '../api/publicationsAPI';
 import { useAuthStore } from "./authStore";
 import {fetchRelatedPosts, fetchTopDonors} from "../api/aboutPostApi";
+import {addFavoritePublication, getFavoritePublications, removeFavoritePublication} from "../api/favoritesApi";
 
 interface Image {
     id: number;
@@ -30,8 +31,7 @@ interface Donor {
     donor_amount: number;
 }
 
-
-interface Publication {
+export interface Publication {
     id: number;
     title: string;
     category: string;
@@ -41,21 +41,26 @@ interface Publication {
     contact_name: string;
     contact_email: string;
     contact_phone: string;
-    images: string[];
+    images: Image[];
     videos: string[];
     created_at: string;
     updated_at: string;
     author_name: string;
     author_email: string;
+    total_views: any;
+    total_donated: any;
+    is_favorite?: boolean;
 }
 
 type Post = Pick<Publication, "id" | "title" | "category" | "images">;
 interface PublicationState {
     publications: Publication[];
     comments: Record<number, Comment[]>;
+    favoritePublications: Publication[];
     loading: boolean;
     error: string | null;
-    fetchPublications: () => Promise<void>;
+    fetchPublications: (p: {}) => Promise<void>;
+    fetchFavorites: () => Promise<void>;
     getPublication: (id: number) => Promise<Publication | null>;
     addPublication: (formData: FormData) => Promise<void>;
     editPublication: (id: number, formData: FormData) => Promise<void>;
@@ -65,6 +70,15 @@ interface PublicationState {
     removeComment: (postId: number, commentId: number) => Promise<void>;
     fetchTopDonors: (postId: number) => Promise<void>;
     fetchRelatedPosts: (category: string, postId: number) => Promise<void>;
+}
+interface Filters {
+    search?: string;
+    categories?: string[];
+    created_at__gte?: string;
+    created_at__lte?: string;
+    amount__gte?: number;
+    amount__lte?: number;
+    ordering?: string;
 }
 
 export const usePublicationsStore = create<PublicationState>((set, get) => ({
@@ -78,14 +92,69 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
     error: null,
     errorDonors: null,
     errorRelated: null,
+    favoritePublications: [],
 
-    fetchPublications: async () => {
+    fetchPublications: async (filters?: Filters) => {
         set({ loading: true, error: null });
         try {
-            const data = await getPublications();
-            set({ publications: data, loading: false });
+            const queryParams = new URLSearchParams();
+            if (filters?.search) queryParams.append('search', filters.search);
+            if (filters?.categories?.length) queryParams.append('category', filters.categories.join(','));
+            if (filters?.created_at__gte) queryParams.append('created_at__gte', filters.created_at__gte);
+            if (filters?.created_at__lte) queryParams.append('created_at__lte', filters.created_at__lte);
+            if (filters?.amount__gte) queryParams.append('amount__gte', filters.amount__gte.toString());
+            if (filters?.amount__lte) queryParams.append('amount__lte', filters.amount__lte.toString());
+            if (filters?.ordering) queryParams.append('ordering', filters.ordering);
+            const response = await getPublications(queryParams.toString());
+            const favoriteIds = new Set(get().favoritePublications.map(fav => fav.id));
+            set({
+                publications: response.map((pub: Publication) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
+                loading: false
+            });
         } catch (error) {
-            set({ error: 'Failed to load publications', loading: false });
+            set({ error: 'Failed to fetch publications', loading: false });
+        }
+    },
+    fetchFavorites: async () => {
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+
+        try {
+            const favorites = await getFavoritePublications(token);
+            const favoriteIds = new Set(favorites.map((fav: any) => fav.publication.id));
+
+            set((state) => ({
+                favoritePublications: favorites.map((fav: any) => fav.publication),
+                publications: state.publications.map((pub) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
+            }));
+        } catch (error) {
+            console.error("Ошибка загрузки избранных:", error);
+        }
+    },
+
+    toggleFavorite: async (id: number) => {
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+
+        const isCurrentlyFavorite = get().favoritePublications.some(pub => pub.id === id);
+        console.log('toggleFavorite ID:', id, 'isCurrentlyFavorite:', isCurrentlyFavorite);
+
+        try {
+            if (isCurrentlyFavorite) {
+                await removeFavoritePublication(id, token);
+            } else {
+                await addFavoritePublication(id, token);
+            }
+            await get().fetchFavorites();
+
+        } catch (error) {
+            console.error('Ошибка переключения избранного:', error);
         }
     },
 
@@ -126,11 +195,12 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
                 ),
                 loading: false,
             }));
+            await updatePublication(id, formData, token);
+            await usePublicationsStore.getState().fetchPublications({});
         } catch (error) {
             set({ error: 'Failed to update publication', loading: false });
         }
     },
-
 
     removePublication: async (id) => {
         set({ loading: true, error: null });
@@ -139,6 +209,7 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             if (!token) throw new Error('Unauthorized');
             await deletePublication(id, token);
             await get().fetchPublications();
+            await usePublicationsStore.getState().fetchPublications({});
         } catch (error) {
             set({ error: 'Failed to delete publication' });
         } finally {
