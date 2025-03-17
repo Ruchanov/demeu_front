@@ -9,9 +9,9 @@ import ContactPage from "./pages/contactUs/ContactPage";
 import ForgotPasswordForm from "./components/forgotPasswordForm/forgotPassword";
 import ResetPasswordForm from "./components/ResetPasswordForm/resetPasswordForm";
 import PublicationCreatingPage from "./pages/publicationCreatingPage";
-import MainPage from "./pages/mainPage";
 import AboutUs from "./pages/aboutUs/aboutUs";
 import About from "./pages/aboutUs/aboutUs";
+import SearchPage from "./pages/search_page";
 
 const App = () => {
   return (
@@ -19,7 +19,6 @@ const App = () => {
       <Header></Header>
       <Routes>
           <Route path="/auth" element={<AuthorizationPage />} />
-          <Route path="/" element={<MainPage />} />
           <Route path="/categories" element={<CategoryPage />}/>
           <Route path="/share" element={<SharePopup />}/>
           <Route path="/profile/me" element={<ProfilePage />}/>
@@ -28,6 +27,8 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
           <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
           <Route path="/create_publication" element={<PublicationCreatingPage />} />
+          <Route path="/search" element={<SearchPage />} />
+
       </Routes>
     </div>
   );
