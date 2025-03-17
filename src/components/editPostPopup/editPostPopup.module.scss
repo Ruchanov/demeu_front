@@ -1,0 +1,202 @@
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background: white;
+  width: 700px;
+  max-width: 90%;
+  max-height: 90vh;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh; /* Ограничение высоты */
+  overflow-y: auto; /* Вертикальная прокрутка */
+  padding-right: 10px; /* Чтобы скролл не прилипал */
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 25px;
+  box-shadow: 0 4px 6px #99DDD0;
+  padding: 12px 20px;
+  margin-bottom: 16px;
+  background-color: white;
+}
+
+.input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  background: transparent;
+  padding-left: 30px; // Отступ для иконки
+}
+
+.inputWrapper svg {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  width: 20px;
+  height: 20px;
+  color: #999;
+}
+
+.categoryIcon {
+  position: absolute;
+  left: 10px;
+}
+
+.dropdownIcon {
+  position: absolute;
+  right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.categorySelect {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  position: relative;
+}
+
+.categoryDropdown {
+  position: absolute;
+  background: white;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 5px;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.categoryItem:hover {
+  background: #f0f0f0;
+}
+
+.categoryItem.active {
+  background: #49c2a7;
+  color: white;
+}
+
+.textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  background: transparent;
+  padding: 12px 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px #99DDD0;
+  min-height: 120px;
+  resize: none;
+}
+
+.imageContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.imageWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imagePreview {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.deleteImage {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.submitButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(to right, #49C2A7, #235C4F);
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 30px;
+  width: 100%;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  margin-top: 20px;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}

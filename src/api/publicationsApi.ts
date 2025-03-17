@@ -58,16 +58,6 @@ export const fetchPostById = async (id: string) => {
     }
 };
 
-export const fetchAuthorById = async (authorId: number) => {
-    try {
-        const response = await axios.get(`http://127.0.0.1:8000/accounts/${authorId}/`);
-        return response.data;
-    } catch (error) {
-        console.error(`Ошибка загрузки автора (ID: ${authorId}):`, error);
-        return null;
-    }
-};
-
 export const fetchCommentsByPostId = async (postId: number) => {
     try {
         const response = await axios.get(`${COMMENTS_API_URL}/publication/${postId}/comments/`);

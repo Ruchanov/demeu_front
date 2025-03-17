@@ -12,6 +12,11 @@ import {
 import { useAuthStore } from "./authStore";
 import {fetchRelatedPosts, fetchTopDonors} from "../api/aboutPostApi";
 
+interface Image {
+    id: number;
+    image: string;
+}
+
 interface Comment {
     id: number;
     author: string;
@@ -40,12 +45,11 @@ interface Publication {
     videos: string[];
     created_at: string;
     updated_at: string;
-    author: number;
+    author_name: string;
+    author_email: string;
 }
 
 type Post = Pick<Publication, "id" | "title" | "category" | "images">;
-
-
 interface PublicationState {
     publications: Publication[];
     comments: Record<number, Comment[]>;
@@ -112,14 +116,21 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         try {
             const token = useAuthStore.getState().token;
             if (!token) throw new Error('Unauthorized');
-            await updatePublication(id, formData, token);
-            await get().fetchPublications();
+
+            const updatedPost = await updatePublication(id, formData, token);
+
+            set((state) => ({
+                ...state,
+                publications: state.publications.map((p) =>
+                    p.id === id ? { ...p, ...updatedPost } : p
+                ),
+                loading: false,
+            }));
         } catch (error) {
-            set({ error: 'Failed to update publication' });
-        } finally {
-            set({ loading: false });
+            set({ error: 'Failed to update publication', loading: false });
         }
     },
+
 
     removePublication: async (id) => {
         set({ loading: true, error: null });

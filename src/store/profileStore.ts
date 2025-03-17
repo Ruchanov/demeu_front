@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { fetchUserProfile, updateUserProfile, fetchUserPosts } from '../api/profileApi';
-
 interface User {
     id: string;
     first_name: string;

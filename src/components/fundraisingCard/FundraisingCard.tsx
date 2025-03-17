@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "./FundraisingCard.module.scss";
 import SharePopup from "../sharePopup/SharePopup";
-import { useTranslation } from "react-i18next"; // Импорт i18n
+import { useTranslation } from "react-i18next";
+import {useProfileStore} from "../../store/profileStore";
+import Button from "../../shared/ui/button/button";
 
 const formatCurrency = (amount) => {
     if (amount === 0) return "0 ₸";
@@ -13,9 +15,15 @@ const formatCurrency = (amount) => {
     return `${amount} ₸`;
 };
 
-const FundraisingCard = ({ totalDonated = 0, goal = 1, daysLeft = 0, percentage = 0 }) => {
+const FundraisingCard = ({ totalDonated = 0, goal = 1, daysLeft = 0, percentage = 0, author_email }) => {
     const [isShareOpen, setIsShareOpen] = useState(false);
-    const { t } = useTranslation(); // Используем i18n
+    const { t } = useTranslation();
+    const { user } = useProfileStore();
+    const isOwner = user?.email === author_email
+
+    console.log("User:", user);
+    console.log("Author:", author_email);
+    console.log("isOwner:", isOwner);
 
     const circleRadius = 50;
     const circleCircumference = 2 * Math.PI * circleRadius;
@@ -77,7 +85,12 @@ const FundraisingCard = ({ totalDonated = 0, goal = 1, daysLeft = 0, percentage 
             </div>
 
             <button className={styles.shareButton} onClick={() => setIsShareOpen(true)}>{t("share")}</button>
-            <button className={styles.deleteButton}>{t("delete")}</button>
+
+            {isOwner ? (
+                <button className={styles.deleteButton}>{t("delete")}</button>
+                ) : (
+                <button className={styles.donateButton}>{t("donateNow")}</button>
+                )}
 
             {isShareOpen && <SharePopup onClose={() => setIsShareOpen(false)} />}
         </div>
