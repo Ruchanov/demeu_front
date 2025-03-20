@@ -42,16 +42,18 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  max-height: 90vh; /* Ограничение высоты */
-  overflow-y: auto; /* Вертикальная прокрутка */
-  padding-right: 10px; /* Чтобы скролл не прилипал */
+  max-height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 10px;
+  align-items: center;
 }
 
 .label {
   font-size: 14px;
   font-weight: 500;
   color: #333;
-  margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 .inputWrapper {
@@ -63,6 +65,7 @@
   padding: 12px 20px;
   margin-bottom: 16px;
   background-color: white;
+  width: 90%;
 }
 
 .input {
@@ -72,58 +75,96 @@
   font-size: 16px;
   color: #333;
   background: transparent;
-  padding-left: 30px; // Отступ для иконки
+  padding-left: 20px; // Отступ для иконки
 }
 
 .inputWrapper svg {
   position: absolute;
   left: 10px;
-  bottom: 10px;
   width: 20px;
   height: 20px;
-  color: #999;
+}
+
+.disabledCategory {
+  pointer-events: none;
+  background: #e0e0e0;
+  color: #888;
+  border-radius: 12px;
+  opacity: 0.7;
+}
+
+.categorySelectWrapper {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 4px 6px #99DDD0;
+  width: 96%;
+  box-sizing: border-box;
+}
+
+.categorySelect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 95%;
+  position: relative;
 }
 
 .categoryIcon {
   position: absolute;
   left: 10px;
+  width: 20px;
+  height: 20px;
 }
 
 .dropdownIcon {
-  position: absolute;
-  right: 10px;
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
   transition: transform 0.3s ease;
+  position: absolute;
+  right: 20px;
 }
 
-.categorySelect {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  position: relative;
+.categoryText {
+  flex: 1;
+  text-align: left;
+  padding-left: 20px;
 }
 
 .categoryDropdown {
-  position: absolute;
-  background: white;
   width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-top: 5px;
-  z-index: 10;
+  background: white;
+  border-radius: 12px;
   max-height: 200px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .categoryItem {
-  display: flex;
-  align-items: center;
   padding: 10px;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
+  border-radius: 8px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #E0E0E0;
+  box-sizing: border-box;
+}
+
+.categoryItem:last-child {
+  border-bottom: none;
 }
 
 .categoryItem:hover {
@@ -133,40 +174,112 @@
 .categoryItem.active {
   background: #49c2a7;
   color: white;
+  font-weight: bold;
 }
 
-.textarea {
-  width: 100%;
+.descriptionWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px #99DDD0;
+  padding: 15px;
+  margin-bottom: 16px;
+  background-color: white;
+  width: 91%;
+  max-width: 100%;
+}
+
+.descriptionIcon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  color: #999;
+}
+
+.descriptionTextarea {
+  width: 90%;
   border: none;
   outline: none;
   font-size: 16px;
   color: #333;
   background: transparent;
-  padding: 12px 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 6px #99DDD0;
-  min-height: 120px;
+  padding: 35px 15px 15px 15px;
+  border-radius: 12px;
+  min-height: 150px;
   resize: none;
+  line-height: 1.5;
 }
 
 .imageContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: 96%;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .imageWrapper {
   position: relative;
+  width: calc(20% - 10px);
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .imagePreview {
-  width: 80px;
-  height: 80px;
-  border-radius: 10px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 12px;
+}
+
+.deleteImage {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addImageContainer {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.addImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(20% - 10px);
+  height: 80px;
+  border-radius: 12px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  //justify-content: flex-start;
+}
+
+.fileInput {
+  display: none;
 }
 
 .deleteImage {
@@ -191,7 +304,7 @@
   font-weight: 500;
   border: none;
   border-radius: 30px;
-  width: 100%;
+  width: 97%;
   cursor: pointer;
   transition: opacity 0.3s;
   margin-top: 20px;
@@ -199,4 +312,29 @@
 
 .submitButton:hover {
   opacity: 0.9;
+}
+
+@media (max-width: 400px) {
+  .popup {
+    max-width: 95%;
+    padding: 10px;
+  }
+
+  .inputWrapper {
+    padding: 8px;
+  }
+
+  .descriptionWrapper {
+    padding: 8px;
+  }
+
+  .imageWrapper,
+  .addImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .submitButton {
+    font-size: 13px;
+  }
 }

@@ -41,7 +41,7 @@ const RelatedPosts = ({ category, postId }) => {
                         <li
                             key={post.id}
                             className={styles.relatedItem}
-                            onClick={() => navigate(`/about-post/${post.id}`)}
+                            onClick={() => navigate(`/publications/${post.id}`)}
                         >
                             <img
                                 src={getImageUrl(post)}

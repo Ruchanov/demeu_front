@@ -27,7 +27,7 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
           <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
           <Route path="/create_publication" element={<PublicationCreatingPage />} />
-          <Route path="/about-post/:id" element={<AboutPostPage />} />
+          <Route path="/publications/:id" element={<AboutPostPage />} />
           <Route path="/search" element={<SearchPage />} />
       </Routes>
     </div>

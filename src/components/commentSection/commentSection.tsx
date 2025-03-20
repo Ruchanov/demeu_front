@@ -5,7 +5,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useProfileStore } from "../../store/profileStore";
 import { useTranslation } from "react-i18next"; // Подключаем локализацию
 
-const CommentSection = ({ postId }) => {
+const CommentSection = ({ postId, onCommentChange }) => {
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ const CommentSection = ({ postId }) => {
     const [editedContent, setEditedContent] = useState("");
     const { token } = useAuthStore();
     const { user } = useProfileStore();
-    const { t } = useTranslation(); // Локализация
+    const { t } = useTranslation();
 
     // Загружаем комментарии
     useEffect(() => {
@@ -38,6 +38,7 @@ const CommentSection = ({ postId }) => {
             const newComment = await sendComment(postId, comment, token);
             setComments((prev) => [newComment, ...prev]);
             setComment("");
+            onCommentChange();
         } catch (error) {
             console.error("Ошибка при отправке комментария:", error);
         }
@@ -50,6 +51,7 @@ const CommentSection = ({ postId }) => {
         try {
             await deleteComment(commentId, token);
             setComments((prev) => prev.filter((c) => c.id !== commentId));
+            onCommentChange();
         } catch (error) {
             console.error("Ошибка при удалении комментария:", error);
         }

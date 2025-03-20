@@ -2,40 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./EditPostPopup.module.scss";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useTranslation } from "react-i18next";
-
-interface PostData {
-    title: string;
-    category: string;
-    description: string;
-    amount: string;
-    bank_details: string;
-    contact_name: string;
-    contact_email: string;
-    contact_phone: string;
-    images: (File | string)[];
-}
-
-interface EditPostPopupProps {
-    post: PostData;
-    onClose: () => void;
-    onSave: (data: FormData) => void;
-}
-
-const categories: string[] = [
-    "Медициналық",
-    "Төтенше жағдай",
-    "Қайырымдылық",
-    "Білім беру саласы",
-    "Жануарлар",
-    "Экологиялық",
-    "Спорт",
-    "Жалпы қаражат жинау"
-];
+import { usePublicationsStore } from "../../store/publicationStore";
+import { Image } from "../../store/publicationStore";
 
 const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) => {
     const { t } = useTranslation();
-    const categoryRef = useRef<HTMLDivElement>(null);
-    const [showCategories, setShowCategories] = useState<boolean>(false);
+    const { editPublication } = usePublicationsStore();
 
     const [formData, setFormData] = useState<PostData>({
         title: post?.title || "",
@@ -48,112 +20,121 @@ const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) 
         contact_phone: post?.contact_phone || "",
         images: post?.images || [],
     });
+    const categoryTranslations = t("categories_list", { returnObjects: true });
 
-    // Выбор категории
-    const handleCategorySelect = (category: string) => {
-        setFormData({ ...formData, category });
-        setShowCategories(false);
-    };
+    const translatedCategory = formData.category && categoryTranslations[formData.category]
+        ? categoryTranslations[formData.category]
+        : t("chooseCategory");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    // Функция получения URL изображения
-    const getImageUrl = (image: string | File | undefined | null) => {
+    const getImageUrl = (image: Image | File | string | undefined | null) => {
         if (!image) return null;
 
         if (typeof image === "string") {
-            if (!image.trim()) return null; // Пустая строка
-            return image.startsWith("http") ? image : `/uploads/${image}`;
+            return image.startsWith("http") ? image : `http://127.0.0.1:8000${image}`;
+        }
+
+        if (typeof image === "object" && "image" in image && typeof image.image === "string") {
+            return image.image.startsWith("http") ? image.image : `http://127.0.0.1:8000${image.image}`;
         }
 
         if (image instanceof File) {
             return URL.createObjectURL(image);
         }
-
         return null;
     };
 
-
-    // Загрузка изображений
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
         const files = Array.from(e.target.files);
 
-        if (formData.images.length + files.length > 5) return;
+        const validFiles = files.filter(file => file.type.startsWith("image/"));
+        console.log(formData)
+        console.log(validFiles)
+        setFormData((prev) => ({
+            ...prev,
+            images: [...prev.images, ...validFiles], // Добавляем только валидные фото
+        }));
+        console.log(formData)
+    };
 
-        setFormData({
-            ...formData,
-            images: [...formData.images, ...files],
+    const [deletedImages, setDeletedImages] = useState<Set<number>>(new Set());
+
+    // 🟢 Обработчик удаления фото
+    const handleDeleteImage = (index: number) => {
+        setFormData((prev) => {
+            const newImages = [...prev.images];
+            const removedImage = newImages[index];
+
+            if (typeof removedImage === "object" && "id" in removedImage) {
+                setDeletedImages((prevDeleted) => new Set([...prevDeleted, removedImage.id])); // Добавляем id в список удаленных
+            }
+
+            newImages.splice(index, 1);
+            return { ...prev, images: newImages };
         });
     };
 
-    // Удаление фото
-    const handleDeleteImage = (index: number) => {
-        const newImages = [...formData.images];
-        newImages.splice(index, 1);
-        setFormData({ ...formData, images: newImages });
-    };
+    useEffect(() => {
+        console.log(formData.images)
+        // setDeletedImages(new Set());
+    }, [formData.images]);
 
-    // Перетаскивание фото (Drag & Drop)
-    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-        e.dataTransfer.setData("imageIndex", index.toString());
-    };
-
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-        e.preventDefault();
-        const draggedIndex = parseInt(e.dataTransfer.getData("imageIndex"));
-        if (isNaN(draggedIndex) || draggedIndex === index) return;
-
-        const newImages = [...formData.images];
-        const [draggedImage] = newImages.splice(draggedIndex, 1);
-        newImages.splice(index, 0, draggedImage);
-        setFormData({ ...formData, images: newImages });
-    };
-
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-    };
-
-    // Функция отправки формы
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const formDataToSend = new FormData();
-        formDataToSend.append("title", formData.title);
-        formDataToSend.append("category", formData.category);
-        formDataToSend.append("description", formData.description);
-        formDataToSend.append("amount", formData.amount);
-        formDataToSend.append("bank_details", formData.bank_details);
-        formDataToSend.append("contact_name", formData.contact_name);
-        formDataToSend.append("contact_email", formData.contact_email);
-        formDataToSend.append("contact_phone", formData.contact_phone);
 
-        // Добавляем файлы (если они новые)
+        const existingImages: string[] = [];
+
         formData.images.forEach((img) => {
+            console.log(img, "else last")
             if (img instanceof File) {
-                formDataToSend.append("images", img);
+                console.log(img, "sdfsdfsdfasdfds")
+                formDataToSend.append("uploaded_images", img);
+                console.log(formDataToSend, "11111111111")
+            } else if (typeof img === "object" && "image" in img && !deletedImages.has(img.id)) {
+                existingImages.push(img.image);
+            }
+        });
+        // console.log(formData)
+        // console.log(existingImages)
+        console.log(formDataToSend)
+        //
+        // console.log("📡 Отправка запроса на сервер:");
+        // console.log("🔹 existing_images:", existingImages);
+        // console.log("🔹 deleted_images:", Array.from(deletedImages)); // ✅ Логируем удаленные фото перед отправкой
+
+        existingImages.forEach((image) => formDataToSend.append("existing_images", image));
+        formDataToSend.append("deleted_images", JSON.stringify(Array.from(deletedImages))); // ✅ Передаем `deletedImages` как JSON
+
+        Object.keys(formData).forEach((key) => {
+            if (key !== "images") {
+                formDataToSend.append(key, formData[key as keyof PostData]);
             }
         });
 
-        await onSave(formDataToSend);
-        onClose();
-    };
+        // console.log(formDataToSend.images)
 
-    // Закрытие dropdown при клике вне
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
-                setShowCategories(false);
-            }
+        try {
+            const updatedPost = await editPublication(post.id, formDataToSend);
+
+            // setFormData((prev) => ({
+            //     ...prev,
+            //     images: updatedPost.images || [],
+            // }));
+
+            setDeletedImages(new Set()); // ✅ Очищаем список удаленных фото после успешного обновления
+
+            onClose();
+        } catch (error) {
+            console.error("Ошибка обновления публикации:", error);
         }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    };
 
     return (
         <div className={styles.popupOverlay}>
@@ -178,51 +159,44 @@ const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) 
                     </div>
 
                     <label className={styles.label}>{t("category")}</label>
-                    <div className={styles.categorySelect} ref={categoryRef} onClick={() => setShowCategories(!showCategories)}>
-                        <span>{formData.category || t("chooseCategory")}</span>
-                        <IconSvg name={showCategories ? "dropupIcon" : "dropdownIcon"} width="20px" height="20px" />
-                    </div>
-
-                    {showCategories && (
-                        <div className={styles.categoryDropdown}>
-                            {categories.map((cat) => (
-                                <div key={cat} className={styles.categoryItem} onClick={() => handleCategorySelect(cat)}>
-                                    {cat}
-                                </div>
-                            ))}
+                    <div className={`${styles.categorySelectWrapper} ${styles.disabledCategory}`}>
+                        <div className={styles.categorySelect}>
+                            <IconSvg name="categoryIcon" className={styles.categoryIcon} width="20px" height="20px" />
+                            <span className={styles.categoryText}>{translatedCategory}</span>
                         </div>
-                    )}
+                    </div>
 
                     <label className={styles.label}>{t("upload_images")}</label>
                     <div className={styles.imageContainer}>
                         {formData.images.map((img, index) => {
                             const imageUrl = getImageUrl(img);
                             return imageUrl ? (
-                                <div
-                                    key={index}
-                                    className={styles.imageWrapper}
-                                    draggable
-                                    onDragStart={(e) => handleDragStart(e, index)}
-                                    onDrop={(e) => handleDrop(e, index)}
-                                    onDragOver={handleDragOver}
-                                >
+                                <div key={index} className={styles.imageWrapper}>
                                     <img src={imageUrl} alt="Preview" className={styles.imagePreview} />
-                                    <button type="button" className={styles.deleteImage} onClick={() => handleDeleteImage(index)}>✖</button>
+                                    <button
+                                        type="button"
+                                        className={styles.deleteImage}
+                                        onClick={() => handleDeleteImage(index)}
+                                    >
+                                        ✖
+                                    </button>
                                 </div>
                             ) : null;
                         })}
-                    </div>
 
-                    {formData.images.length < 5 && (
-                        <input type="file" multiple accept="image/*" onChange={handleImageUpload} className={styles.fileInput} />
-                    )}
+                        {/* Кнопка добавления нового фото */}
+                        <label className={styles.addImage}>
+                            <IconSvg name="cameraIcon" width="40px" height="40px" />
+                            <input type="file" accept="image/*" onChange={handleImageUpload} className={styles.fileInput} />
+                        </label>
+                    </div>
 
                     {/* Описание */}
                     <label className={styles.label}>{t("description")}</label>
-                    <div className={styles.inputWrapper}>
-                        <IconSvg name="descriptionIcon" width="20px" height="20px" />
+                    <div className={styles.descriptionWrapper}>
+                        <IconSvg name="descriptionIcon" className={styles.descriptionIcon} width="20px" height="20px" />
                         <textarea
-                            className={styles.textarea}
+                            className={styles.descriptionTextarea}
                             name="description"
                             value={formData.description}
                             onChange={handleChange}

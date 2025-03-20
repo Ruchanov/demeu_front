@@ -25,12 +25,16 @@ export const createPublication = async (formData: FormData, token: string) => {
 };
 
 export const updatePublication = async (id: number, formData: FormData, token: string) => {
+    console.log("📡 Отправка запроса на сервер:", id, Object.fromEntries(formData));
+
     const response = await axios.put(`${API_URL}${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
         },
     });
+
+    console.log("✅ Сервер вернул ответ:", response.data);
     return response.data;
 };
 
@@ -101,11 +105,11 @@ export const deleteComment = async (commentId: number, token: string) => {
     }
 };
 
-export const updateComment = async (commentId, content, token) => {
+export const updateComment = async (commentId: number, content: string, token: string) => {
     try {
         const response = await axios.put(
-            `${COMMENTS_API_URL}/publication/6/comments/`,
-            { comment_id: commentId, content },
+            `${COMMENTS_API_URL}/comments/${commentId}/`,
+            { content },
             {
                 headers: {
                     Authorization: `Bearer ${token}`,

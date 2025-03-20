@@ -21,9 +21,9 @@ const FundraisingCard = ({ totalDonated = 0, goal = 1, daysLeft = 0, percentage 
     const { user } = useProfileStore();
     const isOwner = user?.email === author_email
 
-    console.log("User:", user);
-    console.log("Author:", author_email);
-    console.log("isOwner:", isOwner);
+    // console.log("User:", user);
+    // console.log("Author:", author_email);
+    // console.log("isOwner:", isOwner);
 
     const circleRadius = 50;
     const circleCircumference = 2 * Math.PI * circleRadius;

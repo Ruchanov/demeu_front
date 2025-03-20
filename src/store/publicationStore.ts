@@ -118,6 +118,19 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             set({ error: 'Failed to fetch publications', loading: false });
         }
     },
+
+    fetchUserPublications: async (email: string) => {
+        set({ loading: true, error: null });
+        try {
+            const queryParams = new URLSearchParams();
+            queryParams.append('author_email', email); // Фильтрация по email
+            const response = await getPublications(queryParams.toString());
+            set({ userPublications: response || [], loading: false }); // Записываем в userPublications
+        } catch (error) {
+            set({ error: 'Failed to fetch user publications', loading: false });
+        }
+    },
+
     fetchFavorites: async () => {
         const token = useAuthStore.getState().token;
         if (!token) return;
@@ -195,10 +208,11 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
                 ),
                 loading: false,
             }));
-            await updatePublication(id, formData, token);
-            await usePublicationsStore.getState().fetchPublications({});
+
+            return updatedPost;
         } catch (error) {
             set({ error: 'Failed to update publication', loading: false });
+            throw error;
         }
     },
 
@@ -266,6 +280,7 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             set({ error: `Failed to delete comment ${commentId}`, loading: false });
         }
     },
+
 
     fetchTopDonors: async (postId) => {
         set({ loadingDonors: true, errorDonors: null });

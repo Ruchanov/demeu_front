@@ -1,103 +1,140 @@
-import React, { useEffect, useState, useCallback } from "react";
-import styles from "./ProfilePage.module.scss";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useProfileStore } from "../../store/profileStore";
-import { useNavigate } from "react-router-dom";
+import { usePublicationsStore } from "../../store/publicationStore";
+import ProfileStats from "../../components/profileStats/ProfileStats";
+import ProfileDonations from "../../components/profileDonations/ProfileDonations";
+import PublicationCard from "../../components/publicationCard";
+import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup"; // Подключаем попап
+import styles from "./ProfilePage.module.scss";
 import IconSvg from "../../shared/assets/icons/Icon";
-import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup";
-import UserPostList from "../../components/userPosts/UserPostList";
-import { useTranslation } from 'react-i18next';
-import PublicationCard from "../../components/publicationCard/index";
+import { useTranslation } from "react-i18next";
 
-
-const ProfilePage = () => {
-    const { user, isAuthenticated, fetchUserProfile, userPosts, fetchUserPosts, loading } = useProfileStore();
-    const [isPopupOpen, setPopupOpen] = useState(false);
-    const navigate = useNavigate();
+const ProfilePage: React.FC = () => {
+    const { user, fetchUserProfile, loading: userLoading } = useProfileStore();
+    const { userPublications, loading: postsLoading, fetchUserPublications } = usePublicationsStore();
     const { t } = useTranslation();
+    const { email: profileEmail } = useParams();
+    const [isEditOpen, setIsEditOpen] = useState(false);
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate("/auth");
-        } else {
+        if (profileEmail === "me") {
             fetchUserProfile();
-            fetchUserPosts();
+        } else {
+            fetchUserProfile(profileEmail);
+            fetchUserPublications(profileEmail);
         }
-    }, [isAuthenticated, fetchUserProfile, fetchUserPosts, navigate]);
+    }, [profileEmail, fetchUserProfile, fetchUserPublications]);
+
+    console.log("Проверка профиля:", profileEmail);
+
+    if (userLoading) {
+        return <div className={styles.loader}>{t("loading")}</div>;
+    }
 
     if (!user) {
-        return <p>{t("loading")}...</p>;
+        return <div className={styles.error}>{t("loading")}</div>;
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.profileContent}>
-                <div className={styles.leftSide}>
-                    <img src={user.avatar} alt="Avatar" className={styles.avatar} />
-                    <div className={`${styles.changeIcon} ${styles.mobileEdit}`} onClick={() => setPopupOpen(true)}>
-                        <IconSvg name="change_icon" width="30px" height="30px" />
-                    </div>
-                    <h2>{user.first_name} {user.last_name}</h2>
-                    <p className={styles.userLocation}>
-                        {user.country && user.city ? `${user.country} / ${user.city}` : "Kazakhstan / Almaty"}
-                    </p>
-                    <div className={`${styles.createPostContainer} ${styles.desktopOnly}`}>
-                        <div className={styles.plusIcon}>+</div>
-                        <button className={styles.createPost}>{t('create_post')}</button>
-                    </div>
-                </div>
+        <div className={styles.profileContainer}>
+            <div className={styles.profileHeader}>
+                <div className={styles.profileContent}>
+                    {/* Левая часть */}
+                    <div className={styles.leftSection}>
+                        <div className={styles.avatarWrapper}>
+                            <img src={user.avatar} alt="User Avatar" className={styles.avatar} />
 
-                <div className={styles.rightSide}>
-                    <div className={styles.contactInfo}>
-                        <p><strong>{t('email')}:</strong> {user.email}</p>
-                        <p><strong>{t('phone')}:</strong> {user.phone_number || "Не указан"}</p>
-                        <div
-                            className={`${styles.changeIcon} ${styles.desktopEdit}`}
-                            onClick={() => {
-                                setPopupOpen(true);
-                            }}>
-                            <IconSvg name="change_icon" width="30px" height="30px" />
+                            {/*{profileEmail === "me" && (*/}
+                                <button className={styles.editAvatar} onClick={() => setIsEditOpen(true)}>
+                                    <IconSvg name="editIcon_profile" width="25px" height="25px" />
+                                </button>
+                            {/*)}*/}
+                        </div>
+                        <h2 className={styles.name}>{user.first_name} {user.last_name}</h2>
+                        <p className={styles.daysWithUs}>
+                            {user.days_since_registration === 0
+                                ? t("days_together_today")
+                                : t("days_together", { count: user.days_since_registration })}
+                        </p>
+                        <p className={styles.bio}>{user.bio}</p>
+                        <div className={`${styles.createPostContainer}`}>
+                            <div className={styles.plusIcon}>+</div>
+                            <button className={styles.createPost}>{t("create_post")}</button>
                         </div>
                     </div>
-                    <p className={styles.birthDate}><strong>{t('birth_date')}:</strong> {user.birth_date || t('not_provided')}</p>
-                    <p className={styles.userBio}>
-                        {typeof user.bio === "string" ? user.bio : JSON.stringify(user.bio)}
-                    </p>
 
-                    <div className={styles.socialIcons}>
-                        {user.instagram && <a href={user.instagram}><IconSvg name="instagram_icon" width="40px" height="40px" /></a>}
-                        {user.facebook && <a href={user.facebook}><IconSvg name="facebook_icon" width="40px" height="40px" /></a>}
-                        {user.whatsapp && <a href={user.whatsapp}><IconSvg name="whatsapp_icon" width="40px" height="40px" /></a>}
-                        {user.telegram && <a href={user.telegram}><IconSvg name="telegram_icon" width="40px" height="40px" /></a>}
-                    </div>
+                    {/* Правая часть */}
+                    <div className={styles.rightSection}>
+                        <div className={styles.userInfoCard}>
+                            <h3 className={styles.userInfoTitle}>{t("full_info")}</h3>
+                            <div className={styles.userInfo}>
+                                <div className={styles.infoColumn}>
+                                    <div className={styles.infoItem}>
+                                        <IconSvg name="locationIcon_profile" width="23px" height="23px" />
+                                        <span>{user.city}, {user.country}</span>
+                                    </div>
+                                    <div className={styles.infoItem}>
+                                        <IconSvg name="calendarIcon_profile" width="23px" height="23px" />
+                                        <span>{user.birth_date}</span>
+                                    </div>
+                                </div>
+                                <div className={styles.infoColumn}>
+                                    <div className={styles.infoItem}>
+                                        <IconSvg name="emailIcon_profile" width="23px" height="23px" />
+                                        <span>{user.email}</span>
+                                    </div>
+                                    <div className={styles.infoItem}>
+                                        <IconSvg name="phoneIcon_profile" width="23px" height="23px" />
+                                        <span>{user.phone_number}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div className={`${styles.createPostContainer} ${styles.mobileOnly}`}>
-                        <div className={styles.plusIcon}>+</div>
-                        <button className={styles.createPost}>{t('create_post')}</button>
+                        <ProfileStats
+                            posts={user.total_publications}
+                            donations={user.total_donations}
+                            views={user.total_profile_views}
+                            savedPosts={user.total_favorite_publications}
+                        />
+                        <ProfileDonations />
                     </div>
                 </div>
             </div>
 
-            {isPopupOpen && <ProfileEditPopup onClose={() => setPopupOpen(false)} />}
+            {/* Список публикаций пользователя */}
+            <div className={styles.postsSection}>
+                <h3>{t("posts")}</h3>
 
-            <div className={styles.postsContainer}>
-                <h2>{t("user_posts")}</h2>
-                {loading ? (
-                    <p>{t("loading")}...</p>
-                ) : !userPosts || userPosts.length === 0 ? (
-                    <p>{t("no_posts")}</p>
-                ) : (
-                    <div className={styles.grid}>
-                        {userPosts.map((post) => (
+                {postsLoading ? (
+                    <p className={styles.loading}>{t("loading")}</p>
+                ) : userPublications?.length > 0 ? (
+                    <div className={styles.publicationsGrid}>
+                        {userPublications.map((pub) => (
                             <PublicationCard
-                                key={post.id}
-                                publication={post}
-                                onClick={() => navigate(`/about-post/${post.id}`)}
+                                key={pub.id}
+                                id={pub.id}
+                                title={pub.title}
+                                category={pub.category}
+                                images={pub.images}
+                                videos={pub.videos}
+                                description={pub.description}
+                                amount={pub.amount}
+                                views={pub.total_views}
+                                donations={pub.total_donated}
+                                created_at={pub.created_at}
+                                author_name={pub.author_name}
+                                is_favorite={pub.is_favorite}
                             />
                         ))}
                     </div>
+                ) : (
+                    <p className={styles.noPosts}>{t("no_posts")}</p>
                 )}
             </div>
 
+            {isEditOpen && <ProfileEditPopup onClose={() => setIsEditOpen(false)} />}
         </div>
     );
 };

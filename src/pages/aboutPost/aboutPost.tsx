@@ -12,6 +12,7 @@ import IconSvg from "../../shared/assets/icons/Icon";
 import defaultAvatar from "../../shared/assets/images/profile_donate.png";
 import {useProfileStore} from "../../store/profileStore";
 import EditPostPopup from "../../components/editPostPopup/EditPostPopup";
+import { usePublicationsStore } from "../../store/publicationStore";
 
 const AboutPostPage = () => {
     const { id } = useParams();
@@ -19,40 +20,28 @@ const AboutPostPage = () => {
     const { t } = useTranslation();
     const [post, setPost] = useState(null);
     const [isShareOpen, setIsShareOpen] = useState(false);
-    const { user } = useProfileStore();
+    const { user, fetchUserProfile } = useProfileStore();
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Для смены фото
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { editPublication, fetchPublications } = usePublicationsStore();
 
-    useEffect(() => {
-        const loadPost = async () => {
-            try {
-                const data = await fetchPostById(id);
-                setPost(data);
-            } catch (error) {
-                console.error("Ошибка загрузки поста:", error);
-            }
-        };
-
-        loadPost();
-    }, [id]);
-
-    const handleSavePost = async (updatedPost) => {
+    const loadPost = async () => {
         try {
-            const formData = new FormData();
-            Object.keys(updatedPost).forEach((key) => {
-                formData.append(key, updatedPost[key]);
-            });
-
-            await editPublication(id, formData);
-            const updatedData = await fetchPostById(id);
-            setPost(updatedData);
+            const data = await fetchPostById(id);
+            setPost(data);
         } catch (error) {
-            console.error("Ошибка обновления поста:", error);
+            console.error("Ошибка загрузки поста:", error);
         }
     };
 
-    if (!post) {
-        return <p className={styles.loading}>{t("loading")}</p>;
-    }
+    useEffect(() => {
+        loadPost();
+
+        if (!user) {
+            fetchUserProfile();
+        }
+    }, [id, user, fetchUserProfile])
 
     const getImageUrl = (url) => {
         if (!url) return "";
@@ -60,14 +49,53 @@ const AboutPostPage = () => {
         return decodedUrl.startsWith("http") ? decodedUrl : `http://127.0.0.1:8000${decodedUrl}`;
     };
 
-    const imageUrl = post.image ? getImageUrl(post.image.image) : (post.images?.length ? getImageUrl(post.images[0].image) : "");
-    const authorAvatar = post.author_avatar ? getImageUrl(post.author_avatar) : defaultAvatar;
+    const imageUrls = post?.images?.length
+        ? post.images.map(img => getImageUrl(img.image))
+        : [post?.image ? getImageUrl(post.image.image) : ""];
+
+    const authorAvatar = defaultAvatar;
+
+    useEffect(() => {
+        if (imageUrls.length > 1) {
+            const interval = setInterval(() => {
+                setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+            }, 5000); // Каждые 5 секунд
+
+            return () => clearInterval(interval);
+        }
+    }, [imageUrls]);
+
+    const openModal = (index) => {
+        setCurrentImageIndex(index);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const nextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+    };
+
+    const prevImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length);
+    };
+
+    if (!post) {
+        return <p className={styles.loading}>{t("loading")}</p>;
+    }
 
     const goToAuthorProfile = () => {
-        if (post.author_email) {
-            navigate(`/profile/${post.author_email}`); // <-- меняем URL
+        if (!post?.author_id) return;
+
+        if (user?.email === post.author_email) {
+            navigate(`/profile/me/`);
+        } else {
+            navigate(`/profile/${post.author_id}/`);
         }
     };
+
 
     return (
         <div className={styles.container}>
@@ -92,14 +120,22 @@ const AboutPostPage = () => {
                         )}
                     </div>
 
+                    <p className={styles.categoryTag}>{t("category")}: {t(`${post.category}`)}</p>
+
                     {/* мобВариант автор */}
                     <div className={`${styles.authorContainer} ${styles.mobileEdit}`} onClick={goToAuthorProfile} style={{ cursor: "pointer" }}>
                         <img src={user?.avatar || authorAvatar} alt="Author Avatar" className={styles.authorAvatar} />
                         <span className={styles.authorName}>{post.author_name}</span>
                     </div>
 
-                    {/* Основное изображение */}
-                    <img src={imageUrl} alt={post.title} className={styles.image} />
+                    {/* Изображение поста */}
+                    <div className={styles.imageContainer} onClick={() => openModal(currentImageIndex)}>
+                        <img
+                            src={imageUrls[currentImageIndex]}
+                            alt={post.title}
+                            className={styles.image}
+                        />
+                    </div>
 
                     {/* мобВариант fundraiseing */}
                     <div className={`${styles.cardSpacing} ${styles.mobileEdit}`}>
@@ -139,7 +175,7 @@ const AboutPostPage = () => {
                     </div>
 
                     {/* Блок комментариев */}
-                    <CommentSection postId={post.id} />
+                    <CommentSection postId={post.id} onCommentChange={loadPost} />
                 </div>
 
                 <div className={styles.rightColumn}>
@@ -172,7 +208,22 @@ const AboutPostPage = () => {
             </div>
 
             {isShareOpen && <SharePopup onClose={() => setIsShareOpen(false)} />}
-            {isEditOpen && <EditPostPopup post={post} onClose={() => setIsEditOpen(false)} onSave={handleSavePost} />}
+            {isEditOpen && <EditPostPopup post={post} onClose={() => setIsEditOpen(false)} />}
+
+            {isModalOpen && (
+                <div className={styles.modalOverlay} onClick={closeModal}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <button className={styles.closeButton} onClick={closeModal}>✕</button>
+                        {imageUrls.length > 1 && (
+                            <>
+                                <button className={styles.prevButton} onClick={prevImage}>‹</button>
+                                <button className={styles.nextButton} onClick={nextImage}>›</button>
+                            </>
+                        )}
+                        <img src={imageUrls[currentImageIndex]} alt="Full Image" className={styles.fullImage} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

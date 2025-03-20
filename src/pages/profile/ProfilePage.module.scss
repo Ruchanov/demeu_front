@@ -1,51 +1,85 @@
-.container {
+.profileContainer {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #76D0C2 0%, white 100%);
   display: flex;
-  border-bottom: 2px solid #ddd;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
+  padding-top: 40px;
+}
+
+.profileHeader {
+  width: 80%;
+  display: flex;
+  justify-content: center;
 }
 
 .profileContent {
   display: flex;
-  width: 90%;
-  max-width: 1100px;
-  border-radius: 12px;
-  padding: 20px;
-  align-items: stretch;
+  width: 100%;
+  max-width: 1200px;
+  gap: 40px;
 }
 
-.leftSide {
-  flex: 1;
+/* Левая часть */
+.leftSection {
+  width: 35%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  border-right: 2px solid #ddd;
-  height: 100%;
+}
+
+.avatarWrapper {
+  position: relative;
 }
 
 .avatar {
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 0px;
+  background: white;
 }
 
-h2 {
+.editAvatar {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #49C2A7;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.name {
   font-size: 25px;
-  margin-bottom: 5px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 5px; /* Уменьшаем отступ */
 }
 
-.userLocation {
+.daysWithUs {
+  margin-top: 5px; /* Уменьшаем отступ */
   font-size: 16px;
-  color: #888;
-  margin-bottom: 8px;
-  margin-top: 0px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
 }
 
+.bio {
+  font-size: 15px;
+  text-align: center;
+  margin-top: 1px;
+  color: #666;
+}
+
+/* Новая кнопка с плюсом */
 .createPostContainer {
   position: relative;
   display: flex;
@@ -91,166 +125,223 @@ h2 {
   opacity: 0.9;
 }
 
-.rightSide {
-  flex: 2;
-  padding-left: 40px;
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  height: 100%;
+/* Правая часть */
+.rightSection {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.contactInfo {
+.userInfoCard {
+  background: #f3fbf9;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Заголовок "Толық ақпарат" */
+.userInfoTitle {
+  color: #4bb89e;
+  font-size: 23px;
+  font-weight: bold;
+  margin-bottom: 1px;
+  margin-top: 1px;
+}
+
+/* Контейнер для информации */
+.userInfo {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Колонки информации */
+.infoColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Каждый элемент информации */
+.infoItem {
+  display: flex;
   align-items: center;
-}
-
-.contactInfo p {
-  font-size: 20px;
-  font-weight: 500;
-}
-
-.birthDate {
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-
-.userBio {
+  gap: 8px;
   font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 30px;
+  color: #333;
 }
 
-.socialIcons {
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
-  align-self: end;
-  padding-top: 30px;
+/* Раздел с публикациями */
+.postsSection {
+  width: 80%;
+  max-width: 1200px;
+  margin-top: 40px;
 }
 
-.socialIcons a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #f5f5f5;
-  transition: 0.3s;
-}
-
-.socialIcons a:hover {
-  transform: scale(1.1);
-}
-
-.changeIcon {
-  cursor: pointer;
-  margin-left: 10px;
-  opacity: 0.7;
-  transition: opacity 0.3s;
-}
-
-.changeIcon:hover {
-  opacity: 1;
-}
-
-.postsContainer {
-  width: 100%;
-  max-width: 1100px;
-  margin-top: 20px;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
-  border-top: 2px solid #ddd;
-}
-
-.postsContainer h2 {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.postsPlaceholder {
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border: 1px dashed #ccc;
-  color: #aaa;
+.noPosts {
   font-size: 18px;
+  color: #777;
+  text-align: center;
+  margin-top: 20px;
 }
 
-.desktopOnly {
-  display: flex;
-}
-
-.desktopEdit{
-  display: flex;
-}
-
-.mobileOnly {
-  display: none;
-}
-
-.mobileEdit{
-  display: none;
-  position: absolute;
-  top: 90px;
-  right: 50px;
-  cursor: pointer;
-  z-index: 10;
+.publicationsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
 
 @media (max-width: 768px) {
-  .profileContent {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    border: none;
-  }
-
-  .leftSide {
-    border: none;
-  }
-
-  .rightSide {
-    padding-left: 0;
-    margin-top: 10px;
-  }
-
-  .contactInfo {
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .socialIcons {
-    justify-content: center;
-    gap: 30px;
+  .profileContainer {
+    width: 100%;
     padding-top: 20px;
   }
 
-  .desktopOnly {
-    display: none;
+  .profileHeader {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 
-  .mobileOnly {
+  .profileContent {
+    width: 90%;
     display: flex;
-    order: 2;
-    margin-top: 30px;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .leftSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rightSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .avatar {
+    width: 140px;
+    height: 140px;
+  }
+
+  .editAvatar {
+    width: 35px;
+    height: 35px;
+  }
+
+  .name {
+    font-size: 20px;
+  }
+
+  .daysWithUs {
+    font-size: 14px;
+  }
+
+  .bio {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .createPost {
+    padding: 12px 28px;
+    font-size: 16px;
+  }
+
+  .plusIcon {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+
+  .rightSection {
+    width: 100%;
+  }
+
+  .userInfoCard {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    background: #f3fbf9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .userInfoTitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: #49c2a7;
+    margin-bottom: 10px;
+  }
+
+  .userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .infoItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: #333;
+    padding: 8px;
+    border-radius: 10px;
+    background: #f9f9f9; /* Добавляем фон, чтобы границы лучше смотрелись */
+  }
+
+  .infoItem svg {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: #49c2a7;
+  }
+
+  /* Фиксируем границы */
+  .userInfoCard {
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Исправление для блока с иконками */
+  .infoColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Адаптация постов */
+  .postsSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
   }
 
-  .desktopEdit{
-    display: none
+  .publicationsGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
   }
 
-  .mobileEdit{
-    display: flex;
+  .publicationCard {
+    width: 90%;
+    max-width: 400px;
+    margin-bottom: 20px;
   }
 }
