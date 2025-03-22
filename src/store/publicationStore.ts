@@ -134,17 +134,17 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         set({ loading: true, error: null });
 
         try {
-            console.log("📥 Фильтруем публикации из user.publications");
+            const favoriteIds = new Set(get().favoritePublications.map(fav => fav.id)); // ✅
 
             const filteredPublications = user.publications?.map((pub) => {
                 return {
                     ...pub,
-                    images: pub.images || [], // <--- гарантируем наличие
+                    images: pub.images || [],
                     author_name: `${user.first_name} ${user.last_name}`,
                     author_avatar: user.avatar,
+                    is_favorite: favoriteIds.has(pub.id), // ✅
                 };
             }) || [];
-
 
             set({ userPublications: filteredPublications, loading: false });
         } catch (error) {
@@ -167,7 +167,12 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
                     ...pub,
                     is_favorite: favoriteIds.has(pub.id),
                 })),
+                userPublications: state.userPublications.map((pub) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
             }));
+
         } catch (error) {
             console.error("Ошибка загрузки избранных:", error);
         }
@@ -178,7 +183,6 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         if (!token) return;
 
         const isCurrentlyFavorite = get().favoritePublications.some(pub => pub.id === id);
-        console.log('toggleFavorite ID:', id, 'isCurrentlyFavorite:', isCurrentlyFavorite);
 
         try {
             if (isCurrentlyFavorite) {
@@ -186,7 +190,22 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             } else {
                 await addFavoritePublication(id, token);
             }
+
             await get().fetchFavorites();
+
+            const currentUser = useProfileStore.getState().user;
+            if (currentUser) {
+                const newTotal = isCurrentlyFavorite
+                    ? currentUser.total_favorite_publications - 1
+                    : currentUser.total_favorite_publications + 1;
+
+                useProfileStore.setState({
+                    user: {
+                        ...currentUser,
+                        total_favorite_publications: newTotal
+                    }
+                });
+            }
 
         } catch (error) {
             console.error('Ошибка переключения избранного:', error);
