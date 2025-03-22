@@ -322,7 +322,6 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         }
     },
 
-
     fetchTopDonors: async (postId: number) => {
         set({ loadingDonors: true, errorDonors: null });
         try {
