@@ -12,6 +12,11 @@ import PublicationCreatingPage from "./pages/publicationCreatingPage";
 import About from "./pages/aboutUs/aboutUs";
 import AboutPostPage from "./pages/aboutPost/aboutPost";
 import SearchPage from "./pages/search_page";
+import MainPage from "./pages/mainPage";
+import FavoritesPage from "./pages/favoritesPage/FavoritesPage";
+import AllPublicationsPage from "./pages/AllPublicationsPage/AllPublicationsPage";
+
+
 
 const App = () => {
   return (
@@ -30,6 +35,9 @@ const App = () => {
           <Route path="/create_publication" element={<PublicationCreatingPage />} />
           <Route path="/publications/:id" element={<AboutPostPage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/publications" element={<AllPublicationsPage />} />
       </Routes>
     </div>
   );

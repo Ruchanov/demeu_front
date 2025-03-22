@@ -12,11 +12,13 @@ const SearchPage = () => {
     const resultsRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation();
 
+    const getCurrentDate = () => new Date().toISOString().split('T')[0];
+
     const [filters, setFilters] = useState({
-        created_at__gte: '',
-        created_at__lte: '',
-        amount__gte: '',
-        amount__lte: '',
+        created_at__gte: '1970-01-01',
+        created_at__lte: getCurrentDate(),
+        amount__gte: '0',
+        amount__lte: '9999999',
         ordering: '',
         search: '',
         categories: [] as string[],
@@ -50,23 +52,6 @@ const SearchPage = () => {
     };
 
     const applyFilters = () => {
-        const finalFilters = { ...filters };
-
-        if (!finalFilters.amount__gte) {
-            finalFilters.amount__gte = '0';
-        }
-
-        if (!finalFilters.amount__lte) {
-            finalFilters.amount__lte = '9999999';
-        }
-
-        if (!finalFilters.created_at__gte) {
-            finalFilters.created_at__gte = '1970-01-01';
-        }
-
-        if (!finalFilters.created_at__lte) {
-            finalFilters.created_at__lte = new Date().toISOString().split('T')[0];
-        }
         fetchPublications(filters);
         setIsSearched(true);
         handleScrollToResults();

@@ -199,6 +199,25 @@
   "full_info": "Подробные информации",
   "days_together": "{{count}} дней с нами",
   "days_together_today": "С сегодняшнего дня с нами",
-  "are_you_sure_delete": "Вы действительно хотите удалить эту публикацию?"
+  "are_you_sure_delete": "Вы действительно хотите удалить эту публикацию?",
+  "medicine": "Медицинская",
+  "emergency": "Чрезвычайная ситуация",
+  "charity": "Благотворительность",
+  "education": "Образование",
+  "general": "Общий сбор средств",
+  "sports": "Спорт",
+  "ecology": "Экология",
+  "animals": "Животные",
+  "banner_title": "Demeu – платформа, готовая помочь",
+  "banner_description": "Наша цель – оказывать поддержку нуждающимся и сделать благотворительность доступной для всех. Мы объединяем людей через надёжную систему.",
+  "statistics_title": "Статистика",
+  "statistics_successful_collections": "Успешные сборы",
+  "statistics_active_collections": "Активные сборы",
+  "statistics_total_amount_collected": "Сумма всех сборов",
+  "statistics_donors_count": "Количество доноров",
+  "view_all": "Все",
+  "recommended_publications": "Рекомендуемые сборы",
+  "new_posts": "Новые публикации",
+  "top_10_posts": "ТОП-10 публикаций"
 }
   

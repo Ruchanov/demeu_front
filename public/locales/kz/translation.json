@@ -199,6 +199,25 @@
   "full_info": "Толық ақпарат",
   "days_together": "{{count}} күн бізбен бірге",
   "days_together_today": "Бүгіннен бастап бізбен бірге",
-  "are_you_sure_delete": "Сіз шынымен бұл жазбаны жойғыңыз келе ме?"
+  "are_you_sure_delete": "Сіз шынымен бұл жазбаны жойғыңыз келе ме?",
+  "medicine": "Медициналық",
+  "emergency": "Төтенше жағдай",
+  "charity": "Қайырымдылық",
+  "education": "Білім беру саласы",
+  "general": "Жалпы қаражат жинау",
+  "sports": "Спорт",
+  "ecology": "Экологиялық",
+  "animals": "Жануарлар",
+  "banner_title": "Demeu – көмектесуге дайын платформа",
+  "banner_description": "Біздің мақсатымыз – мұқтаж адамдарға қолдау көрсету және қайырымдылықты баршаға қолжетімді ету. Біз сенімді жүйе арқылы адамдарды біріктіреміз.",
+  "statistics_title": "Статистика",
+  "statistics_successful_collections": "Табысты жин",
+  "statistics_active_collections": "Белсенді жин",
+  "statistics_total_amount_collected": "Жалпы жиналған сома",
+  "statistics_donors_count": "Қолдаушылар саны",
+  "view_all": "Барлығы",
+  "recommended_publications": "Ұсынылған жиындар",
+  "new_posts": "Жаңа посттар",
+  "top_10_posts": "ТОП-10 посттар"
 }
   
