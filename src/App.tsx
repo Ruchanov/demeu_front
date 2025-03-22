@@ -9,8 +9,8 @@ import ContactPage from "./pages/contactUs/ContactPage";
 import ForgotPasswordForm from "./components/forgotPasswordForm/forgotPassword";
 import ResetPasswordForm from "./components/ResetPasswordForm/resetPasswordForm";
 import PublicationCreatingPage from "./pages/publicationCreatingPage";
-import AboutUs from "./pages/aboutUs/aboutUs";
 import About from "./pages/aboutUs/aboutUs";
+import AboutPostPage from "./pages/aboutPost/aboutPost";
 import SearchPage from "./pages/search_page";
 
 const App = () => {
@@ -21,14 +21,15 @@ const App = () => {
           <Route path="/auth" element={<AuthorizationPage />} />
           <Route path="/categories" element={<CategoryPage />}/>
           <Route path="/share" element={<SharePopup />}/>
-          <Route path="/profile/me" element={<ProfilePage />}/>
+          <Route path="/profiles/me" element={<ProfilePage />} />
+          <Route path="/profiles/:id" element={<ProfilePage />} />
           <Route path="/contact_us" element={<ContactPage />}/>
           <Route path="/about_us" element={<About />}/>
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
           <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
           <Route path="/create_publication" element={<PublicationCreatingPage />} />
+          <Route path="/publications/:id" element={<AboutPostPage />} />
           <Route path="/search" element={<SearchPage />} />
-
       </Routes>
     </div>
   );

@@ -1,95 +1,121 @@
-import { create } from 'zustand';
-import { fetchUserProfile, updateUserProfile, fetchUserPosts } from '../api/profileApi';
+import { create } from "zustand";
+import { fetchUserProfile, updateUserProfile } from "../api/profileApi";
+import { Publication } from "./publicationStore";
 
-interface User {
-    id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number?: string;
-    birth_date?: string;
-    avatar?: string;
-    country?: string;
-    region?: string;
-    bio?: string;
-    instagram?: string;
-    facebook?: string;
-    whatsapp?: string;
-    telegram?: string;
+interface Donation {
+    donor_name: string;
+    donor_amount: number;
+    publication_id: number;
+    publication_title: string;
+    publication_category: string;
+    publication_author: string;
+    publication_created_at: string;
 }
 
+interface ProfileStats {
+    posts: number;
+    donations: number;
+    views: number;
+    savedPosts: number;
+}
+
+interface User {
+    user_id: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    country: string;
+    city: string;
+    phone_number: string;
+    bio: string;
+    birth_date: string;
+    age: number;
+    avatar: string;
+    date_joined: string;
+    days_since_registration: number;
+    total_profile_views: number;
+    total_publications: number;
+    total_donations: number;
+    total_favorite_publications: number;
+    favorite_publications: Publication[];
+    latest_donations: Donation[];
+    publications: Publication[];
+}
 
 interface ProfileState {
     user: User | null;
-    token: string | null;
-    isAuthenticated: boolean;
+    profileStats: ProfileStats;
     loading: boolean;
     error: string | null;
-    posts: any[];
-
-    fetchUserProfile: () => Promise<void>;
-    updateUserProfile: (updatedData: FormData) => Promise<void>;
-    fetchUserPosts: () => Promise<void>;
+    fetchUserProfile: (profileId?: string) => Promise<void>;
+    updateUserProfile: (formData: FormData) => Promise<void>;
 }
 
 export const useProfileStore = create<ProfileState>((set) => ({
     user: null,
-    token: localStorage.getItem('token') || null,
-    isAuthenticated: !!localStorage.getItem('token'),
+    currentUser: null,
+    viewedProfile: null,    profileStats: {
+        posts: 0,
+        donations: 0,
+        views: 0,
+        savedPosts: 0,
+    },
     loading: false,
     error: null,
-    posts: [],
 
-    fetchUserProfile: async () => {
+    fetchCurrentUser: async () => {
         set({ loading: true, error: null });
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                console.error("No token found in localStorage");
-                throw new Error("No token found");
-            }
+            if (!token) throw new Error("❌ No token found");
 
-            console.log("Fetching user profile...");
-            const userProfile = await fetchUserProfile(token);
-            console.log("User profile loaded:", userProfile);
-
-            set({ user: userProfile, isAuthenticated: true, loading: false });
+            const userData = await fetchUserProfile(token); // без id = me
+            set({ currentUser: userData, loading: false });
         } catch (error: any) {
-            console.error("Profile fetch error:", error);
-            set({ error: error.message || "Failed to fetch profile", loading: false, user: null });
+            console.error("❌ Ошибка загрузки текущего пользователя:", error);
+            set({ error: "Failed to fetch current user", loading: false });
         }
     },
 
-    updateUserProfile: async (updatedData) => {
+    fetchUserProfile: async (profileId?: string) => {
         set({ loading: true, error: null });
+
         try {
             const token = localStorage.getItem("token");
-            if (!token) throw new Error("No token found");
+            if (!token) throw new Error("❌ No token found");
 
-            const updatedUser = await updateUserProfile(token, updatedData);
+            const userData = await fetchUserProfile(token, profileId);
+            console.log("✅ Загружен профиль:", userData);
 
-            console.log("✅ Обновленный профиль с бэка:", updatedUser);
-
-            set({ user: updatedUser, loading: false });
-
-            await useProfileStore.getState().fetchUserProfile();
+            set({
+                user: userData,
+                profileStats: {
+                    posts: userData.total_publications,
+                    donations: userData.total_donations,
+                    views: userData.total_profile_views,
+                    savedPosts: userData.total_favorite_publications,
+                },
+                loading: false,
+            });
 
         } catch (error: any) {
+            console.error("❌ Ошибка загрузки профиля:", error);
+            set({ error: "Failed to fetch profile", loading: false });
+        }
+    },
+
+    updateUserProfile: async (formData: FormData) => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("❌ No token found");
+
+            const updatedUser = await updateUserProfile(token, formData);
+            console.log("✅ Профиль обновлен:", updatedUser);
+
+            set({ user: updatedUser });
+        } catch (error) {
             console.error("❌ Ошибка обновления профиля:", error);
-            set({ error: error.message || "Не удалось обновить профиль", loading: false });
-        }
-    },
-
-    fetchUserPosts: async () => {
-        set({ loading: true, error: null });
-        try {
-            const token = useProfileStore.getState().token;
-            if (!token) throw new Error("No token found");
-
-            const userPosts = await fetchUserPosts(token);
-            set({ posts: userPosts, loading: false });
-        } catch (error: any) {
-            set({ error: error.message || "Failed to fetch posts", loading: false });
+            throw error;
         }
     },
 }));

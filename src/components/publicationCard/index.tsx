@@ -61,7 +61,11 @@ const PublicationCard: React.FC<Publication> = ({
             onMouseLeave={handleMouseLeave}
         >
             <div className={styles.media}>
-                <img src={`http://127.0.0.1:8000${images[0]?.image}`} alt={title} className={styles.image} />
+                <img
+                    src={images[0]?.image.startsWith("http") ? images[0].image : `http://127.0.0.1:8000${images[0]?.image}`}
+                    alt={title}
+                    className={styles.image}
+                />
                 <div className={styles.overlay}>
                     <div className={styles.topInfo}>
                         <div className={styles.author}>

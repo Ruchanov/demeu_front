@@ -102,11 +102,11 @@ export const Header = () => {
             </button>
             {isMenuOpen &&(
                 <div className={styles.dropdownMenu}>
-                  <Link to="/profile/me" className={styles.dropdownItem} onClick={handleMenuItemClick}>
+                  <Link to="/profiles/me" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="personIcon" width="30px" height="30px"></IconSvg>
                     {t('profile')}
                   </Link>
-                  <Link to="/about" className={styles.dropdownItem} onClick={handleMenuItemClick}>
+                  <Link to="/about_us" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="peopleIcon" width="30px" height="30px"></IconSvg>
                     {t('aboutUs')}
                   </Link>

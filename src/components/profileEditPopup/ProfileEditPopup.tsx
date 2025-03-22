@@ -4,13 +4,15 @@ import Input from "../../shared/ui/input/input";
 import Button from "../../shared/ui/button/button";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useProfileStore } from "../../store/profileStore";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
-const countries = ["Kazakhstan", "USA", "Russia"];
+const countries = ["Kazakhstan", "Russia", "Uzbekistan", "Kyrgyzstan", "Turkmenistan"];
 const regionsByCountry = {
-    Kazakhstan: ["Almaty", "Astana", "Shymkent"],
-    USA: ["California", "Texas", "New York"],
-    Russia: ["Moscow", "Saint Petersburg", "Novosibirsk"]
+    Kazakhstan: ["Almaty", "Astana", "Shymkent", "Atyrau", "Aktobe", "Karaganda", "Pavlodar", "Taraz", "Oskemen", "Semey"],
+    Russia: ["Moscow", "Saint Petersburg", "Novosibirsk", "Yekaterinburg", "Kazan", "Chelyabinsk", "Omsk", "Samara", "Rostov-on-Don"],
+    Uzbekistan: ["Tashkent", "Samarkand", "Bukhara", "Namangan", "Andijan", "Fergana", "Nukus", "Urgench", "Kokand"],
+    Kyrgyzstan: ["Bishkek", "Osh", "Jalal-Abad", "Karakol", "Tokmok", "Talas", "Naryn", "Batken"],
+    Turkmenistan: ["Ashgabat", "Turkmenabat", "Dashoguz", "Mary", "Balkanabat"]
 };
 
 const ProfileEditPopup = ({ onClose }) => {
@@ -22,32 +24,21 @@ const ProfileEditPopup = ({ onClose }) => {
         phone_number: user?.phone_number || "",
         birth_date: user?.birth_date || "",
         country: user?.country || "",
-        region: user?.region || "",
+        region: user?.city || "",
         bio: user?.bio || "",
         email: user?.email || "",
-        instagram: user?.instagram || "",
-        facebook: user?.facebook || "",
-        whatsapp: user?.whatsapp || "",
-        telegram: user?.telegram || "",
         avatar: user?.avatar || ""
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === "country") {
-            setFormData({ ...formData, country: value, region: "" });
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setFormData((prevData) => ({
-                ...prevData,
-                avatar: file,
-            }));
+            setFormData((prev) => ({ ...prev, avatar: file }));
         }
     };
 
@@ -55,7 +46,6 @@ const ProfileEditPopup = ({ onClose }) => {
         e.preventDefault();
         try {
             const formDataToSend = new FormData();
-
             Object.keys(formData).forEach((key) => {
                 if (formData[key]) {
                     formDataToSend.append(key, formData[key]);
@@ -64,21 +54,13 @@ const ProfileEditPopup = ({ onClose }) => {
 
             console.log("📌 Отправляемые данные:", [...formDataToSend.entries()]);
 
-            const updatedUser = await updateUserProfile(formDataToSend);
+            await updateUserProfile(formDataToSend);
             await fetchUserProfile();
-
-            // 🔥 ОБНОВЛЯЕМ ВСЕ ПОЛЯ, А НЕ ТОЛЬКО АВАТАР
-            setFormData((prev) => ({
-                ...prev,
-                ...updatedUser, // Обновляем все поля, которые вернулись с сервера
-            }));
-
             onClose();
         } catch (error) {
             console.error("❌ Ошибка при обновлении профиля:", error);
         }
     };
-
 
     return (
         <div className={styles.popupOverlay}>
@@ -140,37 +122,29 @@ const ProfileEditPopup = ({ onClose }) => {
                                 <label>{t('birth_date')}</label>
                                 <Input name="birth_date" type="date" value={formData.birth_date} onChange={handleChange} />
                             </div>
-
-                            <div className={styles.inputWrapper}>
-                                <label>{t('country')}</label>
-                                <select name="country" value={formData.country} onChange={handleChange} className={styles.input}>
-                                    <option value="">{t('choose_country')}</option>
-                                    {countries.map((c) => <option key={c} value={c}>{c}</option>)}
-                                </select>
-                            </div>
                         </div>
 
-                        {formData.country && (
+                        {/* Выбор страны */}
+                        <div className={styles.inputWrapper}>
+                            <label>{t('country')}</label>
+                            <select name="country" value={formData.country} onChange={handleChange} className={styles.input}>
+                                <option value="">{t('choose_country')}</option>
+                                {countries.map((c) => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                        </div>
+
+                        {/* Выбор региона (появляется только если страна выбрана) */}
+                        {formData.country && regionsByCountry[formData.country] && (
                             <div className={styles.inputWrapper}>
                                 <label>{t('region')}</label>
                                 <select name="region" value={formData.region} onChange={handleChange} className={styles.input}>
                                     <option value="">{t('choose_region')}</option>
-                                    {regionsByCountry[formData.country]?.map((r) => (
+                                    {regionsByCountry[formData.country].map((r) => (
                                         <option key={r} value={r}>{r}</option>
                                     ))}
                                 </select>
                             </div>
                         )}
-
-                        <h3>{t('social_networks')}</h3>
-                        <div className={styles.socialRow}>
-                            {["whatsapp", "telegram", "instagram", "facebook"].map((network) => (
-                                <div key={network} className={styles.socialInput}>
-                                    <IconSvg name={`${network}_icon`} width="24px" height="24px" />
-                                    <Input name={network} value={formData[network]} onChange={handleChange} placeholder={`${network} URL`} />
-                                </div>
-                            ))}
-                        </div>
 
                         <label>{t('additional_info')}</label>
                         <textarea

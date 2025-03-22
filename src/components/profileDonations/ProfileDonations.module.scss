@@ -1,0 +1,126 @@
+.donationsContainer {
+  background: #f3fbf9;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 23px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #4bb89e;
+}
+
+.donationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.donationItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.donationInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.donationIconWrapper {
+  background: #6ee7b7;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donationName {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 1px;
+}
+
+.donationDate {
+  font-size: 13px;
+  color: #777;
+}
+
+.donationAmount {
+  font-size: 17px;
+  font-weight: bold;
+  color: #49c2a7;
+}
+
+.publicationLink {
+  color: #49C2A7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.publicationLink:hover {
+  text-decoration: underline;
+}
+
+/* Мобильная версия для списка донатов */
+@media screen and (max-width: 768px) {
+  .donationsContainer {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .donationList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .donationItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .donationInfo {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+
+  .donationIconWrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .donationDetails {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .donationAmount {
+    font-size: 16px;
+  }
+
+  .publicationLink {
+    font-size: 14px;
+  }
+}
+
