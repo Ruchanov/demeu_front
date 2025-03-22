@@ -205,6 +205,25 @@
   "full_info": "Full information",
   "days_together": "{{count}} days with us",
   "days_together_today": "With us from today",
-  "are_you_sure_delete": "Are you sure you want to delete this publication?"
+  "are_you_sure_delete": "Are you sure you want to delete this publication?",
+  "medicine": "Medical",
+  "emergency": "Emergency",
+  "charity": "Charity",
+  "education": "Education",
+  "general": "General Fundraising",
+  "sports": "Sports",
+  "ecology": "Ecology",
+  "animals": "Animals",
+  "banner_title": "Demeu – a platform ready to help",
+  "banner_description": "Our goal is to support those in need and make charity accessible to everyone. We connect people through a reliable system.",
+  "statistics_title": "Statistics",
+  "statistics_successful_collections": "Successful collections",
+  "statistics_active_collections": "Active collections",
+  "statistics_total_amount_collected": "Total amount collected",
+  "statistics_donors_count": "Number of donors",
+  "view_all": "View all",
+  "recommended_publications": "Recommended collections",
+  "new_posts": "New posts",
+  "top_10_posts": "Top 10 posts"
 }
   
