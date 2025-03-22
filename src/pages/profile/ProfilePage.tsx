@@ -9,24 +9,39 @@ import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup
 import styles from "./ProfilePage.module.scss";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useTranslation } from "react-i18next";
+import defaultAvatar from "../../shared/assets/images/profile_default.png";
 
 const ProfilePage: React.FC = () => {
     const { user, fetchUserProfile, loading: userLoading } = useProfileStore();
-    const { userPublications, loading: postsLoading, fetchUserPublications } = usePublicationsStore();
+    const { userPublications, loading: postsLoading, fetchUserPublications, fetchFavorites } = usePublicationsStore();
     const { t } = useTranslation();
-    const { email: profileEmail } = useParams();
+    const { id: profileId } = useParams();
     const [isEditOpen, setIsEditOpen] = useState(false);
 
-    useEffect(() => {
-        if (profileEmail === "me") {
-            fetchUserProfile();
-        } else {
-            fetchUserProfile(profileEmail);
-            fetchUserPublications(profileEmail);
-        }
-    }, [profileEmail, fetchUserProfile, fetchUserPublications]);
+    const isOwnProfile = window.location.pathname.includes("/profiles/me");
 
-    console.log("Проверка профиля:", profileEmail);
+    useEffect(() => {
+        console.log("🔄 Загружаем профиль для:", profileId || "me");
+        fetchFavorites();
+        fetchUserProfile(profileId);
+    }, [profileId, fetchUserProfile]);
+
+    useEffect(() => {
+        if (!user?.user_id) {
+            console.log("⏳ Ожидание загрузки пользователя...");
+            return;
+        }
+
+        console.log("✅ User загружен:", user.user_id);
+
+        if (isOwnProfile) {
+            console.log("📥 Фильтруем публикации для текущего пользователя:", user.user_id);
+            fetchUserPublications(user);
+        } else {
+            console.log("📥 Загружаем публикации для профиля:", profileId);
+            fetchUserPublications(user);
+        }
+    }, [user, profileId, fetchUserPublications]);
 
     if (userLoading) {
         return <div className={styles.loader}>{t("loading")}</div>;
@@ -36,6 +51,8 @@ const ProfilePage: React.FC = () => {
         return <div className={styles.error}>{t("loading")}</div>;
     }
 
+    const avatarUrl = user.avatar ? user.avatar : defaultAvatar;
+
     return (
         <div className={styles.profileContainer}>
             <div className={styles.profileHeader}>
@@ -43,13 +60,13 @@ const ProfilePage: React.FC = () => {
                     {/* Левая часть */}
                     <div className={styles.leftSection}>
                         <div className={styles.avatarWrapper}>
-                            <img src={user.avatar} alt="User Avatar" className={styles.avatar} />
+                            <img src={avatarUrl} alt="User Avatar" className={styles.avatar} />
 
-                            {/*{profileEmail === "me" && (*/}
+                            {isOwnProfile && (
                                 <button className={styles.editAvatar} onClick={() => setIsEditOpen(true)}>
                                     <IconSvg name="editIcon_profile" width="25px" height="25px" />
                                 </button>
-                            {/*)}*/}
+                            )}
                         </div>
                         <h2 className={styles.name}>{user.first_name} {user.last_name}</h2>
                         <p className={styles.daysWithUs}>

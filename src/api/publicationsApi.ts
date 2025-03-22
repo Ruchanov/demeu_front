@@ -8,7 +8,6 @@ export const getPublications = async (queryParams = '') => {
     return response.data;
 };
 
-
 export const getPublicationById = async (id: number) => {
     const response = await axios.get(`${API_URL}${id}/`);
     return response.data;
@@ -51,6 +50,8 @@ export const fetchPostById = async (id: string) => {
     try {
         const response = await axios.get(`${API_URL}${id}/`);
         const post = response.data;
+
+        console.log("📥 Загруженный пост:", post);
 
         if (!post.image && post.images?.length) {
             post.image = post.images[0];
@@ -121,5 +122,16 @@ export const updateComment = async (commentId: number, content: string, token: s
     } catch (error) {
         console.error(`Ошибка при обновлении комментария (ID: ${commentId}):`, error);
         throw error;
+    }
+};
+
+export const fetchRelatedPosts = async (category: string, postId: number) => {
+    try {
+        const response = await axios.get(`${API_URL}?category=${category}`);
+        const relatedPosts = response.data.filter((post) => post.id !== postId);
+        return relatedPosts;
+    } catch (error) {
+        console.error("Ошибка при получении похожих постов:", error);
+        return [];
     }
 };

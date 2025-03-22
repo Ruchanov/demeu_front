@@ -20,6 +20,7 @@ interface ProfileStats {
 }
 
 interface User {
+    user_id: number;
     email: string;
     first_name: string;
     last_name: string;
@@ -46,13 +47,14 @@ interface ProfileState {
     profileStats: ProfileStats;
     loading: boolean;
     error: string | null;
-    fetchUserProfile: () => Promise<void>;
+    fetchUserProfile: (profileId?: string) => Promise<void>;
     updateUserProfile: (formData: FormData) => Promise<void>;
 }
 
-export const useProfileStore = create<ProfileState>((set, get) => ({
+export const useProfileStore = create<ProfileState>((set) => ({
     user: null,
-    profileStats: {
+    currentUser: null,
+    viewedProfile: null,    profileStats: {
         posts: 0,
         donations: 0,
         views: 0,
@@ -61,32 +63,32 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
     loading: false,
     error: null,
 
-    fetchUserProfile: async () => {
+    fetchCurrentUser: async () => {
         set({ loading: true, error: null });
         try {
             const token = localStorage.getItem("token");
-            if (!token) throw new Error("No token found");
+            if (!token) throw new Error("❌ No token found");
 
-            const userData = await fetchUserProfile(token);
+            const userData = await fetchUserProfile(token); // без id = me
+            set({ currentUser: userData, loading: false });
+        } catch (error: any) {
+            console.error("❌ Ошибка загрузки текущего пользователя:", error);
+            set({ error: "Failed to fetch current user", loading: false });
+        }
+    },
 
-            // Форматируем донаты
-            const formattedDonations = (userData.latest_donations || []).map((donation: any) => ({
-                donor_name: donation.donor_name || "Анонимный донор",
-                donor_amount: donation.donor_amount || 0,
-                publication_id: donation.publication_id,
-                publication_title: donation.publication_title,
-                publication_category: donation.publication_category,
-                publication_author: donation.publication_author,
-                publication_created_at: donation.publication_created_at,
-            }));
+    fetchUserProfile: async (profileId?: string) => {
+        set({ loading: true, error: null });
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("❌ No token found");
+
+            const userData = await fetchUserProfile(token, profileId);
+            console.log("✅ Загружен профиль:", userData);
 
             set({
-                user: {
-                    ...userData,
-                    latest_donations: formattedDonations,
-                    favorite_publications: userData.favorite_publications || [],
-                    publications: userData.publications || [],
-                },
+                user: userData,
                 profileStats: {
                     posts: userData.total_publications,
                     donations: userData.total_donations,
@@ -95,22 +97,24 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
                 },
                 loading: false,
             });
+
         } catch (error: any) {
+            console.error("❌ Ошибка загрузки профиля:", error);
             set({ error: "Failed to fetch profile", loading: false });
-            console.error("Profile fetch error:", error);
         }
     },
 
     updateUserProfile: async (formData: FormData) => {
         try {
             const token = localStorage.getItem("token");
-            if (!token) throw new Error("No token found");
+            if (!token) throw new Error("❌ No token found");
 
             const updatedUser = await updateUserProfile(token, formData);
+            console.log("✅ Профиль обновлен:", updatedUser);
 
             set({ user: updatedUser });
         } catch (error) {
-            console.error("Profile update error:", error);
+            console.error("❌ Ошибка обновления профиля:", error);
             throw error;
         }
     },

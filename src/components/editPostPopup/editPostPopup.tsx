@@ -8,6 +8,7 @@ import { Image } from "../../store/publicationStore";
 const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) => {
     const { t } = useTranslation();
     const { editPublication } = usePublicationsStore();
+    const [isLoading, setIsLoading] = useState(false);
 
     const [formData, setFormData] = useState<PostData>({
         title: post?.title || "",
@@ -53,18 +54,14 @@ const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) 
         const files = Array.from(e.target.files);
 
         const validFiles = files.filter(file => file.type.startsWith("image/"));
-        console.log(formData)
-        console.log(validFiles)
         setFormData((prev) => ({
             ...prev,
-            images: [...prev.images, ...validFiles], // Добавляем только валидные фото
+            images: [...prev.images, ...validFiles],
         }));
-        console.log(formData)
     };
 
     const [deletedImages, setDeletedImages] = useState<Set<number>>(new Set());
 
-    // 🟢 Обработчик удаления фото
     const handleDeleteImage = (index: number) => {
         setFormData((prev) => {
             const newImages = [...prev.images];
@@ -80,59 +77,56 @@ const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) 
     };
 
     useEffect(() => {
-        console.log(formData.images)
         // setDeletedImages(new Set());
     }, [formData.images]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
 
         const formDataToSend = new FormData();
 
         const existingImages: string[] = [];
 
         formData.images.forEach((img) => {
-            console.log(img, "else last")
             if (img instanceof File) {
-                console.log(img, "sdfsdfsdfasdfds")
                 formDataToSend.append("uploaded_images", img);
-                console.log(formDataToSend, "11111111111")
             } else if (typeof img === "object" && "image" in img && !deletedImages.has(img.id)) {
                 existingImages.push(img.image);
             }
         });
-        // console.log(formData)
-        // console.log(existingImages)
-        console.log(formDataToSend)
-        //
-        // console.log("📡 Отправка запроса на сервер:");
-        // console.log("🔹 existing_images:", existingImages);
-        // console.log("🔹 deleted_images:", Array.from(deletedImages)); // ✅ Логируем удаленные фото перед отправкой
 
         existingImages.forEach((image) => formDataToSend.append("existing_images", image));
-        formDataToSend.append("deleted_images", JSON.stringify(Array.from(deletedImages))); // ✅ Передаем `deletedImages` как JSON
-
+        if (deletedImages.size > 0) {
+            Array.from(deletedImages).forEach((id) => {
+                formDataToSend.append("deleted_images", id.toString());
+            });
+        }
         Object.keys(formData).forEach((key) => {
             if (key !== "images") {
-                formDataToSend.append(key, formData[key as keyof PostData]);
+                let value = formData[key as keyof PostData];
+
+                if (key === "amount") {
+                    let normalized = typeof value === "string" ? value.replace(/\s/g, "").replace(",", ".") : value;
+                    value = parseFloat(normalized);
+                }
+
+                if (value !== undefined && value !== null) {
+                    formDataToSend.append(key, value as any);
+                }
             }
         });
 
-        // console.log(formDataToSend.images)
+        console.log("📦 Отправка данных:", Object.fromEntries(formDataToSend.entries()));
 
         try {
             const updatedPost = await editPublication(post.id, formDataToSend);
-
-            // setFormData((prev) => ({
-            //     ...prev,
-            //     images: updatedPost.images || [],
-            // }));
-
-            setDeletedImages(new Set()); // ✅ Очищаем список удаленных фото после успешного обновления
-
+            setDeletedImages(new Set());
+            setIsLoading(false);
             onClose();
         } catch (error) {
             console.error("Ошибка обновления публикации:", error);
+            setIsLoading(false);
         }
     };
 
@@ -266,7 +260,20 @@ const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) 
                         />
                     </div>
 
-                    <button type="submit" className={styles.submitButton}>{t("save")}</button>
+                    <button
+                        type="submit"
+                        className={styles.submitButton}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <span className={styles.loadingSpinner}>
+                                <IconSvg name="loadingIcon" width="20px" height="20px" className={styles.spinnerIcon} />
+                                {t("saving")}
+                            </span>
+                        ) : (
+                            t("save")
+                        )}
+                    </button>
                 </form>
             </div>
         </div>

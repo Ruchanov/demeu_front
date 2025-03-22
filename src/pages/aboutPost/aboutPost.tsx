@@ -20,7 +20,7 @@ const AboutPostPage = () => {
     const { t } = useTranslation();
     const [post, setPost] = useState(null);
     const [isShareOpen, setIsShareOpen] = useState(false);
-    const { user, fetchUserProfile } = useProfileStore();
+    const { user, fetchUserProfile, fetchCurrentUser, currentUser } = useProfileStore();
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // Для смены фото
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,13 +35,19 @@ const AboutPostPage = () => {
         }
     };
 
+    const closeEditModal = async () => {
+        setIsEditOpen(false), loadPost()
+    }
+
     useEffect(() => {
         loadPost();
 
         if (!user) {
             fetchUserProfile();
         }
-    }, [id, user, fetchUserProfile])
+
+        fetchCurrentUser();
+    }, [id])
 
     const getImageUrl = (url) => {
         if (!url) return "";
@@ -87,15 +93,25 @@ const AboutPostPage = () => {
     }
 
     const goToAuthorProfile = () => {
-        if (!post?.author_id) return;
+        console.log("🔍 Проверка post:", post);
+        if (!post) {
+            console.error("❌ Ошибка: post не найден!");
+            return;
+        }
+
+        const authorId = post?.author_id || post?.author?.id;
+
+        if (!authorId) {
+            console.error("❌ Ошибка: у поста нет author_id!");
+            return;
+        }
 
         if (user?.email === post.author_email) {
-            navigate(`/profile/me/`);
+            navigate(`/profiles/me/`);
         } else {
-            navigate(`/profile/${post.author_id}/`);
+            navigate(`/profiles/${authorId}/`);
         }
     };
-
 
     return (
         <div className={styles.container}>
@@ -105,26 +121,26 @@ const AboutPostPage = () => {
                     {/* Заголовок поста */}
                     <div className={styles.postTitle}>
                         <h1>{post.title}</h1>
-                        { user?.email === post.author_email ? (
+                        { currentUser?.user_id === post.author_id ? (
                             <button className={styles.editButton} onClick={() => {
                                 console.log("Нажали на кнопку редактирования!");
                                 setIsEditOpen(true);
                             }}>
                                 <IconSvg name="pencil_icon" width="30px" height="30px" />
                             </button>
-
                         ) : (
                             <button className={styles.saveButton}>
                                 <IconSvg name="save_icon_aboutPost" width="30px" height="30px" />
                             </button>
                         )}
+
                     </div>
 
                     <p className={styles.categoryTag}>{t("category")}: {t(`${post.category}`)}</p>
 
                     {/* мобВариант автор */}
                     <div className={`${styles.authorContainer} ${styles.mobileEdit}`} onClick={goToAuthorProfile} style={{ cursor: "pointer" }}>
-                        <img src={user?.avatar || authorAvatar} alt="Author Avatar" className={styles.authorAvatar} />
+                        <img src={getImageUrl(post?.author_avatar) || authorAvatar} alt="Author Avatar" className={styles.authorAvatar} />
                         <span className={styles.authorName}>{post.author_name}</span>
                     </div>
 
@@ -140,13 +156,16 @@ const AboutPostPage = () => {
                     {/* мобВариант fundraiseing */}
                     <div className={`${styles.cardSpacing} ${styles.mobileEdit}`}>
                         <FundraisingCard
+                            postId={post.id}
                             totalDonated={post.total_donated}
                             goal={post.amount}
                             daysLeft={post.days_left}
                             percentage={post.donation_percentage}
                             author_email={post.author_email}
+                            author_id={post.author_id}
                             onShareClick={() => setIsShareOpen(true)}
                         />
+
                     </div>
 
                     <p className={styles.description}>{post.description}</p>
@@ -181,20 +200,23 @@ const AboutPostPage = () => {
                 <div className={styles.rightColumn}>
                     <div className={`${styles.cardSpacing} ${styles.desktopEdit}`}>
                         <div className={styles.authorContainer} onClick={goToAuthorProfile} style={{ cursor: "pointer" }}>
-                            <img src={user?.avatar || authorAvatar} alt="Author Avatar" className={styles.authorAvatar} />
+                            <img src={getImageUrl(post?.author_avatar) || authorAvatar} alt="Author Avatar" className={styles.authorAvatar} />
                             <span className={styles.authorName}>{post.author_name}</span>
                         </div>
                     </div>
 
                     <div className={`${styles.cardSpacing} ${styles.desktopEdit}`}>
                         <FundraisingCard
+                            postId={post.id}
                             totalDonated={post.total_donated}
                             goal={post.amount}
                             daysLeft={post.days_left}
                             percentage={post.donation_percentage}
                             author_email={post.author_email}
+                            author_id={post.author_id}
                             onShareClick={() => setIsShareOpen(true)}
                         />
+
                     </div>
 
                     <div className={`${styles.cardSpacing} ${styles.desktopEdit}`}>
@@ -208,7 +230,7 @@ const AboutPostPage = () => {
             </div>
 
             {isShareOpen && <SharePopup onClose={() => setIsShareOpen(false)} />}
-            {isEditOpen && <EditPostPopup post={post} onClose={() => setIsEditOpen(false)} />}
+            {isEditOpen && <EditPostPopup post={post} onClose={closeEditModal} />}
 
             {isModalOpen && (
                 <div className={styles.modalOverlay} onClick={closeModal}>

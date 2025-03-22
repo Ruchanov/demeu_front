@@ -7,10 +7,11 @@ import {
     deletePublication,
     fetchCommentsByPostId,
     sendComment,
-    deleteComment
+    deleteComment,
+    fetchRelatedPosts
 } from '../api/publicationsAPI';
 import { useAuthStore } from "./authStore";
-import {fetchRelatedPosts, fetchTopDonors} from "../api/aboutPostApi";
+import {fetchTopDonors, fetchDonationStats} from "../api/donationsApi";
 import {addFavoritePublication, getFavoritePublications, removeFavoritePublication} from "../api/favoritesApi";
 
 interface Image {
@@ -47,6 +48,8 @@ export interface Publication {
     updated_at: string;
     author_name: string;
     author_email: string;
+    author_id: number;
+    author_avatar: string;
     total_views: any;
     total_donated: any;
     is_favorite?: boolean;
@@ -55,11 +58,13 @@ export interface Publication {
 type Post = Pick<Publication, "id" | "title" | "category" | "images">;
 interface PublicationState {
     publications: Publication[];
+    userPublications: Publication[]; // Добавляем массив для публикаций пользователя
     comments: Record<number, Comment[]>;
     favoritePublications: Publication[];
     loading: boolean;
     error: string | null;
     fetchPublications: (p: {}) => Promise<void>;
+    fetchUserPublications: (id: number) => Promise<void>; // Добавляем сюда
     fetchFavorites: () => Promise<void>;
     getPublication: (id: number) => Promise<Publication | null>;
     addPublication: (formData: FormData) => Promise<void>;
@@ -83,6 +88,7 @@ interface Filters {
 
 export const usePublicationsStore = create<PublicationState>((set, get) => ({
     publications: [],
+    userPublications: [],
     comments: {},
     topDonors: [],
     relatedPosts: [],
@@ -119,15 +125,31 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         }
     },
 
-    fetchUserPublications: async (email: string) => {
+    fetchUserPublications: async (user: User) => {
+        if (!user) {
+            console.log("❌ Ошибка: пользователь не передан!");
+            return;
+        }
+
         set({ loading: true, error: null });
+
         try {
-            const queryParams = new URLSearchParams();
-            queryParams.append('author_email', email); // Фильтрация по email
-            const response = await getPublications(queryParams.toString());
-            set({ userPublications: response || [], loading: false }); // Записываем в userPublications
+            console.log("📥 Фильтруем публикации из user.publications");
+
+            const filteredPublications = user.publications?.map((pub) => {
+                return {
+                    ...pub,
+                    images: pub.images || [], // <--- гарантируем наличие
+                    author_name: `${user.first_name} ${user.last_name}`,
+                    author_avatar: user.avatar,
+                };
+            }) || [];
+
+
+            set({ userPublications: filteredPublications, loading: false });
         } catch (error) {
-            set({ error: 'Failed to fetch user publications', loading: false });
+            console.error("❌ Ошибка загрузки публикаций:", error);
+            set({ error: "Failed to fetch user publications", loading: false });
         }
     },
 
@@ -282,12 +304,13 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
     },
 
 
-    fetchTopDonors: async (postId) => {
+    fetchTopDonors: async (postId: number) => {
         set({ loadingDonors: true, errorDonors: null });
         try {
             const donors = await fetchTopDonors(postId);
             set({ topDonors: donors, loadingDonors: false });
         } catch (error) {
+            console.error("Ошибка при получении топ доноров:", error);
             set({ errorDonors: "Ошибка загрузки топ доноров", loadingDonors: false });
         }
     },

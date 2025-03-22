@@ -21,7 +21,8 @@ const App = () => {
           <Route path="/auth" element={<AuthorizationPage />} />
           <Route path="/categories" element={<CategoryPage />}/>
           <Route path="/share" element={<SharePopup />}/>
-          <Route path="/profile/me" element={<ProfilePage />}/>
+          <Route path="/profiles/me" element={<ProfilePage />} />
+          <Route path="/profiles/:id" element={<ProfilePage />} />
           <Route path="/contact_us" element={<ContactPage />}/>
           <Route path="/about_us" element={<About />}/>
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
