@@ -20,28 +20,48 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
     user: null,
-    token: localStorage.getItem('token') || null,
     isAuthenticated: !!localStorage.getItem('token'),
     loading: false,
     error: null,
+
     login_google: (token) => {
+        console.log("🔑 Google Login - Устанавливаем токен:", token);
         localStorage.setItem("token", token);
-        set({ token, isAuthenticated: true });
+        set({token, isAuthenticated: true});
     },
+    token: localStorage.getItem('token') || null,
+
     login: async (email, password) => {
-        set({ loading: true, error: null });
+        set({loading: true, error: null});
+        console.log("📡 Отправляем запрос на логин...");
+
         try {
             const data = await loginRequest(email, password);
-            console.log('Login response:', data);
+            console.log("🎯 Ответ от сервера:", data);
+
+            if (!data.access_token) {
+                console.error("❌ Ошибка: Сервер не вернул токен!");
+                return;
+            }
+
             localStorage.setItem('token', data.access_token);
-            set({ user: data.user, token: data.access_token, isAuthenticated: true, loading: false });
+            console.log(localStorage.getItem('token'), '+++++++')
+            set({
+                user: data.user,
+                token: data.access_token,
+                isAuthenticated: true,
+                loading: false
+            });
+
+            console.log("✅ Токен сохранен:", data.access_token);
         } catch (error) {
-            set({ error: error.message || 'Login failed', loading: false });
+            console.error("❌ Ошибка логина:", error);
+            set({error: error.message || 'Login failed', loading: false});
         }
     },
 
-    register: async (first_name, last_name, email, password, confirm_password) => {
-        set({ loading: true, error: null, successMessage: null });
+    register: async (first_name: string, last_name: string, email: string, password: string, confirm_password: string) => {
+        set({loading: true, error: null, successMessage: null});
         try {
             await registerRequest(first_name, last_name, email, password, confirm_password);
             set({
@@ -49,44 +69,46 @@ export const useAuthStore = create<AuthState>((set) => ({
                 loading: false
             });
         } catch (error) {
-            set({ error: error.message || 'Registration failed', loading: false });
+            set({error: error.message || "Registration failed", loading: false});
         }
     },
 
     logout: () => {
+        console.log("🚪 Выход: Очищаем токен");
         localStorage.removeItem('token');
-        set({ user: null, token: null, isAuthenticated: false });
+        set({user: null, token: null, isAuthenticated: false});
     },
 
-    requestPasswordReset: async (email) => {
-        set({ loading: true, error: null, successMessage: null });
+    requestPasswordReset: async (email: string) => {
+        set({loading: true, error: null, successMessage: null});
         try {
             const response = await requestPasswordReset(email);
-            set({ successMessage: response.message, loading: false });
+            set({successMessage: response.message, loading: false});
             return response;
         } catch (error) {
-            const errorMessage = error.response?.data?.error || 'Password reset request failed';
-            set({ error: errorMessage, loading: false });
-            return { success: false, err: errorMessage };
+            const errorMessage = error.response?.data?.error || "Password reset request failed";
+            set({error: errorMessage, loading: false});
+            return {success: false, err: errorMessage};
         }
     },
 
-    resetPassword: async (token, newPassword, confirmPassword) => {
-        set({ loading: true, error: null, successMessage: null });
+    resetPassword: async (token: string, newPassword: string, confirmPassword: string) => {
+        set({loading: true, error: null, successMessage: null});
         try {
             const response = await resetPasswordRequest(token, newPassword, confirmPassword);
 
             if (response.message) {
-                set({ successMessage: "Password has been reset successfully.", loading: false });
-                return { success: true };
+                set({successMessage: "Password has been reset successfully.", loading: false});
+                return {success: true};
             } else {
-                return { success: false, error: "Unknown error occurred." };
+                return {success: false, error: "Unknown error occurred."};
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.error || 'Password reset failed';
-            set({ error: errorMessage, loading: false });
+            const errorMessage = error.response?.data?.error || "Password reset failed";
+            set({error: errorMessage, loading: false});
 
-            return { success: false, error: errorMessage };
+            return {success: false, error: errorMessage};
         }
-    },
+    }
 }));
+

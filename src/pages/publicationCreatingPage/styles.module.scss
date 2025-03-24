@@ -1,175 +1,1033 @@
 .container {
-  max-width: 800px;
-  margin: auto;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #76D0C2;
-  transition: border-color 0.3s ease;
-}
-.titleCategoryBlock{
-  background-color: #C4EBE4;
-  border-radius: 5px;
-  padding: 10px;
-}
-label{
-  font-weight: bold;
-}
-.titleCategoryBlock label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-select{
-  padding: 10px 20px;
-  margin-bottom: 16px;
-  width: 100%;
-  max-width: 100%;
-  border-radius: 25px;
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 6px #99DDD0;
-  font-size: 16px;
-  color: #333;
-}
-
-
-
-button:hover {
-  background: #218838;
-}
-
-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-.uploadArea {
-  width: 100%;
-  min-height: 150px;
-  border: 2px dashed #76D0C2;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.uploadArea:hover {
-  background-color: #f0f0f0;
-}
-
-.uploadPlaceholder {
-  text-align: center;
-  color: #0078be;
-}
-
-.uploadIcon {
-  font-size: 30px;
-  margin-bottom: 10px;
-}
-
-.uploadHint {
-  color: #aaa;
-  font-size: 14px;
-}
-
-.filePreviews {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.filePreview {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.filePreview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.removeFile {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(255, 0, 0, 0.7);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.addMore {
-  width: 100px;
-  height: 100px;
-  border: 2px dashed #76D0C2;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #0078be;
-  cursor: pointer;
-}
-
-.addMore:hover {
-  background-color: #f0f0f0;
-}
-.description{
-  height: 100px;
-  box-shadow: 0 4px 6px #99DDD0;
-  font-size: 16px;
-  color: #333;
-  border: 1px solid white;
-  border-radius: 15px;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  border: 1px solid transparent !important;
-  &:focus {
-    box-shadow: #76D0C2 ;
-  }
-}
-.formSections {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-
+  align-items: stretch; // Ensures both sections take full height
+  width: 100%;
+  background: #f9f9f9;
+  flex-direction: row;
+  min-height: 100vh;
+  height: auto; // ❗️ вместо height: 100vh
   @media (max-width: 768px) {
     flex-direction: column;
   }
 }
 
-.bankDetails,
-.contactInfo {
-  flex: 1;
-  background-color: #C4EBE4;
-  padding: 15px;
-  border-radius: 10px;
+
+@media (max-width: 1024px) and (min-width: 769px) {
+
+  .leftSide {
+    width: 35%;
+    margin-right: -10px; // уменьшили перекрытие
+    padding-left: 16px;
+
+    .steps {
+      right: 20px; // подвинуть ближе к центру, чтобы не уходили за край
+    }
+
+    h2 {
+      font-size: 26px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+    }
+  }
+
+  .rightSide {
+    width: 65%;
+    padding: 20px;
+  }
+
+  .mediaUpload {
+    min-height: 80px;
+    .imagePreview, .addMore {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .categoriesContainer {
+    gap: 6px;
+    .categoryItem {
+      .iconWrapper {
+        width: 48px;
+        height: 48px;
+      }
+      .categoryIcon {
+        width: 24px;
+        height: 24px;
+      }
+      .categoryName {
+        font-size: 12px;
+        width: 80px; // или 100px – экспериментируй под иконки
+        white-space: normal;
+        word-wrap: break-word;
+        text-align: center;
+        line-height: 1.2;
+      }
+    }
+  }
+
+  .descriptionField {
+    font-size: 14px;
+  }
+
+  .submitButton {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
 }
-.button{
+
+
+.leftSide {
+  position: relative;
   width: 40%;
-  margin-left: auto;
-  display: block;
+  background-image: url('/assets/images/create_post_bg.svg'); /* Keep your background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  margin-right: -50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 30px;
+  color: white;
+  text-align: left;
+  height: auto;
+  min-height: 100%;
   @media (max-width: 768px) {
     width: 100%;
+    height: auto;
+    margin-right: 0;
+    padding: 20px;
+    align-items: center;
+    text-align: center;
+
+    .steps {
+      flex-direction: row;
+      justify-content: center;
+      position: static;
+      transform: none;
+      margin-top: 20px;
+      gap: 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+    .subtitle {
+      font-size: 16px;
+    }
+  }
+
+  h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.4;
+    max-width: 320px;
+    opacity: 0.9;
+    margin-top: 0;
+  }
+
+  p {
+    font-size: 18px;
+    max-width: 300px;
+  }
+  .steps {
+    position: absolute;
+    right: 60px; /* Moves it closer to the right side */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+
+    .step {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #008080;
+      border: 3px solid #008080;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      transition: all 0.3s;
+      cursor: pointer;
+      z-index: 2;
+
+      &.active {
+        background: #008080;
+        color: white;
+        transform: scale(1.2);
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 3px;
+        height: 50px;
+        background: #008080;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+      }
+
+      &:last-child::after {
+        display: none;
+      }
+      &:not(:last-child)::after {  // Adds line only for steps except last one
+        content: '';
+        position: absolute;
+        width: 2px;
+        height: 70px;
+        background: #008080;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+      }
+    }
+  }
+}
+
+input {
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  font-size: 16px;
+  background: white;
+  appearance: none;
+  box-shadow: none !important;
+  transition: all 0.3s ease-in-out;
+  text-align: left; /* Ensures text starts from the left */
+  line-height: normal; /* Resets any browser-specific line height */
+}
+
+.rightSide {
+  width: 60%;
+  background: white;
+  padding: 40px;
+  padding-top: 20px;
+  padding-bottom: 30px  ;
+  border-radius: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1; /* Ensure it stays above .leftSide */
+  overflow: visible !important; /* Ensure nothing is clipped */
+  position: relative;
+  min-height: 100%;
+  height: auto;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+}
+.mediaUpload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 96px;
+  border: 2px dashed #008080;
+  border-radius: 8px;
+  //padding: 10px;
+  flex-wrap: wrap;
+  background: rgba(0, 128, 128, 0.05); /* Фон остается, но не кликабельный */
+  margin-bottom: 10px;
+  justify-content: center;
+  &:hover {
+    background: rgba(0, 128, 128, 0.05);
+  }
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .uploadPlaceholder {
+    color: #008080;
+    font-size: 16px;
+    opacity: 0.7;
+  }
+
+  .imagePreview {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #ddd;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .removeImage {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      z-index: 10; /* Убедимся, что крестик выше всех */
+      pointer-events: auto; /* Клик теперь проходит точно на кнопку */
+
+      &:hover {
+        background: darkred;
+      }
+    }
+  }
+
+
+  .addMore {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed #008080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* Центрируем текст */
+    flex-direction: column;
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+
+    span {
+      font-size: 24px;
+      font-weight: bold;
+      color: #008080;
+    }
+
+    p {
+      font-size: 12px;
+      color: #008080;
+      margin: 0;
+      padding-top: 5px; /* Немного поднимаем текст */
+    }
+
+    &:hover {
+      border-color: #005f5f;
+      background: rgba(0, 128, 128, 0.1);
+    }
+  }
+}
+.categoriesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centers the items horizontally */
+  gap: 8px; /* Adds spacing between categories */
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+}
+.categoryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+
+  .iconWrapper {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 128, 128, 0.15);
+    border: 2px solid transparent;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &:hover .iconWrapper {
+    border-color: #008080;
+    box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
+  }
+
+  &.active .iconWrapper {
+    border-color: #008080;
+    background: rgba(0, 128, 128, 0.1);
+  }
+
+  .categoryIcon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+  }
+
+  .categoryName {
+    margin-top: 8px; /* Pushes text below the circle */
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    width: 100px; /* Ensures text stays centered */
 
   }
 }
+
+
+.category-icons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+
+  .category {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    transition: all 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #008080;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .selected {
+    border-color: #008080;
+    background: rgba(0, 128, 128, 0.1);
+  }
+}
+
+.fileUpload {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+
+  .upload-box {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: #008080;
+    }
+  }
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+
+  p {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  button {
+    background: #008080;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
+
+.descriptionField {
+  width: 100%;  /* Full width */
+  min-height: 170px; /* Default height */
+  max-height: 250px; /* Prevent it from getting too big */
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px; /* Rounded corners */
+  font-size: 16px;
+  resize: vertical; /* Allow resizing vertically */
+  outline: none;
+  transition: box-shadow 0.3s ease-in-out;
+  //margin-bottom: 10px;
+  &:focus {
+    border-color: #008080;
+    box-shadow: 0 0 10px rgba(0, 128, 128, 0.3);
+  }
+}
+.amountContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns everything to the left */
+  gap: 8px; /* Adds spacing */
+  margin-bottom: 10px;
+}
+
+.amountLabel {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.amountField {
+  width: 200px; /* Keep small size */
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.smallButton {
+  padding: 8px 20px;  /* Smaller padding */
+  font-size: 14px;    /* Reduce font size */
+  border-radius: 20px; /* Make edges round */
+  width: auto;        /* Adjust width automatically */
+  min-width: 120px;   /* Ensure button is not too small */
+}
+
+
+.secondPage {
+  all: unset; /* Removes all styles, but keeps structure */
+  background: none !important; /* Removes background */
+  box-shadow: none; /* Ensures no shadow */
+  padding: 0; /* Removes any unnecessary spacing */
+  width: 100%; /* Ensures it takes full width */
+  h3 {
+    margin-top: 0px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .documentsList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 10px;
+    position: relative;
+    z-index: 10;
+    overflow: visible !important; /* Ensures dropdown is not clipped */
+
+    .documentCategory {
+      position: relative; /* Ensures dropdown stays inside */
+      cursor: pointer;
+      padding: 5px;
+      background: #f9f9f9;
+      transition: background 0.3s ease-in-out;
+      z-index: 10;
+      border-radius: 14px; /* Keep smooth corners */
+      font-weight: normal !important; /* ✅ Remove bold */
+      font-size: 1rem;
+      color: #333; /* ✅ Ensure consistent text color */
+
+      &:hover {
+        background: #eef3f7;
+      }
+
+      .categoryHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: normal !important; /* ✅ Ensure this removes bold */
+        font-size: 1rem;
+      }
+
+      .dropdownIcon {
+        position: absolute;
+        right: 16px; /* Moves it to the right */
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      &.active .dropdownIcon {
+        transform: translateY(-50%) rotate(180deg); /* Rotates on open */
+      }
+
+      .subDocuments {
+        position: absolute !important;
+        left: 0;
+        top: calc(100% - 1px); /* Prevents gap */
+        background: white;
+        border-radius: 14px; /* Keep smooth corners */
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+        width: 98%; /* Matches exactly with category header */
+        max-height: 250px;
+        overflow-y: auto;
+        padding: 8px;
+        z-index: 99999 !important;
+        transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
+        display: none;
+        margin-top: 5px;
+      }
+
+      &.active .subDocuments {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+      }
+    }
+  }
+
+
+  .fileUploadContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Align items properly */
+    gap: 20px;  /* Space between elements */
+    width: 100%;
+    flex-wrap: wrap; /* Ensures responsiveness */
+    justify-content: flex-start; // ❗️ вместо space-around
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    @media (max-width: 1024px) {
+      justify-content: center;
+    }
+    }
+
+  .fileUploadSection {
+    background: white; /* ✅ Set a background */
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    border-radius: 12px; /* ✅ Rounded corners */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* ✅ Soft shadow for elevation */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 100%; /* ✅ Ensure it takes the right width */
+    min-height: 170px;
+
+    gap: 2px;
+    transition: background 0.3s ease-in-out;
+    box-sizing: border-box;
+    flex: 0 1 calc(50% - 10px); // половина ширины - за вычетом gap
+    min-width: 300px;
+
+    @media (max-width: 1024px) {
+      flex: 1 1 100%;
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      width: 100% !important;
+      min-width: unset !important;
+      flex: unset !important;
+    }
+  }
+  .fileUploadSection:nth-child(3) {
+    margin: 0 auto; // Центрирует третий блок при переносе
+  }
+
+  .fileLabel {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .uploadDescription {
+    font-size: 0.9rem;
+    color: gray;
+  }
+
+  .fileUploadArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 60px;
+    max-hight: 80px;
+    border: 2px dashed #008080;
+    border-radius: 12px;
+    background: rgba(0, 128, 128, 0.05);
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    transition: background 0.2s ease-in-out;
+    overflow-x: auto; // ✅ чтобы не растягивалось
+    overflow-y: hidden; // ❗️ убираем вертикальный скролл
+  }
+  .addMoreFile {
+    width: 50px;
+    height: 50px;
+    border: 2px dashed #008080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+    transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    flex: 0 0 auto;
+    margin: 0 auto; // Центрирует саму кнопку в пределах контейнера
+
+    span {
+      font-size: 24px;
+      font-weight: bold;
+      color: #008080;
+    }
+
+    p {
+      font-size: 12px;
+      color: #008080;
+      margin: 0;
+    }
+
+    &:hover {
+      border-color: #005f5f;
+      background: rgba(0, 128, 128, 0.1);
+    }
+  }
+
+  .fileUploadArea:hover {
+    background: rgba(0, 128, 128, 0.1);
+  }
+  .fileListContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    align-items: center;
+    white-space: nowrap;
+    gap: 8px;
+    width: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+  }
+
+
+  .fileItem {
+    width: 50px;
+    height: 50px;
+    background: #f1f1f1;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto;
+
+  }
+  .fileName {
+    max-width: 45px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 9px;
+  }
+
+  .fileIcon {
+    margin-right: 8px;
+    font-size: 1.2rem;
+  }
+
+  .hiddenFileInput {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Fully hidden but still clickable */
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .removeFileButton {
+    position: absolute;
+    top: -13px;
+    right: 3px;
+    background: gray;
+    color: red;
+    font-size: 10px;
+    width: 14px;
+    height: 14px;
+    border-radius: 20%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+  }
+
+  .bankAmountSection {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    justify-content: space-between;
+    margin-top: 10px;
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  .bankFieldContainer {
+    flex: 1; /* Makes both fields equal width */
+    max-width: 48%; /* Prevents crossing */
+    padding: 8px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
+  }
+
+  .labelContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+
+  .labelText {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .inputField {
+    width: 100%; /* Prevents overflow */
+    padding: 6px;
+    border: 2px solid #ddd;
+    border-radius: 14px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    box-sizing: border-box; /* Fixes padding issues */
+    margin-bottom: 0px;
+  }
+
+  .inputField:focus {
+    border-color: #008080;
+    box-shadow: 0 0 10px rgba(0, 128, 128, 0.3);
+  }
+
+}
+.firstPageButtons {
+  display: flex;
+  justify-content: flex-end; /* Moves button to the right */
+  //margin-top: 10px;
+  padding-right: 10px; /* Adds spacing from right */
+}
+.navigationButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 100%; // 🟢 растягиваем до полного контейнера
+
+  .smallButton {
+    padding: 8px 20px;  /* Smaller padding */
+    font-size: 14px;    /* Reduce font size */
+    border-radius: 20px; /* Make edges round */
+    width: auto;        /* Adjust width automatically */
+    min-width: 120px;   /* Ensure button is not too small */
+  }
+
+  .backButton {
+    padding: 8px 20px; /* Same padding as other buttons */
+    font-size: 14px;
+    border-radius: 20px; /* Rounded edges like the next button */
+    width: auto; /* Adjust width dynamically */
+    min-width: 120px; /* Prevent it from being too small */
+    max-width: fit-content; /* Ensures it doesn't stretch too much */
+    border: none;
+    cursor: pointer;
+    font-weight: normal;
+    color: #333;
+    background: #eee;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers text properly */
+
+    &:hover {
+      background: #ddd;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+}
+.documentCategoryIcon {
+  width: 28px; // Adjust if needed
+  height: 28px;
+  margin-right: 12px;
+}
+
+.thirdStepContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 20px 0;
+  }
+}
+
+.thirdStepBox {
+  padding: 25px;
+  width: 420px;
+  border-radius: 10px;
+  box-shadow: none; /* Remove box shadow */
+  text-align: center;
+  background: none; /* Remove background */
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 15px;
+  }
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  background: white; /* Ensure input remains visible */
+}
+
+.submitButton {
+  width: 50%; /* Adjust width to be smaller than the form */
+  max-width: 200px; /* Ensures it’s not too wide */
+  margin: 20px auto; /* Centers the button horizontally */
+  display: block; /* Ensures it respects margin auto */
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  text-align: center;
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: none;
+  }
+  &:hover {
+    background: linear-gradient(to right, #4a9f8c, #226c5e);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftSide {
+    width: 100%;
+    height: auto;
+    align-items: center;
+    padding: 20px 10px;
+    margin-right: 0;
+    background-position: center top;
+
+    h2 {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .steps {
+      position: static;
+      transform: none;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 15px;
+
+      .step {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+
+        &::after {
+          display: none !important;
+        }
+      }
+    }
+  }
+
+  .rightSide {
+    width: 100%;
+    padding: 20px 15px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+

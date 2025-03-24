@@ -14,13 +14,23 @@ export const getPublicationById = async (id: number) => {
 };
 
 export const createPublication = async (formData: FormData, token: string) => {
-    const response = await axios.post(API_URL, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    return response.data;
+    try {
+        console.log("🔵 Sending data:", formData);  // Debugging: Print the data being sent
+
+        const response = await axios.post(`${API_URL}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        console.log("🟢 Success:", response.data);  // Debugging: Print success response
+        return response.data;
+    } catch (error: any) {
+        console.error("🔴 Error creating publication:", error.response?.data || error.message);
+        alert(`Error: ${error.response?.data?.detail || error.message}`);
+        throw error;
+    }
 };
 
 export const updatePublication = async (id: number, formData: FormData, token: string) => {

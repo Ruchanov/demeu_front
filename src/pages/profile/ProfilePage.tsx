@@ -10,6 +10,7 @@ import styles from "./ProfilePage.module.scss";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useTranslation } from "react-i18next";
 import defaultAvatar from "../../shared/assets/images/profile_default.png";
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
     const { user, fetchUserProfile, loading: userLoading } = useProfileStore();
@@ -17,9 +18,12 @@ const ProfilePage: React.FC = () => {
     const { t } = useTranslation();
     const { id: profileId } = useParams();
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const navigate = useNavigate();
 
     const isOwnProfile = window.location.pathname.includes("/profiles/me");
-
+    const handleCreatePostClick = () => {
+        navigate('/create_publication');
+    };
     useEffect(() => {
         console.log("🔄 Загружаем профиль для:", profileId || "me");
         fetchFavorites();
@@ -76,8 +80,8 @@ const ProfilePage: React.FC = () => {
                         </p>
                         <p className={styles.bio}>{user.bio}</p>
                         <div className={`${styles.createPostContainer}`}>
-                            <div className={styles.plusIcon}>+</div>
-                            <button className={styles.createPost}>{t("create_post")}</button>
+                            <div className={styles.plusIcon} onClick={handleCreatePostClick}>+</div>
+                            <button className={styles.createPost} onClick={handleCreatePostClick}>{t("create_post")}</button>
                         </div>
                     </div>
 
