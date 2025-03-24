@@ -1,0 +1,47 @@
+.banner {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 1s ease-in-out; /* Плавное появление */
+}
+
+.fadeIn {
+  opacity: 1;
+}
+
+.fadeOut {
+  opacity: 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(177, 217, 219, 0) 0%, rgba(62, 125, 130, 0.9) 79%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+h2 {
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+
+p {
+  font-size: 15px;
+  font-family: "Montserrat", sans-serif;
+}

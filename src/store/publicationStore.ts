@@ -12,7 +12,10 @@ import {
 } from '../api/publicationsAPI';
 import { useAuthStore } from "./authStore";
 import {fetchTopDonors, fetchDonationStats} from "../api/donationsApi";
+import {getNewPublications, getTopPublications, getRecommendedPublications} from '../api/publicationsAPI';
+import {useAuthStore} from "./authStore";
 import {addFavoritePublication, getFavoritePublications, removeFavoritePublication} from "../api/favoritesApi";
+import {useProfileStore} from "./profileStore";
 
 interface Image {
     id: number;
@@ -65,6 +68,7 @@ interface PublicationState {
     error: string | null;
     fetchPublications: (p: {}) => Promise<void>;
     fetchUserPublications: (id: number) => Promise<void>; // Добавляем сюда
+    fetchPublications: (filters?: Filters) => Promise<void>;
     fetchFavorites: () => Promise<void>;
     getPublication: (id: number) => Promise<Publication | null>;
     addPublication: (formData: FormData) => Promise<void>;
@@ -75,6 +79,9 @@ interface PublicationState {
     removeComment: (postId: number, commentId: number) => Promise<void>;
     fetchTopDonors: (postId: number) => Promise<void>;
     fetchRelatedPosts: (category: string, postId: number) => Promise<void>;
+    fetchRecommendedPublications: () => Promise<void>;
+    fetchNewPublications: () => Promise<void>;
+    fetchTopPublications: () => Promise<void>;
 }
 interface Filters {
     search?: string;
@@ -99,6 +106,9 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
     errorDonors: null,
     errorRelated: null,
     favoritePublications: [],
+    recommendedPublications: [],
+    newPublications: [],
+    topPublications: [],
 
     fetchPublications: async (filters?: Filters) => {
         set({ loading: true, error: null });
@@ -124,7 +134,6 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             set({ error: 'Failed to fetch publications', loading: false });
         }
     },
-
     fetchUserPublications: async (user: User) => {
         if (!user) {
             console.log("❌ Ошибка: пользователь не передан!");
@@ -150,6 +159,38 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         } catch (error) {
             console.error("❌ Ошибка загрузки публикаций:", error);
             set({ error: "Failed to fetch user publications", loading: false });
+        }
+    },
+
+    fetchRecommendedPublications: async () => {
+        set({ loading: true, error: null });
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+        try {
+            const response = await getRecommendedPublications(token);
+            set({ recommendedPublications: response, loading: false });
+        } catch (error) {
+            set({ error: 'Failed to fetch recommended publications', loading: false });
+        }
+    },
+
+    fetchNewPublications: async () => {
+        set({ loading: true, error: null });
+        try {
+            const response = await getNewPublications();
+            set({ newPublications: response, loading: false });
+        } catch (error) {
+            set({ error: 'Failed to fetch new publications', loading: false });
+        }
+    },
+
+    fetchTopPublications: async () => {
+        set({ loading: true, error: null });
+        try {
+            const response = await getTopPublications();
+            set({ topPublications: response, loading: false });
+        } catch (error) {
+            set({ error: 'Failed to fetch top publications', loading: false });
         }
     },
 

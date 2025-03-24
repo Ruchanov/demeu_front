@@ -405,7 +405,7 @@ const CreatePublication = () => {
                                             onClick={() => document.getElementById("id_card")?.click()}
                                         >
                                             <span>+</span>
-                                            <p>Қосу</p>
+                                            <p>{t('add_more')}</p>
                                             <input
                                                 id="id_card"
                                                 type="file"
@@ -447,7 +447,7 @@ const CreatePublication = () => {
                                             onClick={() => document.getElementById("supporting_documents")?.click()}
                                         >
                                             <span>+</span>
-                                            <p>Қосу</p>
+                                            <p>{t('add_more')}</p>
                                             <input
                                                 id="supporting_documents"
                                                 type="file"
@@ -488,7 +488,7 @@ const CreatePublication = () => {
                                             onClick={() => document.getElementById("income_statement")?.click()}
                                         >
                                             <span>+</span>
-                                            <p>Қосу</p>
+                                            <p>{t('add_more')}</p>
                                             <input
                                                 id="income_statement"
                                                 type="file"

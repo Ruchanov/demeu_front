@@ -1,0 +1,75 @@
+.section {
+    margin-top: 40px;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.viewAll {
+    color: #76D0C2;
+    text-decoration: none;
+    font-size: 25px;
+    margin-right: 1rem;
+}
+
+.slider {
+    display: flex;
+    align-items: center;
+}
+
+.cardsContainer {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    transition: transform 0.3s ease-in-out;
+    padding-top: 5px;
+}
+
+.cardWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+//.rank {
+//    font-size: 200px;
+//    font-weight: bold;
+//    color: #76D0C2;
+//    font-family: 'MonteCarlo';
+//}
+.rank {
+
+    font-size: 200px;
+    font-weight: 400;
+
+    font-family: 'MonteCarlo', cursive;
+    color: #76D0C2;
+
+    opacity: 0.4;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+    z-index: -1;
+}
+
+
+.arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}

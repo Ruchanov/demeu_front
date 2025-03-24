@@ -29,7 +29,7 @@ const CategoryPage: React.FC = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
-        }, 5000); // Меняем каждые 5 секунд
+        }, 5000);
 
         return () => clearInterval(interval);
     }, []);

@@ -144,4 +144,22 @@ export const fetchRelatedPosts = async (category: string, postId: number) => {
         console.error("Ошибка при получении похожих постов:", error);
         return [];
     }
+}
+
+
+export const getRecommendedPublications = async (token: string) => {
+    const response = await axios.get(`${API_URL}recommended/`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+};
+
+export const getNewPublications = async () => {
+    const response = await axios.get(`${API_URL}?ordering=-created_at`);
+    return response.data;
+};
+
+export const getTopPublications = async () => {
+    const response = await axios.get(`${API_URL}top-publications/`);
+    return response.data;
 };
