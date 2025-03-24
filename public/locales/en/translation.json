@@ -211,6 +211,16 @@
   "statistics_total_amount_collected": "Total amount collected",
   "statistics_donors_count": "Number of donors",
   "view_all": "View all",
+  "categories_list": {
+    "medical": "Medical Assistance",
+    "emergency": "Emergency Situation",
+    "charity": "Charity",
+    "education": "Education",
+    "animals": "Animals",
+    "environment": "Environment",
+    "sports": "Sports",
+    "general": "General Fundraising"
+  },
   "recommended_publications": "Recommended collections",
   "new_posts": "New posts",
   "top_10_posts": "Top 10 posts",
@@ -231,4 +241,3 @@
   "return_to_main_page": "Return to main page",
   "support_every_soul": "Support every soul"
 }
-  

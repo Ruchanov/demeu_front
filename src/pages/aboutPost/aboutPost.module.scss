@@ -173,6 +173,30 @@
   max-height: 90%;
 }
 
+.contactBox {
+  background-color: #f3fbf9;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  color: #333;
+  width: 100%;
+  word-break: break-word;
+}
+
+.contactTitle {
+  font-size: 18px;
+  font-weight: bold;
+  color: #49c2a7;
+  margin-bottom: 10px;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin-bottom: 15px;
+}
+
 .fullImage {
   width: auto;
   height: auto;

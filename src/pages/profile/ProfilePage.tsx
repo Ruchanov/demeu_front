@@ -155,7 +155,7 @@ const ProfilePage: React.FC = () => {
                 )}
             </div>
 
-            {isEditOpen && <ProfileEditPopup onClose={() => setIsEditOpen(false)} />}
+            {isEditOpen && <ProfileEditPopup key={Date.now()} onClose={() => setIsEditOpen(false)} />}
         </div>
     );
 };
