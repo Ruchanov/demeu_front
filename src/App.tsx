@@ -12,13 +12,15 @@ import PublicationCreatingPage from "./pages/publicationCreatingPage";
 import About from "./pages/aboutUs/aboutUs";
 import AboutPostPage from "./pages/aboutPost/aboutPost";
 import SearchPage from "./pages/search_page";
+import {useAuthStore} from "./store/authStore";
 import MainPage from "./pages/mainPage";
 import FavoritesPage from "./pages/favoritesPage/FavoritesPage";
 import AllPublicationsPage from "./pages/AllPublicationsPage/AllPublicationsPage";
 
-
-
 const App = () => {
+    const data = useAuthStore((state) => state.token);
+    console.log("🔥 Токен из useAuthStore:", data);
+    // console.log("🔓 Авторизован?", isAuthenticated);
   return (
     <div>
       <Header></Header>
