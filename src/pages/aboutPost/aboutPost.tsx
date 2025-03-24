@@ -168,6 +168,16 @@ const AboutPostPage = () => {
 
                     </div>
 
+                    <div className={`${styles.cardSpacing} ${styles.mobileEdit}`}>
+                        <div className={styles.contactBox}>
+                            <h3 className={styles.contactTitle}>{t("contact_info")}</h3>
+                            <hr className={styles.divider} />
+                            <p><strong>{t("contact_name")}:</strong> {post.contact_name}</p>
+                            <p><strong>{t("contact_phone")}:</strong> {post.contact_phone}</p>
+                            <p><strong>{t("contact_email")}:</strong> {post.contact_email}</p>
+                        </div>
+                    </div>
+
                     <p className={styles.description}>{post.description}</p>
 
                     {/* Заголовок с датой и иконками */}
@@ -218,6 +228,17 @@ const AboutPostPage = () => {
                         />
 
                     </div>
+
+                    <div className={`${styles.cardSpacing} ${styles.desktopEdit}`}>
+                        <div className={styles.contactBox}>
+                            <h3 className={styles.contactTitle}>{t("contact_info")}</h3>
+                            <hr className={styles.divider} />
+                            <p><strong>{t("contact_name")}:</strong> {post.contact_name}</p>
+                            <p><strong>{t("contact_phone")}:</strong> {post.contact_phone}</p>
+                            <p><strong>{t("contact_email")}:</strong> {post.contact_email}</p>
+                        </div>
+                    </div>
+
 
                     <div className={`${styles.cardSpacing} ${styles.desktopEdit}`}>
                         <DonorList postId={post.id} />

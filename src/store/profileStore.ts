@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { fetchUserProfile, updateUserProfile } from "../api/profileApi";
+import { fetchUserProfile as fetchUserProfileAPI, updateUserProfile as updateUserProfileAPI } from "../api/profileApi";
 import { Publication } from "./publicationStore";
 
 interface Donation {
@@ -44,24 +44,26 @@ interface User {
 
 interface ProfileState {
     user: User | null;
-    profileStats: ProfileStats;
+    currentUser: User | null;
     loading: boolean;
     error: string | null;
+    profileStats: ProfileStats;
     fetchUserProfile: (profileId?: string) => Promise<void>;
+    fetchCurrentUser: () => Promise<void>;
     updateUserProfile: (formData: FormData) => Promise<void>;
 }
 
 export const useProfileStore = create<ProfileState>((set) => ({
     user: null,
     currentUser: null,
-    viewedProfile: null,    profileStats: {
+    loading: false,
+    error: null,
+    profileStats: {
         posts: 0,
         donations: 0,
         views: 0,
         savedPosts: 0,
     },
-    loading: false,
-    error: null,
 
     fetchCurrentUser: async () => {
         set({ loading: true, error: null });
@@ -69,8 +71,18 @@ export const useProfileStore = create<ProfileState>((set) => ({
             const token = localStorage.getItem("token");
             if (!token) throw new Error("❌ No token found");
 
-            const userData = await fetchUserProfile(token); // без id = me
-            set({ currentUser: userData, loading: false });
+            const userData = await fetchUserProfileAPI(token); // /profiles/me/
+            set({
+                currentUser: userData,
+                user: userData, // 👈 обновляем и user
+                profileStats: {
+                    posts: userData.total_publications,
+                    donations: userData.total_donations,
+                    views: userData.total_profile_views,
+                    savedPosts: userData.total_favorite_publications,
+                },
+                loading: false,
+            });
         } catch (error: any) {
             console.error("❌ Ошибка загрузки текущего пользователя:", error);
             set({ error: "Failed to fetch current user", loading: false });
@@ -79,12 +91,11 @@ export const useProfileStore = create<ProfileState>((set) => ({
 
     fetchUserProfile: async (profileId?: string) => {
         set({ loading: true, error: null });
-
         try {
             const token = localStorage.getItem("token");
             if (!token) throw new Error("❌ No token found");
 
-            const userData = await fetchUserProfile(token, profileId);
+            const userData = await fetchUserProfileAPI(token, profileId);
             console.log("✅ Загружен профиль:", userData);
 
             set({
@@ -109,10 +120,19 @@ export const useProfileStore = create<ProfileState>((set) => ({
             const token = localStorage.getItem("token");
             if (!token) throw new Error("❌ No token found");
 
-            const updatedUser = await updateUserProfile(token, formData);
-            console.log("✅ Профиль обновлен:", updatedUser);
+            const updatedUser = await updateUserProfileAPI(token, formData);
+            console.log("✅ Профиль обновлён:", updatedUser);
 
-            set({ user: updatedUser });
+            set({
+                user: updatedUser,
+                currentUser: updatedUser,
+                profileStats: {
+                    posts: updatedUser.total_publications,
+                    donations: updatedUser.total_donations,
+                    views: updatedUser.total_profile_views,
+                    savedPosts: updatedUser.total_favorite_publications,
+                }
+            });
         } catch (error) {
             console.error("❌ Ошибка обновления профиля:", error);
             throw error;

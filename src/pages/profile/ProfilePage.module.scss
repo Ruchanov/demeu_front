@@ -85,7 +85,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .createPost {
@@ -106,9 +106,9 @@
 
 .plusIcon {
   position: absolute;
-  top: -20px;
+  top: 10px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   width: 35px;
   height: 35px;
   background: #99DDD0;
@@ -119,13 +119,13 @@
   font-size: 20px;
   font-weight: bold;
   color: white;
+  z-index: 1;
 }
 
 .createPostContainer:hover {
   opacity: 0.9;
 }
 
-/* Правая часть */
 .rightSection {
   width: 70%;
   display: flex;
@@ -193,8 +193,15 @@
 .publicationsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 50px;
   margin-top: 20px;
+}
+
+.publicationCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 420px;
 }
 
 @media (max-width: 768px) {

@@ -131,6 +131,13 @@
   background-size: 20px;
 }
 
+.readonlyInput {
+  background-color: #f0f0f0;
+  //color: #555;
+  //box-shadow: 0 0 4px rgba(0, 200, 150, 0.6); // зелёная тень
+  cursor: not-allowed;
+}
+
 .input:focus,
 .select:focus {
   box-shadow: 0px 0px 10px rgba(0, 120, 190, 0.3);

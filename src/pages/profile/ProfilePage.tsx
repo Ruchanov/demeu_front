@@ -5,7 +5,7 @@ import { usePublicationsStore } from "../../store/publicationStore";
 import ProfileStats from "../../components/profileStats/ProfileStats";
 import ProfileDonations from "../../components/profileDonations/ProfileDonations";
 import PublicationCard from "../../components/publicationCard";
-import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup"; // Подключаем попап
+import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup";
 import styles from "./ProfilePage.module.scss";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useTranslation } from "react-i18next";
@@ -155,7 +155,7 @@ const ProfilePage: React.FC = () => {
                 )}
             </div>
 
-            {isEditOpen && <ProfileEditPopup onClose={() => setIsEditOpen(false)} />}
+            {isEditOpen && <ProfileEditPopup key={Date.now()} onClose={() => setIsEditOpen(false)} />}
         </div>
     );
 };
