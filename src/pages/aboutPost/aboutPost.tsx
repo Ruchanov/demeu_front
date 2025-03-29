@@ -196,7 +196,8 @@ const AboutPostPage = () => {
                             postId={post.id}
                             totalDonated={post.total_donated}
                             goal={post.amount}
-                            daysLeft={post.days_left}
+                            daysLeft={post.days_remaining}
+                            durationDays={post.duration_days}
                             percentage={post.donation_percentage}
                             author_email={post.author_email}
                             author_id={post.author_id}
@@ -257,7 +258,8 @@ const AboutPostPage = () => {
                             postId={post.id}
                             totalDonated={post.total_donated}
                             goal={post.amount}
-                            daysLeft={post.days_left}
+                            daysLeft={post.days_remaining}
+                            durationDays={post.duration_days}
                             percentage={post.donation_percentage}
                             author_email={post.author_email}
                             author_id={post.author_id}

@@ -65,6 +65,8 @@ export interface Publication {
     total_views: any;
     total_donated: any;
     is_favorite?: boolean;
+    duration_days: number;
+    days_remaining: number;
 }
 
 type Post = Pick<Publication, "id" | "title" | "category" | "images">;
