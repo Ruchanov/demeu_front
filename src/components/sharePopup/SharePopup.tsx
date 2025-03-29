@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './SharePopup.module.scss';
-import IconSvg from '../../shared/assets/icons/Icon';
+import IconSvg from "../../shared/assets/icons/Icon";
 import {useTranslation} from "react-i18next";
 
 interface SharePopupProps {
@@ -26,7 +26,7 @@ const SharePopup: React.FC<SharePopupProps> = ({ onClose }) => {
         {
             name: 'WhatsApp',
             icon: 'whatsapp_icon',
-            url: `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareMessage} ${shareLink}`)}`,
+            url: `https://api.whatsApp.com/send?text=${encodeURIComponent(`${shareMessage} ${shareLink}`)}`,
         },
         {
             name: 'Telegram',
@@ -58,8 +58,8 @@ const SharePopup: React.FC<SharePopupProps> = ({ onClose }) => {
     return (
         <div className={styles.backdrop} onClick={onClose}> {/* Затемненный фон */}
             <div className={styles.container} onClick={(e) => e.stopPropagation()}> {/* Остановка всплытия */}
-                <button className={styles.backButton} onClick={onClose} aria-label="Close">
-                    <IconSvg name="back_icon" width="20px" height="20px" />
+                <button className={styles.closeButton} onClick={onClose}>
+                    <IconSvg name="closeIcon" width="24px" height="24px" />
                 </button>
                 <h2 className={styles.title}>{t('share')}</h2>
                 <div className={styles.linkContainer}>

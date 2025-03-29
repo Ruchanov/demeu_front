@@ -56,6 +56,10 @@
   cursor: pointer;
 }
 
+.editAvatar svg {
+  width: 100%;
+}
+
 .name {
   font-size: 25px;
   font-weight: bold;
@@ -160,14 +164,12 @@
   gap: 10px;
 }
 
-/* Колонки информации */
 .infoColumn {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Каждый элемент информации */
 .infoItem {
   display: flex;
   align-items: center;
@@ -176,7 +178,6 @@
   color: #333;
 }
 
-/* Раздел с публикациями */
 .postsSection {
   width: 80%;
   max-width: 1200px;
@@ -306,7 +307,7 @@
     color: #333;
     padding: 8px;
     border-radius: 10px;
-    background: #f9f9f9; /* Добавляем фон, чтобы границы лучше смотрелись */
+    background: #f9f9f9;
   }
 
   .infoItem svg {
@@ -316,13 +317,11 @@
     color: #49c2a7;
   }
 
-  /* Фиксируем границы */
   .userInfoCard {
     box-sizing: border-box;
     overflow: hidden;
   }
 
-  /* Исправление для блока с иконками */
   .infoColumn {
     display: flex;
     flex-direction: column;

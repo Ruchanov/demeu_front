@@ -98,9 +98,11 @@ const ProfileEditPopup = ({ onClose }) => {
                             alt="Avatar"
                             className={styles.avatar}
                         />
-                        <label htmlFor="avatarUpload" className={styles.avatarLabel}>
-                            {t('upload_photo')}
-                        </label>
+                        <div className={styles.uploading} >
+                            <label htmlFor="avatarUpload" className={styles.avatarLabel}>
+                                {t('upload_photo')}
+                            </label>
+                        </div>
                         <input
                             type="file"
                             id="avatarUpload"
@@ -139,7 +141,19 @@ const ProfileEditPopup = ({ onClose }) => {
 
                             <div className={styles.inputWrapper}>
                                 <label>{t('phone')}</label>
-                                <Input name="phone_number" value={formData.phone_number} onChange={handleChange} />
+                                <Input
+                                    name="phone_number"
+                                    value={formData.phone_number}
+                                    onChange={(e) => {
+                                        const input = e.target.value;
+
+                                        // Если пользователь стер +7, снова добавим
+                                        const sanitized = input.startsWith('+7') ? input : '+7' + input.replace(/[^0-9]/g, '');
+                                        setFormData({ ...formData, phone_number: sanitized });
+                                    }}
+                                    placeholder="+7**********"
+                                    style={{ color: formData.phone_number ? '#000' : '#999' }} // делаем placeholder светлым
+                                />
                             </div>
                         </div>
 

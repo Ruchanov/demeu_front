@@ -72,6 +72,23 @@
   gap: 10px;
 }
 
+.loadMoreButton {
+  background: none;
+  border: 1px solid #17A34A;
+  color: #17A34A;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: center;
+  transition: 0.2s;
+
+  &:hover {
+    background: #17A34A;
+    color: white;
+  }
+}
+
 .avatar {
   width: 40px;
   height: 40px;

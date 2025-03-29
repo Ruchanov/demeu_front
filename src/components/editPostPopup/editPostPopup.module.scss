@@ -36,6 +36,11 @@
   background: none;
   border: none;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.5);
+    background: none;
+  }
 }
 
 .form {
@@ -122,59 +127,10 @@
   height: 20px;
 }
 
-.dropdownIcon {
-  margin-left: auto;
-  width: 20px;
-  height: 20px;
-  transition: transform 0.3s ease;
-  position: absolute;
-  right: 20px;
-}
-
 .categoryText {
   flex: 1;
   text-align: left;
   padding-left: 20px;
-}
-
-.categoryDropdown {
-  width: 100%;
-  background: white;
-  border-radius: 12px;
-  max-height: 200px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.categoryItem {
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s;
-  border-radius: 8px;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #E0E0E0;
-  box-sizing: border-box;
-}
-
-.categoryItem:last-child {
-  border-bottom: none;
-}
-
-.categoryItem:hover {
-  background: #f0f0f0;
-}
-
-.categoryItem.active {
-  background: #49c2a7;
-  color: white;
-  font-weight: bold;
 }
 
 .descriptionWrapper {
@@ -232,6 +188,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 .imagePreview {
@@ -243,20 +200,24 @@
 
 .deleteImage {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 0;
+  right: 0;
+  transform: translate(10%, -80%);
   background: red;
   color: white;
   border: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
+  padding: 0;
 }
+
 
 .addImageContainer {
   display: flex;
