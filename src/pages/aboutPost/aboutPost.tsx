@@ -24,30 +24,43 @@ const AboutPostPage = () => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // Для смены фото
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { editPublication, fetchPublications } = usePublicationsStore();
+    const { editPublication, fetchPublications, fetchFavorites, toggleFavorite } = usePublicationsStore();
 
     const loadPost = async () => {
         try {
             const data = await fetchPostById(id);
-            setPost(data);
+            const favoriteIds = usePublicationsStore.getState().favoritePublications.map(pub => pub.id);
+            const isFavorite = favoriteIds.includes(data.id);
+
+            setPost({
+                ...data,
+                is_favorite: isFavorite
+            });
         } catch (error) {
             console.error("Ошибка загрузки поста:", error);
         }
     };
+
 
     const closeEditModal = async () => {
         setIsEditOpen(false), loadPost()
     }
 
     useEffect(() => {
-        loadPost();
+        const init = async () => {
+            await fetchFavorites();
+            await loadPost();
+        };
+
+        init();
 
         if (!user) {
             fetchUserProfile();
         }
 
         fetchCurrentUser();
-    }, [id])
+    }, [id]);
+
 
     const getImageUrl = (url) => {
         if (!url) return "";
@@ -88,6 +101,18 @@ const AboutPostPage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length);
     };
 
+    const handleFavoriteClick = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!post?.id) return;
+
+        await toggleFavorite(post.id);
+
+        setPost(prev => ({
+            ...prev!,
+            is_favorite: !prev?.is_favorite
+        }));
+    };
+
     if (!post) {
         return <p className={styles.loading}>{t("loading")}</p>;
     }
@@ -121,19 +146,31 @@ const AboutPostPage = () => {
                     {/* Заголовок поста */}
                     <div className={styles.postTitle}>
                         <h1>{post.title}</h1>
-                        { currentUser?.user_id === post.author_id ? (
-                            <button className={styles.editButton} onClick={() => {
-                                console.log("Нажали на кнопку редактирования!");
-                                setIsEditOpen(true);
-                            }}>
+                        {currentUser?.user_id === post.author_id ? (
+                            <button
+                                className={styles.editButton}
+                                onClick={() => {
+                                    console.log("Нажали на кнопку редактирования!");
+                                    setIsEditOpen(true);
+                                }}
+                            >
                                 <IconSvg name="pencil_icon" width="30px" height="30px" />
                             </button>
                         ) : (
-                            <button className={styles.saveButton}>
-                                <IconSvg name="save_icon_aboutPost" width="30px" height="30px" />
-                            </button>
+                            <div
+                                className={styles.favoriteButton}
+                                onClick={handleFavoriteClick}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="Add to favorites"
+                            >
+                                {post.is_favorite ? (
+                                    <IconSvg name="filledFavoritesIcon" width="30px" height="30px" />
+                                ) : (
+                                    <IconSvg name="favoritesIcon" width="30px" height="30px" />
+                                )}
+                            </div>
                         )}
-
                     </div>
 
                     <p className={styles.categoryTag}>{t("category")}: {t(`${post.category}`)}</p>

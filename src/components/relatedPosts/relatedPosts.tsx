@@ -37,7 +37,7 @@ const RelatedPosts = ({ category, postId }) => {
             <h3 className={styles.title}>{t("related_posts")}</h3>
             {relatedPosts.length > 0 ? (
                 <ul className={styles.list}>
-                    {relatedPosts.map((post) => (
+                    {relatedPosts.slice(0, 3).map((post) => (
                         <li
                             key={post.id}
                             className={styles.relatedItem}
