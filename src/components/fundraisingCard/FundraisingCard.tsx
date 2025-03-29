@@ -21,16 +21,19 @@ interface FundraisingCardProps {
     totalDonated?: number;
     goal?: number;
     daysLeft?: number;
+    durationDays?: number;
     percentage?: number;
     author_id: number;
     author_email: string;
 }
+
 
 const FundraisingCard: React.FC<FundraisingCardProps> = ({
                                                              postId,
                                                              totalDonated = 0,
                                                              goal = 1,
                                                              daysLeft = 0,
+                                                             durationDays = 0,
                                                              percentage = 0,
                                                              author_id,
                                                          }) => {
@@ -66,7 +69,7 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
 
         const animate = (time: number) => {
             const progress = Math.min((time - startTime) / duration, 1);
-            const newPercentage = progress * percentage;
+            const newPercentage = progress * Math.min(percentage, 100);
             setAnimatedPercentage(newPercentage);
             setProgressOffset(circleCircumference * (1 - newPercentage / 100));
 
@@ -110,7 +113,7 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
                         fontSize="20px"
                         fill="#17A34A"
                     >
-                        {Math.round(animatedPercentage)}%
+                        {Math.min(Math.round(animatedPercentage), 100)}%
                     </text>
                 </svg>
             </div>
@@ -124,7 +127,7 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
             </div>
             <div className={styles.goalDetails}>
                 <span>{t("daysLeft")}</span>
-                <span>{daysLeft || "0"} {t("days")}</span>
+                <span>{daysLeft || 0} / {durationDays || "?"} {t("days")}</span>
             </div>
 
             <button
