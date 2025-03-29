@@ -5,6 +5,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useProfileStore } from "../../store/profileStore";
 import { useTranslation } from "react-i18next";
 import defaultAvatar from "../../shared/assets/images/profile_default.png";
+import { useNavigate } from "react-router-dom";
 
 const CommentSection = ({ postId, onCommentChange }) => {
     const [comments, setComments] = useState([]);
@@ -15,6 +16,7 @@ const CommentSection = ({ postId, onCommentChange }) => {
     const { token } = useAuthStore();
     const { user } = useProfileStore();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const COMMENTS_PER_PAGE = 7;
     const [visibleCount, setVisibleCount] = useState(COMMENTS_PER_PAGE);
@@ -87,6 +89,17 @@ const CommentSection = ({ postId, onCommentChange }) => {
         }
     };
 
+    const goToUserProfile = (authorId) => {
+        if (!authorId) return;
+
+        if (user?.user_id === authorId) {
+            navigate("/profiles/me/");
+        } else {
+            navigate(`/profiles/${authorId}/`);
+        }
+    };
+
+
     return (
         <div className={styles.container}>
             <h3>{t("leave_comment")}</h3>
@@ -107,10 +120,15 @@ const CommentSection = ({ postId, onCommentChange }) => {
                             {comments.slice(0, visibleCount).map((c) => (
                                 <div key={c.id} className={styles.comment}>
                                     <div className={styles.commentHeader}>
-                                        <div className={styles.commentUser}>
+                                        <div
+                                            className={styles.commentUser}
+                                            onClick={() => goToUserProfile(c.author_id)}
+                                            style={{ cursor: "pointer" }}
+                                        >
                                             <img src={c.avatar || defaultAvatar} alt="Avatar" className={styles.avatar} />
                                             <strong className={styles.userName}>{c.author}</strong>
                                         </div>
+
 
                                         {user?.email && c.author === user.email && (
                                             <div className={styles.actions}>

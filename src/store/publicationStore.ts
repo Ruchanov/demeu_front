@@ -25,14 +25,23 @@ interface Image {
 interface Comment {
     id: number;
     author: string;
+    author_id: number;
+    avatar: string;
     content: string;
     created_at: string;
     updated_at: string;
 }
 
 interface Donor {
+    id: number;
+    donor_id: number;
     donor_name: string;
-    donor_amount: number;
+    donor_avatar: string;
+    donor_amount: string;
+    support_percentage: number;
+    support_amount: string;
+    total_amount: string;
+    created_at: string;
 }
 
 export interface Publication {
