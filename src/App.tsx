@@ -39,7 +39,7 @@ const App = () => {
           <Route path="/create_publication" element={<PublicationCreatingPage />} />
           <Route path="/publications/:id" element={<AboutPostPage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/main" element={<MainPage />} />
+          <Route path="" element={<MainPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/publications" element={<AllPublicationsPage />} />
       </Routes>
