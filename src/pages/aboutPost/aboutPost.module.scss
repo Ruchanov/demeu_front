@@ -275,6 +275,47 @@
   display: flex;
 }
 
+.categoryStatusRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.statusTag {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: 30px;
+  text-transform: uppercase;
+}
+
+.active {
+  background-color: #e0f7ec;
+  color: #17a34a;
+}
+
+.pending {
+  background-color: #fff4cc;
+  color: #e9a100;
+}
+
+.archived {
+  background-color: #eee;
+  color: #999;
+}
+
+.successful {
+  background-color: #A2F5C8;
+  color: #05623C;
+}
+
+//.successful {
+//  background-color: #C1F3EC;
+//  color: #008B7D;
+//}
+
 @media (max-width: 768px) {
   .container {
     display: flex;
@@ -391,5 +432,16 @@
   .commentSection {
     width: 100%;
     padding: 10px;
+  }
+
+  .categoryStatusRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .statusTag {
+    font-size: 13px;
+    padding: 3px 10px;
   }
 }

@@ -20,13 +20,14 @@ const PublicationCard: React.FC<Publication> = ({
                                                 }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    // Процент (donations / amount)
-    const percentage = Math.min(Math.round((donations / amount) * 100), 100);
-
     const { toggleFavorite } = usePublicationsStore();
     const [isHovered, setIsHovered] = useState(false);
+    // const [animatedOffset, setAnimatedOffset] = useState(2 * Math.PI * 50);
+    const cleanDonations = typeof donations === 'number' ? donations : donations?.amount || 0;
+    const cleanViews = typeof views === 'number' ? views : views?.amount || 0;
 
-    // Для анимации прогресс круга
+    const percentage = Math.min(Math.round((cleanDonations / amount) * 100), 100);
+
     const circleRadius = 50;
     const circleCircumference = 2 * Math.PI * circleRadius;
     const progressOffset = circleCircumference * (1 - percentage / 100);
@@ -35,9 +36,7 @@ const PublicationCard: React.FC<Publication> = ({
     // Состояние для показа DonationPopup
     const [isDonationOpen, setDonationOpen] = useState(false);
 
-    // Открытие/закрытие попапа
     const handleOpenDonation = (e: React.MouseEvent) => {
-        // Чтобы клик не «шёл» дальше до handleCardClick:
         e.stopPropagation();
         setDonationOpen(true);
     };
@@ -45,7 +44,6 @@ const PublicationCard: React.FC<Publication> = ({
         setDonationOpen(false);
     };
 
-    // Анимация дуги при ховере:
     useEffect(() => {
         if (isHovered) {
             // Сначала «убираем» анимацию
@@ -80,8 +78,6 @@ const PublicationCard: React.FC<Publication> = ({
         ? images[0].image
         : `http://127.0.0.1:8000${images[0]?.image}`;
 
-    // Здесь важно: возвращаем JSX с «карточкой» и
-    // выводим <DonationPopup /> вне карточки (соседом)
     return (
         <>
             <div
@@ -175,14 +171,8 @@ const PublicationCard: React.FC<Publication> = ({
 
                 <div className={styles.details}>
                     <div className={styles.dateViews}>
-                        <span>👁 {views}</span>
-                        <span>
-                            {new Date(created_at).toLocaleDateString('kk-KZ', {
-                                day: 'numeric',
-                                month: 'long',
-                                year: 'numeric',
-                            })}
-                        </span>
+                        <span>👁 {cleanViews.toLocaleString()}</span>
+                        <span>{new Date(created_at).toLocaleDateString('kk-KZ', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                     </div>
                     <div className={styles.amountSection}>
                         <div className={styles.goal}>
@@ -191,13 +181,12 @@ const PublicationCard: React.FC<Publication> = ({
                         </div>
                         <div className={styles.donated}>
                             <span>{t('collected')}</span>
-                            <strong>{donations.toLocaleString()} ₸</strong>
+                            <strong>{cleanDonations.toLocaleString()} ₸</strong>
                         </div>
                     </div>
                     <h3>{title}</h3>
                     <button
                         className={styles.helpButton}
-                        // Останавливаем всплытие, чтобы не переходить на детальную
                         onClick={(e) => {
                             e.stopPropagation();
                             handleOpenDonation(e);
@@ -207,11 +196,9 @@ const PublicationCard: React.FC<Publication> = ({
                     </button>
                 </div>
             </div>
-
             {/* Модальное окно вынесено на уровень выше (соседом),
                 чтобы оно не было вложено в .card */}
-            {isDonationOpen && (
-                <DonationPopup
+            {isDonationOpen && ( <DonationPopup
                     publicationId={id}
                     onClose={handleCloseDonation}
                 />

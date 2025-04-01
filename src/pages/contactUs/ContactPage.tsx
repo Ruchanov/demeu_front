@@ -3,9 +3,11 @@ import styles from "./ContactPage.module.scss";
 import Input from "../../shared/ui/input/input";
 import Button from "../../shared/ui/button/button";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const ContactPage = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();  // Для перенаправления
     const [formData, setFormData] = useState({
         subject: "",
         fullName: "",
@@ -14,6 +16,7 @@ const ContactPage = () => {
         message: "",
         file: null,
     });
+    const [error, setError] = useState("");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,9 +27,25 @@ const ContactPage = () => {
         setFormData({ ...formData, file: e.target.files[0] });
     };
 
+    // Валидация номера телефона
+    const validatePhone = (phone) => {
+        const phoneRegex = /^\+7\d{10}$/;
+        return phoneRegex.test(phone);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!validatePhone(formData.phone)) {
+            setError(t("phone_error"));
+            return;
+        }
+
+        setError("");
+
         console.log("Form submitted:", formData);
+
+        navigate("/profiles/me");
     };
 
     return (
@@ -47,7 +66,14 @@ const ContactPage = () => {
 
                 <div className={styles.inputWrapper}>
                     <label>{t("phone")}</label>
-                    <Input name="phone" value={formData.phone} onChange={handleChange} className={styles.inputFull} />
+                    <Input
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={styles.inputFull}
+                        placeholder="+7XXXXXXXXXX"
+                    />
+                    {error && <p className={styles.error}>{error}</p>}
                 </div>
 
                 <div className={styles.inputWrapper}>

@@ -5,19 +5,20 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import styles from "./ProfileDonations.module.scss";
 
-const getDaysAgo = (dateString: string, t: any) => {
-    if (!dateString) return t("unknown_date");
-
+const getDaysAgo = (dateString, t) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    date.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
+
+    const diffTime = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays === 0) return t("today");
     if (diffDays === 1) return t("yesterday");
     return t("days_ago", { count: diffDays });
 };
-
 const ProfileDonations: React.FC = () => {
     const { user } = useProfileStore();
     const { t } = useTranslation();
@@ -40,7 +41,7 @@ const ProfileDonations: React.FC = () => {
                                     {donation.publication_title}
                                 </Link>
                                 <p className={styles.donationDate}>
-                                    {getDaysAgo(donation.publication_created_at, t)}
+                                    {getDaysAgo(donation.donation_created_at, t)}
                                 </p>
                             </div>
                         </div>
