@@ -42,7 +42,7 @@ const CategoryList: React.FC = () => {
             <div className={styles.sectionHeader}>
                 <h2>{t("categories")}</h2>
                 <div>
-                    <a href="#" className={styles.viewAll} onClick={() => navigate("/publications?type=all")}>
+                    <a href="#" className={styles.viewAll} onClick={() => navigate("/categories")}>
                         {t("view_all")}
                     </a>
                     <button className={styles.arrow} onClick={prevSlide} disabled={startIndex === 0}>

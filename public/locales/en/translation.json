@@ -249,5 +249,17 @@
   "status_pending": "Pending",
   "status_archived": "Archived",
   "status_successful": "Successful",
-  "no_publications_for_category": "There are no publications in this category yet."
+  "no_publications_for_category": "There are no publications in this category yet.",
+  "donation_amount": "Donation Amount",
+  "support_demeu_description": "Support \"Demeu\" services\n\nTo further develop our services and help those in need, we kindly ask you to contribute voluntarily.\n\nEvery contribution starts great changes!\nThank you! 💙",
+  "payment_method": "Payment Method",
+  "card_number": "Card number",
+  "expiry": "Expiry",
+  "cvv": "CVV",
+  "save_card_for_future": "Save card for future donations",
+  "your_donation": "Your donation:",
+  "support_demeu": "Support for \"Demeu\":",
+  "total": "Total:",
+  "donate_now": "Donate Now",
+  "loading": "Sending..."
 }
