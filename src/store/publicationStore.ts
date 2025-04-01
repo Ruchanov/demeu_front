@@ -12,7 +12,7 @@ import {
 } from '../api/publicationsAPI';
 import { useAuthStore } from "./authStore";
 import {fetchTopDonors, fetchDonationStats} from "../api/donationsApi";
-import {getNewPublications, getTopPublications, getRecommendedPublications} from '../api/publicationsAPI';
+import {getNewPublications, getTopPublications, getRecommendedPublications, getArchivedPublications, getMyActivePublications, getMyPendingPublications} from '../api/publicationsAPI';
 import {useAuthStore} from "./authStore";
 import {addFavoritePublication, getFavoritePublications, removeFavoritePublication} from "../api/favoritesApi";
 import {useProfileStore} from "./profileStore";
@@ -25,14 +25,23 @@ interface Image {
 interface Comment {
     id: number;
     author: string;
+    author_id: number;
+    avatar: string;
     content: string;
     created_at: string;
     updated_at: string;
 }
 
 interface Donor {
+    id: number;
+    donor_id: number;
     donor_name: string;
-    donor_amount: number;
+    donor_avatar: string;
+    donor_amount: string;
+    support_percentage: number;
+    support_amount: string;
+    total_amount: string;
+    created_at: string;
 }
 
 export interface Publication {
@@ -56,12 +65,21 @@ export interface Publication {
     total_views: any;
     total_donated: any;
     is_favorite?: boolean;
+    duration_days: number;
+    days_remaining: number;
+    status: string;
 }
 
 type Post = Pick<Publication, "id" | "title" | "category" | "images">;
 interface PublicationState {
     publications: Publication[];
-    userPublications: Publication[]; // Добавляем массив для публикаций пользователя
+    userPublications: Publication[];
+    archivedPublications: Publication[];
+    activePublications: Publication[];
+    pendingPublications: Publication[];
+    fetchArchivedPublications: () => Promise<void>;
+    fetchActivePublications: () => Promise<void>;
+    fetchPendingPublications: () => Promise<void>;
     comments: Record<number, Comment[]>;
     favoritePublications: Publication[];
     loading: boolean;
@@ -96,6 +114,9 @@ interface Filters {
 export const usePublicationsStore = create<PublicationState>((set, get) => ({
     publications: [],
     userPublications: [],
+    archivedPublications: [],
+    activePublications: [],
+    pendingPublications: [],
     comments: {},
     topDonors: [],
     relatedPosts: [],
@@ -134,6 +155,7 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             set({ error: 'Failed to fetch publications', loading: false });
         }
     },
+
     fetchUserPublications: async (user: User) => {
         if (!user) {
             console.log("❌ Ошибка: пользователь не передан!");
@@ -143,17 +165,19 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         set({ loading: true, error: null });
 
         try {
-            const favoriteIds = new Set(get().favoritePublications.map(fav => fav.id)); // ✅
+            const favoriteIds = new Set(get().favoritePublications.map(fav => fav.id));
 
-            const filteredPublications = user.publications?.map((pub) => {
-                return {
+            const filteredPublications = user.publications
+                ?.filter((pub) => pub.status === "active") // ✅ фильтруем только активные
+                .map((pub) => ({
                     ...pub,
                     images: pub.images || [],
                     author_name: `${user.first_name} ${user.last_name}`,
                     author_avatar: user.avatar,
-                    is_favorite: favoriteIds.has(pub.id), // ✅
-                };
-            }) || [];
+                    is_favorite: favoriteIds.has(pub.id),
+                    total_donated: typeof pub.total_donated === 'object' ? pub.total_donated.amount : pub.total_donated,
+                    total_views: typeof pub.total_views === 'object' ? pub.total_views.amount : pub.total_views,
+                })) || [];
 
             set({ userPublications: filteredPublications, loading: false });
         } catch (error) {
@@ -385,5 +409,73 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             set({ errorRelated: "Ошибка загрузки похожих постов", loadingRelated: false });
         }
     },
+
+    fetchArchivedPublications: async () => {
+        set({ loading: true });
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+
+        try {
+            const archived = await getArchivedPublications(token);
+            const favoriteIds = new Set(get().favoritePublications.map((f) => f.id));
+            set({
+                archivedPublications: archived.map((pub: Publication) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                    total_donated: typeof pub.total_donated === 'object' ? pub.total_donated.amount : pub.total_donated,
+                    total_views: typeof pub.total_views === 'object' ? pub.total_views.amount : pub.total_views,
+                })),
+                loading: false
+            });
+
+        } catch (error) {
+            set({ error: "Failed to fetch archived publications", loading: false });
+        }
+    },
+
+    fetchActivePublications: async () => {
+        set({ loading: true });
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+
+        try {
+            const active = await getMyActivePublications(token);
+            const favoriteIds = new Set(get().favoritePublications.map(f => f.id));
+            set({
+                activePublications: active.map((pub: Publication) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                    total_donated: typeof pub.total_donated === 'object' ? pub.total_donated.amount : pub.total_donated,
+                    total_views: typeof pub.total_views === 'object' ? pub.total_views.amount : pub.total_views,
+                })),
+                loading: false
+            });
+        } catch (error) {
+            set({ error: "Failed to fetch active publications", loading: false });
+        }
+    },
+
+    fetchPendingPublications: async () => {
+        set({ loading: true });
+        const token = useAuthStore.getState().token;
+        if (!token) return;
+
+        try {
+            const pending = await getMyPendingPublications(token);
+            const favoriteIds = new Set(get().favoritePublications.map(f => f.id));
+            set({
+                pendingPublications: pending.map((pub: Publication) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                    total_donated: typeof pub.total_donated === 'object' ? pub.total_donated.amount : pub.total_donated,
+                    total_views: typeof pub.total_views === 'object' ? pub.total_views.amount : pub.total_views,
+                })),
+                loading: false
+            });
+        } catch (error) {
+            set({ error: "Failed to fetch pending publications", loading: false });
+        }
+    },
+
 
 }));

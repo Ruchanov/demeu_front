@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ProfileEditPopup.module.scss";
 import Input from "../../shared/ui/input/input";
 import Button from "../../shared/ui/button/button";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useProfileStore } from "../../store/profileStore";
 import { useTranslation } from "react-i18next";
+import defaultAvatar from "../../shared/assets/images/profile_default.png";
 
 const countries = ["Kazakhstan", "Russia", "Uzbekistan", "Kyrgyzstan", "Turkmenistan"];
 const regionsByCountry = {
@@ -16,8 +17,9 @@ const regionsByCountry = {
 };
 
 const ProfileEditPopup = ({ onClose }) => {
-    const { user, updateUserProfile, fetchUserProfile } = useProfileStore();
+    const { user, fetchUserProfile, updateUserProfile } = useProfileStore();
     const { t } = useTranslation();
+
     const [formData, setFormData] = useState({
         first_name: user?.first_name || "",
         last_name: user?.last_name || "",
@@ -30,6 +32,16 @@ const ProfileEditPopup = ({ onClose }) => {
         avatar: user?.avatar || ""
     });
 
+    const [previewUrl, setPreviewUrl] = useState(
+        typeof user?.avatar === "string" ? user.avatar : ""
+    );
+
+    useEffect(() => {
+        if (user?.avatar && typeof user.avatar === "string") {
+            setPreviewUrl(user.avatar);
+        }
+    }, [user?.avatar]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -39,6 +51,7 @@ const ProfileEditPopup = ({ onClose }) => {
         const file = e.target.files[0];
         if (file) {
             setFormData((prev) => ({ ...prev, avatar: file }));
+            setPreviewUrl(URL.createObjectURL(file));
         }
     };
 
@@ -46,17 +59,23 @@ const ProfileEditPopup = ({ onClose }) => {
         e.preventDefault();
         try {
             const formDataToSend = new FormData();
-            Object.keys(formData).forEach((key) => {
-                if (formData[key]) {
-                    formDataToSend.append(key, formData[key]);
-                }
-            });
+
+            formDataToSend.append("phone_number", formData.phone_number);
+            formDataToSend.append("birth_date", formData.birth_date);
+            formDataToSend.append("country", formData.country);
+            formDataToSend.append("city", formData.region);
+            formDataToSend.append("bio", formData.bio);
+
+            if (formData.avatar && formData.avatar instanceof File) {
+                formDataToSend.append("avatar", formData.avatar);
+            }
 
             console.log("📌 Отправляемые данные:", [...formDataToSend.entries()]);
 
             await updateUserProfile(formDataToSend);
             await fetchUserProfile();
             onClose();
+
         } catch (error) {
             console.error("❌ Ошибка при обновлении профиля:", error);
         }
@@ -75,14 +94,15 @@ const ProfileEditPopup = ({ onClose }) => {
                 <div className={styles.content}>
                     <div className={styles.avatarSection}>
                         <img
-                            src={formData.avatar instanceof File ? URL.createObjectURL(formData.avatar) : user?.avatar}
+                            src={previewUrl || defaultAvatar}
                             alt="Avatar"
                             className={styles.avatar}
                         />
-
-                        <label htmlFor="avatarUpload" className={styles.avatarLabel}>
-                            {t('upload_photo')}
-                        </label>
+                        <div className={styles.uploading} >
+                            <label htmlFor="avatarUpload" className={styles.avatarLabel}>
+                                {t('upload_photo')}
+                            </label>
+                        </div>
                         <input
                             type="file"
                             id="avatarUpload"
@@ -96,24 +116,44 @@ const ProfileEditPopup = ({ onClose }) => {
                         <div className={styles.formRow}>
                             <div className={styles.inputWrapper}>
                                 <label>{t('first_name')}</label>
-                                <Input name="first_name" value={formData.first_name} onChange={handleChange} />
+                                <Input name="first_name" value={formData.first_name} readOnly onChange={() => {}}
+                                       className={styles.readonlyInput} />
                             </div>
 
                             <div className={styles.inputWrapper}>
                                 <label>{t('last_name')}</label>
-                                <Input name="last_name" value={formData.last_name} onChange={handleChange} />
+                                <Input name="last_name" value={formData.last_name} readOnly onChange={() => {}}
+                                       className={styles.readonlyInput} />
                             </div>
                         </div>
 
                         <div className={styles.formRow}>
                             <div className={styles.inputWrapper}>
                                 <label>{t('email')}</label>
-                                <Input name="email" value={formData.email} onChange={handleChange} />
+                                <Input
+                                    name="email"
+                                    value={formData.email}
+                                    readOnly
+                                    onChange={() => {}}
+                                    className={styles.readonlyInput}
+                                />
                             </div>
 
                             <div className={styles.inputWrapper}>
                                 <label>{t('phone')}</label>
-                                <Input name="phone_number" value={formData.phone_number} onChange={handleChange} />
+                                <Input
+                                    name="phone_number"
+                                    value={formData.phone_number}
+                                    onChange={(e) => {
+                                        const input = e.target.value;
+
+                                        // Если пользователь стер +7, снова добавим
+                                        const sanitized = input.startsWith('+7') ? input : '+7' + input.replace(/[^0-9]/g, '');
+                                        setFormData({ ...formData, phone_number: sanitized });
+                                    }}
+                                    placeholder="+7**********"
+                                    style={{ color: formData.phone_number ? '#000' : '#999' }} // делаем placeholder светлым
+                                />
                             </div>
                         </div>
 

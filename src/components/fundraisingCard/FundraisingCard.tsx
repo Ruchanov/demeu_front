@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useProfileStore } from "../../store/profileStore";
 import { usePublicationsStore } from "../../store/publicationStore";
 import { useNavigate } from "react-router-dom";
+import DonationPopup from "../donationsPopup/DonationPopup";
 
 const formatCurrency = (amount: number) => {
     if (amount === 0) return "0 ₸";
@@ -21,18 +22,23 @@ interface FundraisingCardProps {
     totalDonated?: number;
     goal?: number;
     daysLeft?: number;
+    durationDays?: number;
     percentage?: number;
     author_id: number;
     author_email: string;
+    onDonationSuccess?: () => void;
 }
+
 
 const FundraisingCard: React.FC<FundraisingCardProps> = ({
                                                              postId,
                                                              totalDonated = 0,
                                                              goal = 1,
                                                              daysLeft = 0,
+                                                             durationDays = 0,
                                                              percentage = 0,
                                                              author_id,
+                                                             onDonationSuccess,
                                                          }) => {
     const [isShareOpen, setIsShareOpen] = useState(false);
     const { t } = useTranslation();
@@ -47,6 +53,15 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
     const circleCircumference = 2 * Math.PI * circleRadius;
     const [animatedPercentage, setAnimatedPercentage] = useState(0);
     const [progressOffset, setProgressOffset] = useState(circleCircumference);
+    const [isDonationOpen, setDonationOpen] = useState(false);
+
+    const handleOpenDonation = () => {
+        setDonationOpen(true);
+    };
+
+    const handleCloseDonation = () => {
+        setDonationOpen(false);
+    };
 
     const handleDelete = async () => {
         const confirmed = window.confirm(t("are_you_sure_delete"));
@@ -66,7 +81,7 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
 
         const animate = (time: number) => {
             const progress = Math.min((time - startTime) / duration, 1);
-            const newPercentage = progress * percentage;
+            const newPercentage = progress * Math.min(percentage, 100);
             setAnimatedPercentage(newPercentage);
             setProgressOffset(circleCircumference * (1 - newPercentage / 100));
 
@@ -110,7 +125,7 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
                         fontSize="20px"
                         fill="#17A34A"
                     >
-                        {Math.round(animatedPercentage)}%
+                        {Math.min(Math.round(animatedPercentage), 100)}%
                     </text>
                 </svg>
             </div>
@@ -124,7 +139,7 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
             </div>
             <div className={styles.goalDetails}>
                 <span>{t("daysLeft")}</span>
-                <span>{daysLeft || "0"} {t("days")}</span>
+                <span>{daysLeft || 0} / {durationDays || "?"} {t("days")}</span>
             </div>
 
             <button
@@ -142,12 +157,19 @@ const FundraisingCard: React.FC<FundraisingCardProps> = ({
                     {t("delete")}
                 </button>
             ) : (
-                <button className={styles.donateButton}>
+                <button className={styles.donateButton} onClick={handleOpenDonation}>
                     {t("donateNow")}
                 </button>
             )}
 
             {isShareOpen && <SharePopup onClose={() => setIsShareOpen(false)} />}
+            {isDonationOpen && (
+                <DonationPopup
+                    publicationId={postId}
+                    onClose={handleCloseDonation}
+                    onDonationSuccess={onDonationSuccess}
+                />
+            )}
         </div>
     );
 };

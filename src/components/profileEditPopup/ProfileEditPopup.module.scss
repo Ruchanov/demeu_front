@@ -79,6 +79,13 @@
   border: 4px solid #ddd;
 }
 
+.uploading {
+  display: flex;
+  justify-content: center;
+  margin-right: 35px;
+  margin-top: 10px;
+}
+
 .avatarLabel {
   font-size: 14px;
   cursor: pointer;
@@ -131,6 +138,13 @@
   background-size: 20px;
 }
 
+.readonlyInput {
+  background-color: #f0f0f0;
+  //color: #555;
+  //box-shadow: 0 0 4px rgba(0, 200, 150, 0.6); // зелёная тень
+  cursor: not-allowed;
+}
+
 .input:focus,
 .select:focus {
   box-shadow: 0px 0px 10px rgba(0, 120, 190, 0.3);
@@ -155,7 +169,7 @@
 }
 
 .footer {
-  position: sticky;
+  //position: sticky;
   bottom: 0;
   padding: 15px;
   display: flex;
@@ -184,5 +198,9 @@
   .submitButton {
     position: static;
     margin-top: 10px;
+  }
+
+  .uploading {
+    margin-right: 5px;
   }
 }

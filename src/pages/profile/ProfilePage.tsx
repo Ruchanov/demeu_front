@@ -5,7 +5,7 @@ import { usePublicationsStore } from "../../store/publicationStore";
 import ProfileStats from "../../components/profileStats/ProfileStats";
 import ProfileDonations from "../../components/profileDonations/ProfileDonations";
 import PublicationCard from "../../components/publicationCard";
-import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup"; // Подключаем попап
+import ProfileEditPopup from "../../components/profileEditPopup/ProfileEditPopup";
 import styles from "./ProfilePage.module.scss";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useTranslation } from "react-i18next";
@@ -14,11 +14,23 @@ import { useNavigate } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
     const { user, fetchUserProfile, loading: userLoading } = useProfileStore();
-    const { userPublications, loading: postsLoading, fetchUserPublications, fetchFavorites } = usePublicationsStore();
+    const {
+        userPublications,
+        activePublications,
+        pendingPublications,
+        archivedPublications,
+        fetchUserPublications,
+        fetchActivePublications,
+        fetchPendingPublications,
+        fetchArchivedPublications,
+        fetchFavorites,
+        loading: postsLoading,
+    } = usePublicationsStore();
     const { t } = useTranslation();
     const { id: profileId } = useParams();
     const [isEditOpen, setIsEditOpen] = useState(false);
     const navigate = useNavigate();
+    const [selectedTab, setSelectedTab] = useState<"active" | "pending" | "archived">("active");
 
     const isOwnProfile = window.location.pathname.includes("/profiles/me");
     const handleCreatePostClick = () => {
@@ -31,21 +43,39 @@ const ProfilePage: React.FC = () => {
     }, [profileId, fetchUserProfile]);
 
     useEffect(() => {
-        if (!user?.user_id) {
-            console.log("⏳ Ожидание загрузки пользователя...");
-            return;
+        if (user?.user_id) {
+            fetchActivePublications();
+            fetchPendingPublications();
+            fetchArchivedPublications();
         }
+    }, [user]);
 
-        console.log("✅ User загружен:", user.user_id);
+    useEffect(() => {
+        if (!user?.user_id) return;
 
-        if (isOwnProfile) {
-            console.log("📥 Фильтруем публикации для текущего пользователя:", user.user_id);
-            fetchUserPublications(user);
-        } else {
-            console.log("📥 Загружаем публикации для профиля:", profileId);
-            fetchUserPublications(user);
+        if (!isOwnProfile) {
+            console.log("📥 Загружаем активные посты другого пользователя:", profileId);
+            fetchUserPublications(user); // или передай profileId, если нужно
         }
-    }, [user, profileId, fetchUserPublications]);
+    }, [user, profileId]);
+
+
+    // useEffect(() => {
+    //     if (!user?.user_id) {
+    //         console.log("⏳ Ожидание загрузки пользователя...");
+    //         return;
+    //     }
+    //
+    //     console.log("✅ User загружен:", user.user_id);
+    //
+    //     if (isOwnProfile) {
+    //         console.log("📥 Фильтруем публикации для текущего пользователя:", user.user_id);
+    //         fetchUserPublications(user);
+    //     } else {
+    //         console.log("📥 Загружаем публикации для профиля:", profileId);
+    //         fetchUserPublications(user);
+    //     }
+    // }, [user, profileId, fetchUserPublications]);
 
     if (userLoading) {
         return <div className={styles.loader}>{t("loading")}</div>;
@@ -56,6 +86,31 @@ const ProfilePage: React.FC = () => {
     }
 
     const avatarUrl = user.avatar ? user.avatar : defaultAvatar;
+
+    const renderPublications = (publications: any[]) => (
+        publications.length > 0 ? (
+            <div className={styles.publicationsGrid}>
+                {publications.map((pub) => (
+                    <PublicationCard
+                        key={pub.id}
+                        id={pub.id}
+                        title={pub.title}
+                        category={pub.category}
+                        images={pub.images}
+                        amount={pub.amount}
+                        donations={pub.total_donated}
+                        views={pub.total_views}
+                        created_at={pub.created_at}
+                        author_name={pub.author_name}
+                        is_favorite={pub.is_favorite}
+                    />
+                ))}
+            </div>
+        ) : (
+            <p className={styles.noPosts}>{t("no_posts")}</p>
+        )
+    );
+
 
     return (
         <div className={styles.profileContainer}>
@@ -124,38 +179,52 @@ const ProfilePage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Список публикаций пользователя */}
             <div className={styles.postsSection}>
-                <h3>{t("posts")}</h3>
+                {isOwnProfile ? (
+                    <>
+                        <div className={styles.tabButtons}>
+                            <button
+                                className={selectedTab === "active" ? styles.activeTab : styles.tab}
+                                onClick={() => setSelectedTab("active")}
+                            >
+                                {t("active_posts")}
+                            </button>
+                            <button
+                                className={selectedTab === "pending" ? styles.activeTab : styles.tab}
+                                onClick={() => setSelectedTab("pending")}
+                            >
+                                {t("pending_posts")}
+                            </button>
+                            <button
+                                className={selectedTab === "archived" ? styles.activeTab : styles.tab}
+                                onClick={() => setSelectedTab("archived")}
+                            >
+                                {t("archived_posts")}
+                            </button>
+                        </div>
 
-                {postsLoading ? (
-                    <p className={styles.loading}>{t("loading")}</p>
-                ) : userPublications?.length > 0 ? (
-                    <div className={styles.publicationsGrid}>
-                        {userPublications.map((pub) => (
-                            <PublicationCard
-                                key={pub.id}
-                                id={pub.id}
-                                title={pub.title}
-                                category={pub.category}
-                                images={pub.images}
-                                videos={pub.videos}
-                                description={pub.description}
-                                amount={pub.amount}
-                                views={pub.total_views}
-                                donations={pub.total_donated}
-                                created_at={pub.created_at}
-                                author_name={pub.author_name}
-                                is_favorite={pub.is_favorite}
-                            />
-                        ))}
-                    </div>
+                        {postsLoading ? (
+                            <p className={styles.loading}>{t("loading")}</p>
+                        ) : selectedTab === "active" ? (
+                            renderPublications(activePublications)
+                        ) : selectedTab === "pending" ? (
+                            renderPublications(pendingPublications)
+                        ) : (
+                            renderPublications(archivedPublications)
+                        )}
+                    </>
                 ) : (
-                    <p className={styles.noPosts}>{t("no_posts")}</p>
+                    <>
+                        {postsLoading ? (
+                            <p className={styles.loading}>{t("loading")}</p>
+                        ) : (
+                            renderPublications(userPublications)
+                        )}
+                    </>
                 )}
             </div>
 
-            {isEditOpen && <ProfileEditPopup onClose={() => setIsEditOpen(false)} />}
+            {isEditOpen && <ProfileEditPopup key={Date.now()} onClose={() => setIsEditOpen(false)} />}
         </div>
     );
 };

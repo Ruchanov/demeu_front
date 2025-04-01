@@ -56,6 +56,10 @@
   cursor: pointer;
 }
 
+.editAvatar svg {
+  width: 100%;
+}
+
 .name {
   font-size: 25px;
   font-weight: bold;
@@ -85,7 +89,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .createPost {
@@ -106,9 +110,9 @@
 
 .plusIcon {
   position: absolute;
-  top: -20px;
+  top: 10px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   width: 35px;
   height: 35px;
   background: #99DDD0;
@@ -119,13 +123,13 @@
   font-size: 20px;
   font-weight: bold;
   color: white;
+  z-index: 1;
 }
 
 .createPostContainer:hover {
   opacity: 0.9;
 }
 
-/* Правая часть */
 .rightSection {
   width: 70%;
   display: flex;
@@ -160,14 +164,12 @@
   gap: 10px;
 }
 
-/* Колонки информации */
 .infoColumn {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Каждый элемент информации */
 .infoItem {
   display: flex;
   align-items: center;
@@ -176,7 +178,6 @@
   color: #333;
 }
 
-/* Раздел с публикациями */
 .postsSection {
   width: 80%;
   max-width: 1200px;
@@ -193,8 +194,51 @@
 .publicationsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 50px;
   margin-top: 20px;
+}
+
+.publicationCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 420px;
+}
+
+.tabButtons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  background: none;
+  border: 2px solid #49C2A7;
+  color: #49C2A7;
+  padding: 10px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  background-color: #49C2A7;
+  color: white;
+}
+
+.activeTab {
+  background-color: #49C2A7;
+  color: white;
+  border: 2px solid #49C2A7;
+  border-radius: 50px;
+  padding: 10px 28px;
+  font-size: 16px;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
@@ -299,7 +343,7 @@
     color: #333;
     padding: 8px;
     border-radius: 10px;
-    background: #f9f9f9; /* Добавляем фон, чтобы границы лучше смотрелись */
+    background: #f9f9f9;
   }
 
   .infoItem svg {
@@ -309,13 +353,11 @@
     color: #49c2a7;
   }
 
-  /* Фиксируем границы */
   .userInfoCard {
     box-sizing: border-box;
     overflow: hidden;
   }
 
-  /* Исправление для блока с иконками */
   .infoColumn {
     display: flex;
     flex-direction: column;
@@ -344,4 +386,18 @@
     max-width: 400px;
     margin-bottom: 20px;
   }
+
+  .tabButtons {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tab,
+  .activeTab {
+    font-size: 15px;
+    padding: 8px 20px;
+  }
+
 }

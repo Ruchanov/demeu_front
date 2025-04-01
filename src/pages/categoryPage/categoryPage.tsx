@@ -19,11 +19,14 @@ import bg6 from "../../shared/assets/images/bg6.jpg";
 import bg7 from "../../shared/assets/images/bg7.jpg";
 import bg8 from "../../shared/assets/images/bg8.jpg";
 import bg9 from "../../shared/assets/images/bg9.jpg";
+import { useNavigate } from "react-router-dom";
+
 
 const backgroundImages = [bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9];
 
 const CategoryPage: React.FC = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
@@ -44,41 +47,41 @@ const CategoryPage: React.FC = () => {
                 <p className={styles.subtitle}>{t("description")}</p>
 
                 <div className={styles.categoryWrapper}>
-                    <div className={styles.categoryCard}>
-                        <img src={catMed} alt={t("medical")} className={styles.icon} />
-                        <p>{t("medical")}</p>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/medical`)} >
+                        <img src={catMed} alt={t("medicine")} className={styles.icon} />
+                        <p>{t("medicine")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/emergency`)}>
                         <img src={catEmer} alt={t("emergency")} className={styles.icon} />
                         <p>{t("emergency")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/charity`)}>
                         <img src={catChar} alt={t("charity")} className={styles.icon} />
                         <p>{t("charity")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/education`)}>
                         <img src={catEdu} alt={t("education")} className={styles.icon} />
                         <p>{t("education")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/ecology`)}>
                         <img src={catEnv} alt={t("ecology")} className={styles.icon} />
                         <p>{t("ecology")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/sports`)}>
                         <img src={catSpo} alt={t("sports")} className={styles.icon} />
                         <p>{t("sports")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/animals`)}>
                         <img src={catAni} alt={t("animals")} className={styles.icon} />
                         <p>{t("animals")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/cancer`)} >
                         <img src={catMed} alt={t("cancer")} className={styles.icon} />
                         <p>{t("cancer")}</p>
                     </div>
-                    <div className={styles.categoryCard}>
-                        <img src={catGen} alt={t("general_fundraising")} className={styles.icon} />
-                        <p>{t("general_fundraising")}</p>
+                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/general_fundraising`)}>
+                        <img src={catGen} alt={t("general")} className={styles.icon} />
+                        <p>{t("general")}</p>
                     </div>
                 </div>
             </div>

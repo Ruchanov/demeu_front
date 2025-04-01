@@ -198,17 +198,17 @@ const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) 
                     </div>
 
                     {/* Сумма */}
-                    <label className={styles.label}>{t("amount")}</label>
-                    <div className={styles.inputWrapper}>
-                        <IconSvg name="moneyIcon" width="20px" height="20px" />
-                        <input
-                            className={styles.input}
-                            name="amount"
-                            type="number"
-                            value={formData.amount}
-                            onChange={handleChange}
-                        />
-                    </div>
+                    {/*<label className={styles.label}>{t("amount")}</label>*/}
+                    {/*<div className={styles.inputWrapper}>*/}
+                    {/*    <IconSvg name="moneyIcon" width="20px" height="20px" />*/}
+                    {/*    <input*/}
+                    {/*        className={styles.input}*/}
+                    {/*        name="amount"*/}
+                    {/*        type="number"*/}
+                    {/*        value={formData.amount}*/}
+                    {/*        onChange={handleChange}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
 
                     {/* Банк */}
                     <label className={styles.label}>{t("bank_details")}</label>

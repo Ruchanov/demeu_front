@@ -16,6 +16,7 @@ import {useAuthStore} from "./store/authStore";
 import MainPage from "./pages/mainPage";
 import FavoritesPage from "./pages/favoritesPage/FavoritesPage";
 import AllPublicationsPage from "./pages/AllPublicationsPage/AllPublicationsPage";
+import CategoryDetailPage from "./pages/CategoryDetailPage/CategoryDetailPage"
 
 const App = () => {
     const data = useAuthStore((state) => state.token);
@@ -27,6 +28,7 @@ const App = () => {
       <Routes>
           <Route path="/auth" element={<AuthorizationPage />} />
           <Route path="/categories" element={<CategoryPage />}/>
+          <Route path="/categories/:category" element={<CategoryDetailPage />} />
           <Route path="/share" element={<SharePopup />}/>
           <Route path="/profiles/me" element={<ProfilePage />} />
           <Route path="/profiles/:id" element={<ProfilePage />} />

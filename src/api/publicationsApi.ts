@@ -163,3 +163,28 @@ export const getTopPublications = async () => {
     const response = await axios.get(`${API_URL}top-publications/`);
     return response.data;
 };
+
+// api/publicationsAPI.ts
+export const getArchivedPublications = async (token: string) => {
+    const response = await fetch("http://127.0.0.1:8000/publications/archive/", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    if (!response.ok) throw new Error("Failed to fetch archive");
+    return await response.json();
+};
+
+export const getMyActivePublications = async (token: string) => {
+    const response = await axios.get("http://127.0.0.1:8000/publications/my-active/", {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+};
+
+export const getMyPendingPublications = async (token: string) => {
+    const response = await axios.get("http://127.0.0.1:8000/publications/my-pending/", {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+};
