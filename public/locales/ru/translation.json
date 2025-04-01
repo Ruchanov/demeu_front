@@ -233,5 +233,14 @@
   "bank_details_placeholder": "Введите банковские реквизиты",
   "phone_number": "Номер телефона",
   "support_every_soul": "Опора для каждой души!",
-  "show_more": "Показать еще"
+  "show_more": "Показать еще",
+  "posts": "Публикации",
+  "active_posts": "Активные публикации",
+  "pending_posts": "Ожидающие публикации",
+  "archived_posts": "Архивированные публикации",
+  "status_active": "Активный",
+  "status_pending": "Ожидает",
+  "status_archived": "Архивный",
+  "status_successful": "Завершён успешно",
+  "no_publications_for_category": "В этой категории пока нет публикаций."
 }

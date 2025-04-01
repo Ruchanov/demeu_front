@@ -15,8 +15,13 @@ const formatAmount = (amount) => {
 const getDaysAgo = (dateString, t) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // Обнуляем время, чтобы не учитывать часы, минуты, секунды
+    date.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
+
+    const diffTime = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays === 0) return t("today");
     if (diffDays === 1) return t("yesterday");

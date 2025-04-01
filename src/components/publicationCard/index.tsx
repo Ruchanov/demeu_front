@@ -19,10 +19,15 @@ const PublicationCard: React.FC<Publication> = ({
                                                 }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const percentage = Math.min(Math.round((donations / amount) * 100), 100);
+    // const percentage = Math.min(Math.round((donations / amount) * 100), 100);
     const { toggleFavorite } = usePublicationsStore();
     const [isHovered, setIsHovered] = useState(false);
     const [animatedOffset, setAnimatedOffset] = useState(2 * Math.PI * 50);
+    const cleanDonations = typeof donations === 'number' ? donations : donations?.amount || 0;
+    const cleanViews = typeof views === 'number' ? views : views?.amount || 0;
+
+    const percentage = Math.min(Math.round((cleanDonations / amount) * 100), 100);
+
 
     const circleRadius = 50;
     const circleCircumference = 2 * Math.PI * circleRadius;
@@ -114,7 +119,7 @@ const PublicationCard: React.FC<Publication> = ({
             </div>
             <div className={styles.details} onClick={handleClick}>
                 <div className={styles.dateViews}>
-                    <span>👁 {views}</span>
+                    <span>👁 {cleanViews.toLocaleString()}</span>
                     <span>{new Date(created_at).toLocaleDateString('kk-KZ', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                 </div>
                 <div className={styles.amountSection}>
@@ -124,7 +129,7 @@ const PublicationCard: React.FC<Publication> = ({
                     </div>
                     <div className={styles.donated}>
                         <span>{t('collected')}</span>
-                        <strong>{donations.toLocaleString()} ₸</strong>
+                        <strong>{cleanDonations.toLocaleString()} ₸</strong>
                     </div>
                 </div>
                 <h3>{title}</h3>

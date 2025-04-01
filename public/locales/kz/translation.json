@@ -236,5 +236,14 @@
   "your_post_takes_several_days": "Сіздің постыңыз тексеру үстінде. Түсіністікпен қарауыңызды сұраймыз. Бұл процесс шамамен 1-3 күн уақыт алады.  ",
   "return_to_main_page": "Басты бетке оралу",
   "support_every_soul": "Әрбір жанға тірек!",
-  "show_more": "Көбірек көрсету"
+  "show_more": "Көбірек көрсету",
+  "posts": "Жазбалар",
+  "active_posts": "Белсенді жазбалар",
+  "pending_posts": "Күтілуде тұрған жазбалар",
+  "archived_posts": "Архивтелген жазбалар",
+  "status_active": "Белсенді",
+  "status_pending": "Күтуде",
+  "status_archived": "Архивтелген",
+  "status_successful": "Жетістікпен аяқталды",
+  "no_publications_for_category": "Бұл санатта жарияланымдар жоқ."
 }

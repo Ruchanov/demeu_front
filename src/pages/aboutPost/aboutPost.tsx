@@ -173,7 +173,12 @@ const AboutPostPage = () => {
                         )}
                     </div>
 
-                    <p className={styles.categoryTag}>{t("category")}: {t(`${post.category}`)}</p>
+                    <div className={styles.categoryStatusRow}>
+                        <span className={styles.categoryTag}>{t("category")}: {t(`${post.category}`)}</span>
+                        <span className={`${styles.statusTag} ${styles[post.status]}`}>
+                            {t(`status_${post.status}`)}
+                          </span>
+                    </div>
 
                     {/* мобВариант автор */}
                     <div className={`${styles.authorContainer} ${styles.mobileEdit}`} onClick={goToAuthorProfile} style={{ cursor: "pointer" }}>

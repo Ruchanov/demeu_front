@@ -5,6 +5,7 @@ import { Publication } from "./publicationStore";
 interface Donation {
     donor_name: string;
     donor_amount: number;
+    donation_created_at: string;
     publication_id: number;
     publication_title: string;
     publication_category: string;

@@ -240,5 +240,14 @@
   "your_post_takes_several_days": "Your post is in the process of verification. Please be understanding. This process takes about 1-3 days.",
   "return_to_main_page": "Return to main page",
   "support_every_soul": "Support every soul",
-  "show_more": "Show more"
+  "show_more": "Show more",
+  "posts": "Posts",
+  "active_posts": "Active posts",
+  "pending_posts": "Pending posts",
+  "archived_posts": "Archived posts",
+  "status_active": "Active",
+  "status_pending": "Pending",
+  "status_archived": "Archived",
+  "status_successful": "Successful",
+  "no_publications_for_category": "There are no publications in this category yet."
 }
