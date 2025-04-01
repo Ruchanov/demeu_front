@@ -68,7 +68,7 @@ const DonorList = ({ postId }) => {
                                     <span className={styles.date}>{getDaysAgo(donor.created_at, t)}</span>
                                 </div>
 
-                                <span className={styles.amount}>{formatAmount(donor.donor_amount)}</span>
+                                <span className={styles.amount}>{formatAmount(Number(donor.donor_amount))}</span>
                             </li>
                         );
                     })}

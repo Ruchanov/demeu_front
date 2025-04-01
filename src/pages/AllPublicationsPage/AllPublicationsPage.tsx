@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { usePublicationsStore } from "../../store/publicationStore";
+import { usePublicationsStore, Publication } from "../../store/publicationStore";
 import PublicationCard from "../../components/publicationCard";
 import styles from "./allPublicationsPage.module.scss";
 
@@ -11,46 +11,82 @@ const AllPublicationsPage: React.FC = () => {
     const type = params.get("type"); // new, top, recommended
     const category = params.get("category"); // medicine, education и т.д.
 
-    const { fetchRecommendedPublications, fetchNewPublications, fetchTopPublications, fetchPublications, publications } =
-        usePublicationsStore();
+    const {
+        fetchRecommendedPublications,
+        fetchNewPublications,
+        fetchTopPublications,
+        fetchPublications,
+        recommendedPublications,
+        newPublications,
+        topPublications,
+        publications
+    } = usePublicationsStore();
+
     const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(true);
+
         if (category) {
-            fetchPublications({ categories: [category] }).then(() => setLoading(false));
+            fetchPublications({ categories: [category] }).finally(() => setLoading(false));
         } else {
             switch (type) {
                 case "recommended":
-                    fetchRecommendedPublications().then(() => setLoading(false));
+                    fetchRecommendedPublications().finally(() => setLoading(false));
                     break;
                 case "new":
-                    fetchNewPublications().then(() => setLoading(false));
+                    fetchNewPublications().finally(() => setLoading(false));
                     break;
                 case "top":
-                    fetchTopPublications().then(() => setLoading(false));
+                    fetchTopPublications().finally(() => setLoading(false));
                     break;
                 default:
-                    setLoading(false);
+                    fetchPublications().finally(() => setLoading(false));
             }
         }
     }, [type, category, fetchRecommendedPublications, fetchNewPublications, fetchTopPublications, fetchPublications]);
+
+    const getPublicationsByType = (): Publication[] => {
+        if (category) {
+            return publications;
+        }
+        switch (type) {
+            case "recommended":
+                return recommendedPublications;
+            case "new":
+                return newPublications;
+            case "top":
+                return topPublications;
+            default:
+                return publications;
+        }
+    };
+
+    const currentPublications = getPublicationsByType();
 
     return (
         <div className={styles.container}>
             <h1>
                 {category
                     ? t(`categories.${category}`)
-                    : t(type === "recommended" ? "recommended_publications" : type === "new" ? "new_posts" : "top_10_posts")}
+                    : t(
+                        type === "recommended"
+                            ? "recommended_publications"
+                            : type === "new"
+                                ? "new_posts"
+                                : type === "top"
+                                    ? "top_10_posts"
+                                    : "all_publications"
+                    )}
             </h1>
 
             {loading ? (
                 <p>{t("loading")}</p>
             ) : (
                 <div className={styles.publicationsList}>
-                    {publications.length > 0 ? (
-                        publications.map((pub) => (
+                    {currentPublications.length > 0 ? (
+                        currentPublications.map((pub) => (
                             <PublicationCard
                                 key={pub.id}
                                 id={pub.id}

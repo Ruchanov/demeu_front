@@ -202,6 +202,7 @@ const AboutPostPage = () => {
                             author_email={post.author_email}
                             author_id={post.author_id}
                             onShareClick={() => setIsShareOpen(true)}
+                            onDonationSuccess={loadPost}
                         />
 
                     </div>
@@ -264,6 +265,7 @@ const AboutPostPage = () => {
                             author_email={post.author_email}
                             author_id={post.author_id}
                             onShareClick={() => setIsShareOpen(true)}
+                            onDonationSuccess={loadPost}
                         />
 
                     </div>
