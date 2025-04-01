@@ -175,6 +175,16 @@
   "contact_name": "Contact Name",
   "contact_email": "Contact Email",
   "contact_phone": "Contact Phone",
+  "categories_list": {
+    "medical": "Medical Assistance",
+    "emergency": "Emergency Situation",
+    "charity": "Charity",
+    "education": "Education",
+    "animals": "Animals",
+    "environment": "Environment",
+    "sports": "Sports",
+    "general": "General Fundraising"
+  },
   "latest_donations": "Latest Donations",
   "anonymous": "Anonymous Donor",
   "unknown_date": "Unknown date",
@@ -229,6 +239,11 @@
   "Sports competition registration": "Sports competition registration",
   "your_post_takes_several_days": "Your post is in the process of verification. Please be understanding. This process takes about 1-3 days.",
   "return_to_main_page": "Return to main page",
-  "support_every_soul": "Support every soul"
+  "support_every_soul": "Support every soul",
+  "duration_title": "Post Duration",
+  "duration_description": "Select how long your post will be active. After this period, it will be removed from the platform.",
+  "7_days": "7 days",
+  "14_days": "2 weeks",
+  "30_days": "1 month"
 }
   

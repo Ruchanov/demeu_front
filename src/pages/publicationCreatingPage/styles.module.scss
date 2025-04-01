@@ -247,16 +247,13 @@ input {
   gap: 10px;
   width: 100%;
   min-height: 96px;
-  border: 2px dashed #008080;
+  border: 2px dashed rgb(220, 220, 220);
   border-radius: 8px;
   //padding: 10px;
   flex-wrap: wrap;
-  background: rgba(0, 128, 128, 0.05); /* Фон остается, но не кликабельный */
+  background: rgba(220,220,220, 0.5);
   margin-bottom: 10px;
   justify-content: center;
-  &:hover {
-    background: rgba(0, 128, 128, 0.05);
-  }
 
   @media (max-width: 768px) {
     flex-wrap: wrap;
@@ -299,6 +296,7 @@ input {
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 0;
       padding: 0;
       z-index: 10; /* Убедимся, что крестик выше всех */
       pointer-events: auto; /* Клик теперь проходит точно на кнопку */
@@ -313,7 +311,7 @@ input {
   .addMore {
     width: 80px;
     height: 80px;
-    border: 2px dashed #008080;
+    border: 2px #008080;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -322,6 +320,13 @@ input {
     border-radius: 8px;
     cursor: pointer;
     background: white;
+    .uploadIcon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      object-fit: contain;
+      opacity: 0.6; // 👈 Прозрачность от 0 до 1
+    }
 
     span {
       font-size: 24px;
@@ -642,14 +647,13 @@ input {
     padding-bottom: 10px;
     padding-right: 15px;
     border-radius: 12px; /* ✅ Rounded corners */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* ✅ Soft shadow for elevation */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     max-width: 100%; /* ✅ Ensure it takes the right width */
     min-height: 170px;
-
+    box-shadow: 0 4px 6px #99DDD0;
     gap: 2px;
     transition: background 0.3s ease-in-out;
     box-sizing: border-box;
@@ -666,9 +670,82 @@ input {
       flex: unset !important;
     }
   }
-  .fileUploadSection:nth-child(3) {
-    margin: 0 auto; // Центрирует третий блок при переносе
+
+  .durationContainer {
+    background: white; /* ✅ Set a background */
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    border-radius: 12px; /* ✅ Rounded corners */
+    box-shadow: 0 4px 6px #99DDD0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 100%; /* ✅ Ensure it takes the right width */
+    min-height: 170px;
+
+    gap: 2px;
+    transition: background 0.3s ease-in-out;
+    box-sizing: border-box;
+    flex: 0 1 calc(50% - 10px); // половина ширины - за вычетом gap
+    min-width: 300px;
+    @media (max-width: 1024px) {
+      flex: 1 1 100%;
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      width: 100% !important;
+      min-width: unset !important;
+      flex: unset !important;
+    }
   }
+
+  .durationTitle {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .durationDescription {
+    font-size: 0.9rem;
+    color: gray;
+  }
+
+  .durationOptions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between; // либо flex-start
+
+  }
+
+  .durationOption {
+    flex: 1 1 90px;       // ✅ позволяет расти/сжиматься, но не меньше 90px
+    min-width: 80px;      // ✅ минимум ширины
+    max-width: 200px;     // ✅ максимум для контроля
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+    color: black;
+  }
+
+  .selected {
+    background-color: #007864;
+    color: white;
+    border-color: #007864;
+  }
+
+
+  //.fileUploadSection:nth-child(3) {
+  //  margin: 0 auto; // Центрирует третий блок при переносе
+  //}
 
   .fileLabel {
     font-size: 1rem;
@@ -684,23 +761,26 @@ input {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 96%;
+    gap: 10px;
     min-height: 60px;
     max-hight: 80px;
-    border: 2px dashed #008080;
+    border: 2px dashed rgba(220,220,220);
     border-radius: 12px;
-    background: rgba(0, 128, 128, 0.05);
+    background: rgba(220,220,220, 0.5);
     cursor: pointer;
     position: relative;
     text-align: center;
     transition: background 0.2s ease-in-out;
     overflow-x: auto; // ✅ чтобы не растягивалось
     overflow-y: hidden; // ❗️ убираем вертикальный скролл
+    padding-right: 5px;
+    padding-left: 5px;
   }
   .addMoreFile {
     width: 50px;
     height: 50px;
-    border: 2px dashed #008080;
+    border: 2px  #008080;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -711,7 +791,7 @@ input {
     background: white;
     transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out;
     flex: 0 0 auto;
-    margin: 0 auto; // Центрирует саму кнопку в пределах контейнера
+    //margin: 0 auto; // Центрирует саму кнопку в пределах контейнера
 
     span {
       font-size: 24px;
@@ -731,9 +811,9 @@ input {
     }
   }
 
-  .fileUploadArea:hover {
-    background: rgba(0, 128, 128, 0.1);
-  }
+  //.fileUploadArea:hover {
+  //  background: rgba(0, 128, 128, 0.1);
+  //}
   .fileListContainer {
     display: flex;
     flex-wrap: nowrap;
@@ -834,7 +914,7 @@ input {
     padding: 8px;
     background: white;
     border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px #99DDD0;
 
   }
 

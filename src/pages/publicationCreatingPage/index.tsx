@@ -17,6 +17,7 @@ import aniIcon from '../../shared/assets/icons/cat_ani.svg';
 import cancIcon from '../../shared/assets/icons/cat_canc.svg';
 import genIcon from '../../shared/assets/icons/cat_gen.svg';
 import backgroundImg from "../../shared/assets/images/create_post_bg.svg";
+import cloudIcon from '../../shared/assets/icons/cloud_for_download.svg';
 import {createPublication} from "../../api/publicationsApi";
 import {useAuthStore} from "../../store/authStore";
 const categoryIcons: Record<string, string> = {
@@ -172,7 +173,12 @@ const CreatePublication = () => {
         },
     ];
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-
+    const [selected, setSelected] = useState<string>('7'); // по умолчанию 7 дней
+    const dayLabels: { [key: string]: string } = {
+        '7': t('7_days'),
+        '14': t('14_days'),
+        '30': t('30_days'),
+    };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -191,6 +197,7 @@ const CreatePublication = () => {
         form.append("contact_name", formData.contact_name);
         form.append("contact_email", formData.contact_email);
         form.append("contact_phone", formData.contact_phone);
+        form.append('duration_days', selected);
 
 
         if (mediaFiles.length > 0) {
@@ -307,7 +314,7 @@ const CreatePublication = () => {
                             {/* Upload Button */}
                             <div className={styles.addMore}
                                  onClick={() => document.getElementById('mediaFileInput')?.click()}>
-                                <span>+</span>
+                                <img src={cloudIcon} alt="upload" className={styles.uploadIcon}/>
                                 <p>{t('add_more')}</p>
                             </div>
 
@@ -385,37 +392,37 @@ const CreatePublication = () => {
                                 </label>
                                 <div className={styles.uploadDescription}>{t('id_card_description')}</div>
                                 <div className={styles.fileUploadArea}>
-                                    <div className={styles.fileListContainer}>
-                                        {uploadedFiles.id_card.map((file, index) => (
-                                            <div key={index} className={styles.fileItem}>
-                                                <span className={styles.fileIcon}>{getFileIcon(file)}</span>
-                                                <span className={styles.fileName}>{file.name}</span>
-                                                <button
-                                                    className={styles.removeFileButton}
-                                                    onClick={(e) => removeFile("id_card", index, e)}
-                                                >
-                                                    ✖
-                                                </button>
-                                            </div>
-                                        ))}
-
-                                        {/* Кнопка «Қосу» — единственная, которая вызывает file input */}
-                                        <div
-                                            className={styles.addMoreFile}
-                                            onClick={() => document.getElementById("id_card")?.click()}
-                                        >
-                                            <span>+</span>
-                                            <p>{t('add_more')}</p>
-                                            <input
-                                                id="id_card"
-                                                type="file"
-                                                className={styles.hiddenFileInput}
-                                                multiple
-                                                onChange={(e) => handleFileChange(e, "id_card")}
-                                                style={{display: 'none'}}
-                                            />
+                                    {/*<div className={styles.fileListContainer}>*/}
+                                    {uploadedFiles.id_card.map((file, index) => (
+                                        <div key={index} className={styles.fileItem}>
+                                            <span className={styles.fileIcon}>{getFileIcon(file)}</span>
+                                            <span className={styles.fileName}>{file.name}</span>
+                                            <button
+                                                className={styles.removeFileButton}
+                                                onClick={(e) => removeFile("id_card", index, e)}
+                                            >
+                                                ✖
+                                            </button>
                                         </div>
+                                    ))}
+
+                                    {/* Кнопка «Қосу» — единственная, которая вызывает file input */}
+                                    <div
+                                        className={styles.addMoreFile}
+                                        onClick={() => document.getElementById("id_card")?.click()}
+                                    >
+                                        <img src={cloudIcon} alt="upload" className={styles.uploadIcon}/>
+                                        <p>{t('add_more')}</p>
+                                        <input
+                                            id="id_card"
+                                            type="file"
+                                            className={styles.hiddenFileInput}
+                                            multiple
+                                            onChange={(e) => handleFileChange(e, "id_card")}
+                                            style={{display: 'none'}}
+                                        />
                                     </div>
+                                    {/*</div>*/}
                                 </div>
 
                             </div>
@@ -427,37 +434,37 @@ const CreatePublication = () => {
                                 </label>
                                 <div className={styles.uploadDescription}>{t('supporting_docs_description')}</div>
                                 <div className={styles.fileUploadArea}>
-                                    <div className={styles.fileListContainer}>
-                                        {uploadedFiles.supporting_documents.map((file, index) => (
-                                            <div key={index} className={styles.fileItem}>
-                                                <span className={styles.fileIcon}>{getFileIcon(file)}</span>
-                                                <span className={styles.fileName}>{file.name}</span>
-                                                <button
-                                                    className={styles.removeFileButton}
-                                                    onClick={(e) => removeFile("supporting_documents", index, e)}
-                                                >
-                                                    ✖
-                                                </button>
-                                            </div>
-                                        ))}
-
-                                        {/* Кнопка «Қосу» — единственная, которая вызывает file input */}
-                                        <div
-                                            className={styles.addMoreFile}
-                                            onClick={() => document.getElementById("supporting_documents")?.click()}
-                                        >
-                                            <span>+</span>
-                                            <p>{t('add_more')}</p>
-                                            <input
-                                                id="supporting_documents"
-                                                type="file"
-                                                className={styles.hiddenFileInput}
-                                                multiple
-                                                onChange={(e) => handleFileChange(e, "supporting_documents")}
-                                                style={{display: 'none'}}
-                                            />
+                                    {/*<div className={styles.fileListContainer}>*/}
+                                    {uploadedFiles.supporting_documents.map((file, index) => (
+                                        <div key={index} className={styles.fileItem}>
+                                            <span className={styles.fileIcon}>{getFileIcon(file)}</span>
+                                            <span className={styles.fileName}>{file.name}</span>
+                                            <button
+                                                className={styles.removeFileButton}
+                                                onClick={(e) => removeFile("supporting_documents", index, e)}
+                                            >
+                                                ✖
+                                            </button>
                                         </div>
+                                    ))}
+
+                                    {/* Кнопка «Қосу» — единственная, которая вызывает file input */}
+                                    <div
+                                        className={styles.addMoreFile}
+                                        onClick={() => document.getElementById("supporting_documents")?.click()}
+                                    >
+                                        <img src={cloudIcon} alt="upload" className={styles.uploadIcon}/>
+                                        <p>{t('add_more')}</p>
+                                        <input
+                                            id="supporting_documents"
+                                            type="file"
+                                            className={styles.hiddenFileInput}
+                                            multiple
+                                            onChange={(e) => handleFileChange(e, "supporting_documents")}
+                                            style={{display: 'none'}}
+                                        />
                                     </div>
+                                    {/*</div>*/}
                                 </div>
                             </div>
 
@@ -468,40 +475,56 @@ const CreatePublication = () => {
                                 </label>
                                 <div className={styles.uploadDescription}>{t('income_statement_description')}</div>
                                 <div className={styles.fileUploadArea}>
-                                    <div className={styles.fileListContainer}>
-                                        {uploadedFiles.income_statement.map((file, index) => (
-                                            <div key={index} className={styles.fileItem}>
-                                                <span className={styles.fileIcon}>{getFileIcon(file)}</span>
-                                                <span className={styles.fileName}>{file.name}</span>
-                                                <button
-                                                    className={styles.removeFileButton}
-                                                    onClick={(e) => removeFile("income_statement", index, e)}
-                                                >
-                                                    ✖
-                                                </button>
-                                            </div>
-                                        ))}
-
-                                        {/* Кнопка «Қосу» — единственная, которая вызывает file input */}
-                                        <div
-                                            className={styles.addMoreFile}
-                                            onClick={() => document.getElementById("income_statement")?.click()}
-                                        >
-                                            <span>+</span>
-                                            <p>{t('add_more')}</p>
-                                            <input
-                                                id="income_statement"
-                                                type="file"
-                                                className={styles.hiddenFileInput}
-                                                multiple
-                                                onChange={(e) => handleFileChange(e, "income_statement")}
-                                                style={{display: 'none'}}
-                                            />
+                                    {/*<div className={styles.fileListContainer}>*/}
+                                    {uploadedFiles.income_statement.map((file, index) => (
+                                        <div key={index} className={styles.fileItem}>
+                                            <span className={styles.fileIcon}>{getFileIcon(file)}</span>
+                                            <span className={styles.fileName}>{file.name}</span>
+                                            <button
+                                                className={styles.removeFileButton}
+                                                onClick={(e) => removeFile("income_statement", index, e)}
+                                            >
+                                                ✖
+                                            </button>
                                         </div>
+                                    ))}
+
+                                    {/* Кнопка «Қосу» — единственная, которая вызывает file input */}
+                                    <div
+                                        className={styles.addMoreFile}
+                                        onClick={() => document.getElementById("income_statement")?.click()}
+                                    >
+                                        <img src={cloudIcon} alt="upload" className={styles.uploadIcon}/>
+                                        <p>{t('add_more')}</p>
+                                        <input
+                                            id="income_statement"
+                                            type="file"
+                                            className={styles.hiddenFileInput}
+                                            multiple
+                                            onChange={(e) => handleFileChange(e, "income_statement")}
+                                            style={{display: 'none'}}
+                                        />
                                     </div>
+                                    {/*</div>*/}
                                 </div>
                             </div>
-
+                            <div className={styles.durationContainer}>
+                                <h3 className={styles.durationTitle}>{t('duration_title')}</h3>
+                                <p className={styles.durationDescription}>
+                                    {t('duration_description')}
+                                </p>
+                                <div className={styles.durationOptions}>
+                                    {['7', '14', '30'].map((day: string) => (
+                                        <button
+                                            key={day}
+                                            className={`${styles.durationOption} ${selected === day ? styles.selected : ''}`}
+                                            onClick={() => setSelected(day)}
+                                        >
+                                            {dayLabels[day]}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
 
 
@@ -524,7 +547,7 @@ const CreatePublication = () => {
                             {/* Required Amount Field */}
                             <div className={styles.bankFieldContainer}>
                                 <div className={styles.labelContainer}>
-                                    <span className={styles.labelText}>{t("required_amount")}</span>
+                                <span className={styles.labelText}>{t("required_amount")}</span>
                                 </div>
                                 <input
                                     type="text"
