@@ -12,6 +12,8 @@ h1 {
 
 .publicationsList {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
 }
