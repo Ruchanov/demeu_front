@@ -1,11 +1,14 @@
 .container {
+  width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 40px 16px;
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .title {
@@ -30,100 +33,214 @@
 
 .inputWrapper {
   width: 100%;
-  max-width: 500px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
 }
 
-.inputFull {
+.inputWrapper label {
+  margin-left: 0;
+}
+
+.inputWrapper input {
+  margin-left: 0;
+}
+
+.inputFull,
+.textarea,
+.submitButtonWrapper,
+.mediaUpload {
   width: 100%;
-  max-width: 500px;
+  box-sizing: border-box;
 }
 
-.inputWrapper textarea{
+.textarea {
   border-radius: 25px;
   box-shadow: 0 4px 6px #99DDD0;
-  padding: 30px 30px;
-  margin-bottom: 16px;
-  transition: box-shadow 0.3s ease;
+  padding: 25px 20px;
   border: none;
-}
-
-label {
+  resize: none;
+  font-family: inherit;
   font-size: 16px;
-  font-weight: 500;
-  color: #444;
-  margin-bottom: 5px;
-  align-self: flex-start;
+  transition: box-shadow 0.3s ease;
 }
 
-.fileUploadWrapper {
+.hintText {
+  font-size: 14px;
+  color: #666;
+  margin: 8px 0 12px;
+}
+
+.imageContainer {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   width: 100%;
   max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-bottom: 5px;
 }
 
-.fileInputContainer {
+.imageWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.deleteImage {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(-15%, -55%);
+  background: red;
+  color: white;
+  border: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 50px;
-  border-radius: 8px;
-  background-color: rgba(0, 168, 107, 0.05);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  padding: 0;
+}
+
+.addImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.fileInput {
+  display: none;
 }
 
 .submitButtonWrapper {
   width: 100%;
-  max-width: 500px;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 20px;
+  box-sizing: border-box;
 }
 
-.submitButtonWrapper:hover {
-  opacity: 0.9;
+.inputError {
+  border: 1px solid red;
+}
+
+.errorText {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  text-align: left;
 }
 
 @media (max-width: 768px) {
   .container {
-    max-width: 90%;
-    padding: 20px;
+    padding: 24px 12px 80px; // уменьшил боковые
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .inputWrapper,
+  .inputFull,
+  .textarea,
+  .submitButtonWrapper,
+  .imageContainer {
+    max-width: 100%;
+    width: 100%;
   }
 
   .title {
     font-size: 22px;
+    margin-bottom: 8px;
   }
 
   .subtitle {
-    font-size: 16px;
-    margin-bottom: 15px;
+    font-size: 15px;
+    margin-bottom: 18px;
+    line-height: 1.4;
+  }
+
+  .form {
+    gap: 14px;
   }
 
   .inputWrapper {
     max-width: 100%;
+    margin-bottom: 8px;
   }
 
-  .inputFull {
+  .inputFull,
+  .textarea,
+  .submitButtonWrapper {
     max-width: 100%;
   }
 
-  .inputWrapper textarea {
-    padding: 20px;
+  .textarea {
+    padding: 18px 14px;
+    font-size: 14px;
+    border-radius: 20px;
   }
 
-  .fileUploadWrapper {
-    max-width: 100%;
+  .hintText {
+    font-size: 12.5px;
+    margin: 6px 0 10px;
+    color: #666;
   }
 
-  .fileInputContainer {
-    height: 45px;
+  .imageContainer {
+    gap: 10px;
+    padding-bottom: 6px;
+    overflow-x: auto;
+  }
+
+  .imageWrapper,
+  .addImage {
+    width: 65px;
+    height: 65px;
+    border-radius: 10px;
+  }
+
+  .imagePreview {
+    border-radius: 10px;
+  }
+
+  .uploadIcon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .deleteImage {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    top: 0;
+    right: 0;
+    transform: translate(20%, -50%);
   }
 
   .submitButtonWrapper {
-    max-width: 100%;
+    margin-top: 16px;
   }
 }

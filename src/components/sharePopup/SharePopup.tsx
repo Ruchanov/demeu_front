@@ -25,7 +25,7 @@ const SharePopup: React.FC<SharePopupProps> = ({ onClose }) => {
     const socialLinks = [
         {
             name: 'WhatsApp',
-            icon: 'whatsApp_icon',
+            icon: 'whatsapp_icon',
             url: `https://api.whatsApp.com/send?text=${encodeURIComponent(`${shareMessage} ${shareLink}`)}`,
         },
         {

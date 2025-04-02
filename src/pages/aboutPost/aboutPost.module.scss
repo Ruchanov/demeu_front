@@ -1,6 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  gap: 20px;
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
@@ -11,6 +12,7 @@
   gap: 20px;
   width: 100%;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .leftColumn {
@@ -18,7 +20,9 @@
   background: #fff;
   padding: 20px;
   border-radius: 12px;
+  width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
 .rightColumn {
@@ -32,6 +36,7 @@
   justify-content: flex-start;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   width: 100%;
+  box-sizing: border-box;
 }
 
 .authorContainer {
@@ -42,7 +47,9 @@
   padding: 10px 15px;
   border-radius: 20px;
   box-shadow: 0 2px 5px rgba(0.1, 0.1, 0.1, 0.1);
-  width: 92.5%;
+  width: 100%;
+  max-width: 100%;
+  justify-content: flex-start;
 }
 
 .authorAvatar {
@@ -141,7 +148,6 @@
   align-items: center;
 }
 
-
 .saveButton:hover {
   background: none;
   transform: scale(1.2);
@@ -234,7 +240,6 @@
   background: darkred;
 }
 
-
 .prevButton, .nextButton {
   position: absolute;
   top: 50%;
@@ -259,7 +264,7 @@
 }
 
 .prevButton:hover, .nextButton:hover {
-  background: rgba(0, 0, 0, 0.8); /* при наведении – ещё темнее */
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .cardSpacing {
@@ -311,17 +316,12 @@
   color: #05623C;
 }
 
-//.successful {
-//  background-color: #C1F3EC;
-//  color: #008B7D;
-//}
-
 @media (max-width: 768px) {
   .container {
     display: flex;
     flex-direction: column;
-    max-width: 100%;
     padding: 10px;
+    overflow: hidden;
   }
 
   .mainContent {
@@ -329,6 +329,8 @@
     flex-direction: column;
     gap: 15px;
     width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .postTitle {
@@ -336,59 +338,78 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    width: 100%;
   }
 
   .postTitle h1 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     line-height: 1.2;
     text-align: left;
+    margin: 0;
   }
 
   .authorContainer {
     display: flex;
     align-items: center;
+    flex-direction: row;
     gap: 10px;
+    justify-content: flex-start;
     background: white;
     padding: 10px;
     border-radius: 12px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    justify-content: center;
+    box-sizing: border-box;
+    margin-bottom: 10px;
   }
 
-  .fundraisingCard {
-    width: 100%;
-    padding: 15px;
+  .authorAvatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .authorName {
+    font-size: 16px;
+    font-weight: bold;
   }
 
   .description {
     font-size: 16px;
     text-align: justify;
     padding: 10px;
+    margin: 0 auto;
+    max-width: 100%;
   }
 
   .postHeader {
     display: flex;
     justify-content: space-between;
     padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  .donorList {
-    width: 100%;
+  .donorList, .relatedPosts, .commentSection {
     padding: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
+    width: 100%;
   }
 
-  .relatedPosts {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 30px ;
+  .commentBox{
+    margin-top: 20px;
   }
 
-  .commentSection {
+  .categoryStatusRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     width: 100%;
-    padding: 10px;
+  }
+
+  .statusTag {
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 20px;
   }
 
   .desktopEdit {
@@ -398,50 +419,34 @@
   .mobileEdit {
     display: flex;
     flex-direction: column;
-  }
-
-  .postTitle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-  }
-
-  .authorContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
     width: 100%;
-    justify-content: flex-start;
   }
 
-  .fundraisingCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .cardSpacing {
+    margin-top: 15px;
     width: 100%;
-    padding: 10px;
   }
 
-  .donorList, .relatedPosts {
+  .fundraisingCard, .contactBox {
     width: 100%;
     padding: 15px;
+    box-sizing: border-box;
   }
 
-  .commentSection {
+  /* Для поста */
+  .imageContainer {
     width: 100%;
-    padding: 10px;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
   }
 
-  .categoryStatusRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .statusTag {
-    font-size: 13px;
-    padding: 3px 10px;
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease-in-out;
   }
 }

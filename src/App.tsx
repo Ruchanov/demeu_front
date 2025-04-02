@@ -17,6 +17,8 @@ import MainPage from "./pages/mainPage";
 import FavoritesPage from "./pages/favoritesPage/FavoritesPage";
 import AllPublicationsPage from "./pages/AllPublicationsPage/AllPublicationsPage";
 import CategoryDetailPage from "./pages/CategoryDetailPage/CategoryDetailPage"
+// import '/shared/assets/icons/sprite.svg';
+
 
 const App = () => {
     const data = useAuthStore((state) => state.token);
