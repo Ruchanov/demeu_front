@@ -209,7 +209,6 @@ const AboutPostPage = () => {
                             onShareClick={() => setIsShareOpen(true)}
                             onDonationSuccess={loadPost}
                         />
-
                     </div>
 
                     <div className={`${styles.cardSpacing} ${styles.mobileEdit}`}>
@@ -247,8 +246,9 @@ const AboutPostPage = () => {
                         <RelatedPosts category={post.category} postId={post.id} />
                     </div>
 
-                    {/* Блок комментариев */}
-                    <CommentSection postId={post.id} onCommentChange={loadPost} />
+                    <div className={styles.commentBox}>
+                        <CommentSection postId={post.id} onCommentChange={loadPost} />
+                    </div>
                 </div>
 
                 <div className={styles.rightColumn}>

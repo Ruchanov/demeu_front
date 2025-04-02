@@ -1,9 +1,11 @@
+/* Десктоп версия */
 .container {
   background: #f0fdf4;
   padding: 15px;
   border-radius: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  width: 95%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .title {
@@ -25,7 +27,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px;
+  padding: 15px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -58,4 +60,41 @@
 .date {
   font-size: 12px;
   color: gray;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .list {
+    gap: 8px;
+  }
+
+  .relatedItem {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .postTitle {
+    font-size: 12px;
+  }
+
+  .date {
+    font-size: 11px;
+  }
+
+  .info {
+    gap: 4px;
+  }
 }

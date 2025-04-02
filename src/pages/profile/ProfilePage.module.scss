@@ -19,6 +19,7 @@
   width: 100%;
   max-width: 1200px;
   gap: 40px;
+  padding: 0 20px;
 }
 
 /* Левая часть */
@@ -27,10 +28,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  word-wrap: break-word;
 }
 
 .avatarWrapper {
   position: relative;
+  overflow: visible;
 }
 
 .avatar {
@@ -43,8 +46,8 @@
 
 .editAvatar {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: 0;
+  right: 0;
   background: #49C2A7;
   border-radius: 50%;
   width: 50px;
@@ -54,10 +57,12 @@
   justify-content: center;
   border: none;
   cursor: pointer;
+  z-index: 3;
 }
 
-.editAvatar svg {
-  width: 100%;
+.editIcon_svg {
+  width: 20px;
+  height: 20px;
 }
 
 .name {
@@ -65,11 +70,11 @@
   font-weight: bold;
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 5px; /* Уменьшаем отступ */
+  margin-bottom: 5px;
 }
 
 .daysWithUs {
-  margin-top: 5px; /* Уменьшаем отступ */
+  margin-top: 5px;
   font-size: 16px;
   font-weight: 500;
   color: #333;
@@ -81,9 +86,12 @@
   text-align: center;
   margin-top: 1px;
   color: #666;
+  padding: 0 15px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
-/* Новая кнопка с плюсом */
 .createPostContainer {
   position: relative;
   display: flex;
@@ -156,7 +164,6 @@
   margin-top: 1px;
 }
 
-/* Контейнер для информации */
 .userInfo {
   display: flex;
   justify-content: space-between;
@@ -192,10 +199,11 @@
 }
 
 .publicationsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 50px;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 
 .publicationCard {
@@ -241,6 +249,31 @@
   white-space: nowrap;
 }
 
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 100%;
+  background: linear-gradient(to bottom, #76D0C2 0%, white 100%);
+}
+
+.loaderText {
+  font-size: 22px;
+  font-weight: 600;
+  color: #49C2A7;
+  animation: blink 1.4s infinite ease-in-out;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 @media (max-width: 768px) {
   .profileContainer {
     width: 100%;
@@ -251,7 +284,6 @@
     width: 100%;
     flex-direction: column;
     align-items: center;
-    width: 100%;
   }
 
   .profileContent {
@@ -282,8 +314,13 @@
   }
 
   .editAvatar {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .editIcon_svg {
+    width: 15px;
+    height: 15px;
   }
 
   .name {
@@ -363,41 +400,6 @@
     flex-direction: column;
     gap: 10px;
     width: 100%;
-  }
-
-  /* Адаптация постов */
-  .postsSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .publicationsGrid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .publicationCard {
-    width: 90%;
-    max-width: 400px;
-    margin-bottom: 20px;
-  }
-
-  .tabButtons {
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .tab,
-  .activeTab {
-    font-size: 15px;
-    padding: 8px 20px;
   }
 
 }

@@ -124,7 +124,7 @@ const SearchPage = () => {
                             <div className={styles.publicationsGrid}>
                                 {publications.map((pub) => (
                                     <PublicationCard
-                                        // key={pub.id}
+                                        key={pub.id}
                                         id={pub.id}
                                         title={pub.title}
                                         category={pub.category}

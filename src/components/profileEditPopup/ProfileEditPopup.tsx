@@ -19,6 +19,7 @@ const regionsByCountry = {
 const ProfileEditPopup = ({ onClose }) => {
     const { user, fetchUserProfile, updateUserProfile } = useProfileStore();
     const { t } = useTranslation();
+    const [phoneError, setPhoneError] = useState(false);
 
     const [formData, setFormData] = useState({
         first_name: user?.first_name || "",
@@ -57,33 +58,46 @@ const ProfileEditPopup = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!/^\+7\d{10}$/.test(formData.phone_number)) {
+            setPhoneError(true);
+            return;
+        }
+        setPhoneError(false);
+
         try {
             const formDataToSend = new FormData();
-
             formDataToSend.append("phone_number", formData.phone_number);
             formDataToSend.append("birth_date", formData.birth_date);
             formDataToSend.append("country", formData.country);
             formDataToSend.append("city", formData.region);
             formDataToSend.append("bio", formData.bio);
 
-            if (formData.avatar && formData.avatar instanceof File) {
+            if (formData.avatar instanceof File) {
                 formDataToSend.append("avatar", formData.avatar);
             }
 
             console.log("📌 Отправляемые данные:", [...formDataToSend.entries()]);
 
             await updateUserProfile(formDataToSend);
-            await fetchUserProfile();
-            onClose();
 
+            // подождём немного, чтобы бэкенд успел обработать
+            setTimeout(async () => {
+                await fetchUserProfile();
+                onClose(); // вызываем только один раз
+            }, 500);
         } catch (error) {
             console.error("❌ Ошибка при обновлении профиля:", error);
         }
     };
 
     return (
-        <div className={styles.popupOverlay}>
-            <div className={styles.popup}>
+        <div className={styles.popupOverlay} onClick={(e) => {
+            if (e.target === e.currentTarget) {
+                onClose();
+            }
+        }}>
+            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.header}>
                     <h2>{t('update')}</h2>
                     <button className={styles.closeButton} onClick={onClose}>
@@ -93,14 +107,16 @@ const ProfileEditPopup = ({ onClose }) => {
 
                 <div className={styles.content}>
                     <div className={styles.avatarSection}>
-                        <img
-                            src={previewUrl || defaultAvatar}
-                            alt="Avatar"
-                            className={styles.avatar}
-                        />
-                        <div className={styles.uploading} >
+                        <div className={styles.avatarWrapper}>
+                            <img
+                                src={previewUrl || defaultAvatar}
+                                alt="Avatar"
+                                className={styles.avatar}
+                            />
+                        </div>
+                        <div className={styles.uploading}>
                             <label htmlFor="avatarUpload" className={styles.avatarLabel}>
-                                {t('upload_photo')}
+                                {t("upload_photo")}
                             </label>
                         </div>
                         <input
@@ -108,8 +124,12 @@ const ProfileEditPopup = ({ onClose }) => {
                             id="avatarUpload"
                             accept="image/*"
                             className={styles.hiddenInput}
-                            onChange={handleAvatarChange}
+                            onChange={(e) => {
+                                handleAvatarChange(e);
+                                e.target.value = ""; // ✅ сброс выбора
+                            }}
                         />
+
                     </div>
 
                     <form className={styles.form} onSubmit={handleSubmit}>
@@ -145,15 +165,17 @@ const ProfileEditPopup = ({ onClose }) => {
                                     name="phone_number"
                                     value={formData.phone_number}
                                     onChange={(e) => {
-                                        const input = e.target.value;
-
-                                        // Если пользователь стер +7, снова добавим
-                                        const sanitized = input.startsWith('+7') ? input : '+7' + input.replace(/[^0-9]/g, '');
+                                        const value = e.target.value;
+                                        const sanitized = value.replace(/[^\d+]/g, '');
                                         setFormData({ ...formData, phone_number: sanitized });
+
+                                        setPhoneError(!/^\+7\d{0,10}$/.test(sanitized));
                                     }}
-                                    placeholder="+7**********"
-                                    style={{ color: formData.phone_number ? '#000' : '#999' }} // делаем placeholder светлым
+                                    className={`${phoneError ? styles.inputError : ""}`}
                                 />
+
+                                {phoneError && <span className={styles.errorText}>{t("invalid_phone")}</span>}
+
                             </div>
                         </div>
 
@@ -186,7 +208,7 @@ const ProfileEditPopup = ({ onClose }) => {
                             </div>
                         )}
 
-                        <label>{t('additional_info')}</label>
+                        <label className={styles.textareaLabel}>{t('additional_info')}</label>
                         <textarea
                             name="bio"
                             value={formData.bio}

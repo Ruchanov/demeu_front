@@ -55,10 +55,12 @@
 }
 
 .label {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   color: #333;
   margin-top: 10px;
+  align-self: flex-start;
+  margin-left: 20px;
 }
 
 .inputWrapper {
@@ -80,7 +82,7 @@
   font-size: 16px;
   color: #333;
   background: transparent;
-  padding-left: 20px; // Отступ для иконки
+  padding-left: 30px; // Отступ для иконки
 }
 
 .inputWrapper svg {
@@ -217,7 +219,6 @@
   z-index: 2;
   padding: 0;
 }
-
 
 .addImageContainer {
   display: flex;

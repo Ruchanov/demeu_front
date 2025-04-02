@@ -249,31 +249,46 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
 
         const isCurrentlyFavorite = get().favoritePublications.some(pub => pub.id === id);
 
+        // Найдём пост в любом списке
+        const allPosts = [
+            ...get().publications,
+            ...get().userPublications,
+            ...get().activePublications,
+            ...get().pendingPublications,
+            ...get().archivedPublications,
+        ];
+
+        const foundPost = allPosts.find(p => p.id === id);
+        if (!foundPost) {
+            console.warn("⚠️ Пост не найден в списках для избранного:", id);
+            return;
+        }
+
+        // Обновление локально
+        const updateFavoriteLocally = (list: Publication[]) =>
+            list.map((pub) =>
+                pub.id === id ? { ...pub, is_favorite: !isCurrentlyFavorite } : pub
+            );
+
+        set((state) => ({
+            favoritePublications: isCurrentlyFavorite
+                ? state.favoritePublications.filter((p) => p.id !== id)
+                : [...state.favoritePublications, { ...foundPost, is_favorite: true }],
+            publications: updateFavoriteLocally(state.publications),
+            userPublications: updateFavoriteLocally(state.userPublications),
+            activePublications: updateFavoriteLocally(state.activePublications),
+            pendingPublications: updateFavoriteLocally(state.pendingPublications),
+            archivedPublications: updateFavoriteLocally(state.archivedPublications),
+        }));
+
         try {
             if (isCurrentlyFavorite) {
                 await removeFavoritePublication(id, token);
             } else {
                 await addFavoritePublication(id, token);
             }
-
-            await get().fetchFavorites();
-
-            const currentUser = useProfileStore.getState().user;
-            if (currentUser) {
-                const newTotal = isCurrentlyFavorite
-                    ? currentUser.total_favorite_publications - 1
-                    : currentUser.total_favorite_publications + 1;
-
-                useProfileStore.setState({
-                    user: {
-                        ...currentUser,
-                        total_favorite_publications: newTotal
-                    }
-                });
-            }
-
         } catch (error) {
-            console.error('Ошибка переключения избранного:', error);
+            console.error('❌ Ошибка переключения избранного:', error);
         }
     },
 
@@ -476,6 +491,4 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             set({ error: "Failed to fetch pending publications", loading: false });
         }
     },
-
-
 }));

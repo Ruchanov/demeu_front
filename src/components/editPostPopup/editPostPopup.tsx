@@ -131,8 +131,12 @@ const EditPostPopup: React.FC<EditPostPopupProps> = ({ post, onClose, onSave }) 
     };
 
     return (
-        <div className={styles.popupOverlay}>
-            <div className={styles.popup}>
+        <div className={styles.popupOverlay} onClick={(e) => {
+            if (e.target === e.currentTarget) {
+                onClose();
+            }
+        }}>
+            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.header}>
                     <h2>{t("updatePost")}</h2>
                     <button className={styles.closeButton} onClick={onClose}>

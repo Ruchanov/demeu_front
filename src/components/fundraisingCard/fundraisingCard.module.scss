@@ -4,8 +4,8 @@
   padding: 24px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   text-align: center;
-  //width: 300px;
-  width: 90%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .progressCircle {
@@ -87,3 +87,68 @@
 .donateButton:hover {
   background: #14963E;
 }
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .fundraisingCard {
+    width: 100%; /* Ширина 100% для мобильной версии */
+    padding: 16px; /* Уменьшаем отступы для мобильной версии */
+  }
+
+  .amountCollected {
+    font-size: 20px; /* Меньший размер шрифта на мобильных */
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+
+  .text {
+    font-size: 14px; /* Меньший размер шрифта для мобильных */
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+
+  .goalDetails {
+    font-size: 14px; /* Уменьшаем размер шрифта */
+    padding: 8px 0; /* Уменьшаем отступы */
+  }
+
+  .shareButton,
+  .deleteButton,
+  .donateButton {
+    font-size: 16px; /* Меньший размер шрифта на мобильных */
+    padding: 10px;
+    border-radius: 10px; /* Меньше радиус для мобильной версии */
+    margin-top: 8px; /* Уменьшаем отступы между кнопками */
+  }
+
+  .shareButton {
+    background: #17A34A;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .shareButton:hover {
+    background: #14963E;
+  }
+
+  .deleteButton {
+    background: #FFECEC;
+    color: #D9534F;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .deleteButton:hover {
+    background: #D9534F;
+    color: white;
+  }
+
+  .donateButton {
+    background: #17A34A;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .donateButton:hover {
+    background: #14963E;
+  }
+}
+
+
