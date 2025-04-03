@@ -89,7 +89,7 @@ const RegisterForm = () => {
               </div>
             </form>
         )}
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <p className={styles.error}>{t(error)}</p>}
       </div>
   );
 };

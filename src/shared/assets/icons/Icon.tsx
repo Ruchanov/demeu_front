@@ -9,8 +9,8 @@ interface IconSvgProps {
   color?: string;
 }
 
-const IconSvg: React.FC<IconSvgProps> = ({ name, width = '24', height = '24', fill = 'currentColor', className = '', color = '' }) => (
-  <svg width={width} height={height} fill={fill} className={className}>
+const IconSvg: React.FC<IconSvgProps> = ({ name, width = '24', height = '24', fill = 'currentColor', className = '', color = '',   ...props}) => (
+  <svg width={width} height={height} fill={fill} className={className} {...props}>
     <use color={color ? color : ''} xlinkHref={`#icon-${name}`} />
   </svg>
 );
