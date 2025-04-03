@@ -62,6 +62,7 @@ const CreatePublication = () => {
     }, [isAuthenticated, navigate]);
 
     const { user } = useProfileStore();
+    const MAX_MEDIA_FILES = 20;
 
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [loading, setLoading] = useState(false);
@@ -93,6 +94,8 @@ const CreatePublication = () => {
     });
 
 
+
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, key: string) => {
         const selectedFiles = Array.from(event.target.files || []);
         if (!selectedFiles.length) return;
@@ -100,9 +103,21 @@ const CreatePublication = () => {
         setUploadedFiles((prev) => {
             const existingFiles = prev[key] || [];
 
-            if (existingFiles.length + selectedFiles.length > 5) {
-                alert(t('file_upload_limit_exceeded')); // ✅ Можно заменить на toast
-                return prev; // ничего не меняем
+            // Устанавливаем лимит
+            const maxFiles = key === "supporting_documents" ? 5 : 1;
+
+            if (existingFiles.length + selectedFiles.length > maxFiles) {
+                const limitKey =
+                    key === "supporting_documents"
+                        ? 'max_supporting_documents'
+                        : key === "id_card"
+                            ? 'only_one_id_card'
+                            : 'only_one_income_statement';
+
+                alert(t(limitKey)); // ✅ Переводится корректно теперь
+                event.target.value = '';
+
+                return prev;
             }
 
             return {
@@ -111,23 +126,30 @@ const CreatePublication = () => {
             };
         });
 
-        // Сбрасываем значение input, чтобы можно было повторно выбрать тот же файл
         event.target.value = '';
     };
 
 
-    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: "media" | "documents", fieldName?: string) => {
+
+    const handleFileUpload = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        type: "media" | "documents",
+        fieldName?: string
+    ) => {
         if (!e.target.files || e.target.files.length === 0) return;
 
+        const newFiles = Array.from(e.target.files);
+
         if (type === "media") {
-            setMediaFiles((prevFiles) => [...prevFiles, ...Array.from(e.target.files)]);
+            const totalFiles = mediaFiles.length + newFiles.length;
+
+            if (totalFiles > MAX_MEDIA_FILES) {
+                alert(t('max_files_exceeded', { count: MAX_MEDIA_FILES }));
+                return;
+            }
+
+            setMediaFiles((prevFiles) => [...prevFiles, ...newFiles]);
         }
-        // else if (type === "documents" && fieldName) {
-        //     setFormData((prevState) => ({
-        //         ...prevState,
-        //         [fieldName]: e.target.files[0], // ✅ Берем только первый файл (File)
-        //     }));
-        // }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -141,35 +163,55 @@ const CreatePublication = () => {
     const documentCategories = [
         {
             name: 'medicine',
-            documents: ['Medical certificate', 'Invoices', 'Doctor referral'],
+            documents: ["Medical report showing the diagnosis",
+                "Bill for treatment or rehabilitation",
+                "Documents confirming disability (if any)",
+                "Certificate of lack of public funding",
+                "Medical history (if necessary)"],
         },
         {
             name: 'education',
-            documents: ['School enrollment proof', 'Scholarship letter'],
+            documents: [ "Certificate or Diploma of Education",
+                "Account of an educational institution",
+                "Documents confirming academic achievements",
+                "Motivation letter",
+                "Letters of recommendation (if any)"],
         },
         {
             name: 'ecology',
-            documents: ['Ecological project approval'],
+            documents: [ "Description of the environmental initiative",
+                "Required permit documents (if available)",
+                "Environmental impact assessment conclusion"],
         },
         {
             name: 'emergency',
-            documents: ['Disaster relief request', 'Government approval'],
+            documents: [  "Emergency proof documents",
+                "Police or Ministry of emergency situations report",
+                "A social service certificate confirming the need for help"],
         },
         {
             name: 'charity',
-            documents: ['Non-profit registration', 'Fundraising authorization'],
+            documents: [ "A document confirming belonging to a socially vulnerable group",
+                "Certificate of marital status",
+                "Plan for the use of funds for charitable purposes"],
         },
         {
             name: 'animals',
-            documents: ['Veterinary certificate'],
+            documents: ["Veterinary definition of an animal",
+                "Documents confirming the need for protection",
+                "Application for animal shelter"],
         },
         {
             name: 'general',
-            documents: ['General support document'],
+            documents: [ "List of people who need help (if any)",
+                "Documents confirming the intended use of the collected funds",
+                "Description of public initiative"],
         },
         {
             name: 'sports',
-            documents: ['Sports competition registration'],
+            documents: ["Participant list and sports project description",
+                "Document confirming the need for funding to participate in a competition or event",
+                "Certificates and diplomas confirming sports achievements"],
         },
     ];
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -179,6 +221,57 @@ const CreatePublication = () => {
         '14': t('14_days'),
         '30': t('30_days'),
     };
+
+    const handleNextFromStep1 = () => {
+        if (!formData.title.trim() || !formData.category || !formData.description.trim() || mediaFiles.length === 0) {
+            alert(t("please_fill_all_fields_step1"));
+            return;
+        }
+        setStep(2);
+    };
+
+    const handleNextFromStep2 = () => {
+        const hasAllDocuments =
+            uploadedFiles.id_card.length > 0 &&
+            uploadedFiles.supporting_documents.length > 0 &&
+            uploadedFiles.income_statement.length > 0;
+
+        if (!hasAllDocuments || !formData.bank_details.trim() || !formData.amount.trim()) {
+            alert(t("please_fill_all_fields_step2"));
+            return;
+        }
+        setStep(3);
+    };
+    const handleStepClick = (nextStep: number) => {
+        if (nextStep === step) return; // Если нажали на текущий шаг — ничего не делаем
+
+        // Валидация для перехода со step 1
+        if (step === 1) {
+            if (!formData.title || !formData.description || mediaFiles.length === 0) {
+                alert(t("please_fill_all_fields_step1"));
+                return;
+            }
+        }
+
+        // Валидация для перехода со step 2
+        if (step === 2) {
+            const { id_card, supporting_documents, income_statement } = uploadedFiles;
+            if (
+                id_card.length === 0 ||
+                supporting_documents.length === 0 ||
+                income_statement.length === 0 ||
+                !formData.bank_details ||
+                !formData.amount
+            ) {
+                alert(t("please_fill_all_fields_step2"));
+                return;
+            }
+        }
+
+        // Только если всё заполнено — переходим
+        setStep(nextStep);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -259,18 +352,20 @@ const CreatePublication = () => {
         <div className={styles.container}>
             <div className={styles.leftSide} style={{backgroundImage: `url(${backgroundImg})`}}>
                 <h2>{t('create_post')}</h2>
-                <p className={styles.subtitle}>{t('support_every_soul')}</p> {/* Добавляем сабтекст */}
+                <p className={styles.subtitle}>{t('support_every_soul')}</p>
+
                 <div className={styles.steps}>
                     {[1, 2, 3].map((stepNum) => (
                         <div
                             key={stepNum}
                             className={`${styles.step} ${step === stepNum ? styles.active : ''}`}
-                            onClick={() => setStep(stepNum)}
+                            onClick={() => handleStepClick(stepNum)} // ⬅️ Замена здесь
                         >
                             {stepNum}
                         </div>
                     ))}
                 </div>
+
 
 
             </div>
@@ -341,9 +436,10 @@ const CreatePublication = () => {
                         />
 
                         <div className={styles.firstPageButtons}>
-                            <Button className={styles.smallButton} onClick={() => setStep(2)}>
+                            <Button className={styles.smallButton} onClick={handleNextFromStep1}>
                                 {t('continue')}
                             </Button>
+
                         </div>
 
                     </div>
@@ -566,7 +662,7 @@ const CreatePublication = () => {
                             <Button className={styles.backButton} onClick={() => setStep(1)}>
                                 {t('back')}
                             </Button>
-                            <Button className={styles.smallButton} onClick={() => setStep(3)}>
+                            <Button className={styles.smallButton} onClick={handleNextFromStep2}>
                                 {t('continue')}
                             </Button>
                         </div>
@@ -586,7 +682,7 @@ const CreatePublication = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder={t('contact_person')}
-                                className={styles.inputField}
+                                className={styles.thirdStepInput}
                             />
                             <Input
                                 type="email"
@@ -595,7 +691,7 @@ const CreatePublication = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder={t('email')}
-                                className={styles.inputField}
+                                className={styles.thirdStepInput}
                             />
                             <Input
                                 type="tel"
@@ -604,7 +700,7 @@ const CreatePublication = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder={t('phone_number')}
-                                className={styles.inputField}
+                                className={styles.thirdStepInput}
                             />
 
                             <Button

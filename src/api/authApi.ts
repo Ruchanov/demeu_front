@@ -1,4 +1,5 @@
 import axios from 'axios';
+import i18n from "i18next";
 
 const API_BASE_URL = 'http://127.0.0.1:8000/accounts';
 
@@ -32,7 +33,7 @@ export const requestPasswordReset = async (email: string) => {
     const response = await axios.post(`${API_BASE_URL}/request-password-reset/`, { email });
     return response.data;
   } catch (error) {
-    throw error.response?.data || 'Password reset request failed';
+    throw error.response?.data || i18n.t('password_reset_failed');
   }
 };
 

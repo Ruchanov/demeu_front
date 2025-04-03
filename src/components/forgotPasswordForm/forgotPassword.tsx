@@ -5,6 +5,7 @@ import styles from './forgotPassword.module.scss';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
 import Popup from "../../shared/ui/popup/Popup";
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPasswordForm = () => {
     const { t } = useTranslation();
@@ -12,6 +13,7 @@ const ForgotPasswordForm = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [popupError, setPopupError] = useState(false);
+    const navigate = useNavigate();
     const { requestPasswordReset, loading, error} = useAuthStore(); // ✅ Используем `loading` из useAuthStore
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -53,7 +55,14 @@ const ForgotPasswordForm = () => {
                 <h3>{popupError ? t('error') : t('success')}</h3>
                 <p>{popupMessage}</p>
                 <div className={styles.button}>
-                    <Button onClick={() => setIsPopupOpen(false)}>{t('close')}</Button>
+                    <Button onClick={() => { setIsPopupOpen(false);
+                            if (!popupError) {
+                                navigate('/auth');
+                            }
+                        }}
+                    >
+                        {t('close')}
+                    </Button>
                 </div>
             </Popup>
         </div>

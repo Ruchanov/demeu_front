@@ -504,6 +504,17 @@ input {
     border-color: #008080;
     box-shadow: 0 0 10px rgba(0, 128, 128, 0.3);
   }
+  @media (max-width: 768px) {
+    min-height: 130px;
+    max-height: 180px;
+    font-size: 15px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 100px;
+    max-height: 140px;
+    font-size: 14px;
+  }
 }
 .amountContainer {
   display: flex;
@@ -915,7 +926,9 @@ input {
     background: white;
     border-radius: 20px;
     box-shadow: 0 4px 6px #99DDD0;
-
+    @media (max-width: 768px) {
+      max-width: 100%;
+    }
   }
 
   .labelContainer {
@@ -1032,13 +1045,32 @@ h3 {
   margin-bottom: 15px;
 }
 
-.inputField {
+//.inputField {
+//  width: 100%;
+//  padding: 12px;
+//  border: 1px solid #ccc;
+//  border-radius: 20px;
+//  margin-bottom: 15px;
+//  background: white; /* Ensure input remains visible */
+//}
+.thirdStepInput {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 20px;
   margin-bottom: 15px;
-  background: white; /* Ensure input remains visible */
+  background: white;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  &:focus {
+    border-color: #008080;
+    box-shadow: 0 0 10px rgba(0, 128, 128, 0.3);
+  }
 }
 
 .submitButton {
