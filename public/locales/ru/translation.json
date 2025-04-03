@@ -311,6 +311,8 @@
   "Participant list and sports project description": "Список участников и описание спортивного проекта",
   "Document confirming the need for funding to participate in a competition or event": "Документ, подтверждающий необходимость финансирования участия в соревновании или мероприятии",
   "Certificates and diplomas confirming sports achievements": "Сертификаты и дипломы, подтверждающие спортивные достижения",
-  "main_page": "Главная страница"
-
+  "main_page": "Главная страница",
+  "not_specified": "Не указан",
+  "invalid_phone": "Неверный номер телефона. Он должен начинаться с +7 и содержать 11 цифр.",
+  "upload_hint": "Вы можете прикрепить изображение по вашему вопросу"
 }

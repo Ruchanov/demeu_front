@@ -11,6 +11,7 @@ import IconSvg from "../../shared/assets/icons/Icon";
 import { useTranslation } from "react-i18next";
 import defaultAvatar from "../../shared/assets/images/profile_default.png";
 import { useNavigate } from 'react-router-dom';
+import editIcon from '../../shared/assets/icons/editIcon_profile.svg';
 
 const ProfilePage: React.FC = () => {
     const { user, fetchUserProfile, loading: userLoading } = useProfileStore();
@@ -37,48 +38,31 @@ const ProfilePage: React.FC = () => {
         navigate('/create_publication');
     };
     useEffect(() => {
-        console.log("🔄 Загружаем профиль для:", profileId || "me");
         fetchFavorites();
         fetchUserProfile(profileId);
-    }, [profileId, fetchUserProfile]);
+    }, [profileId]);
 
-    useEffect(() => {
-        if (user?.user_id) {
-            fetchActivePublications();
-            fetchPendingPublications();
-            fetchArchivedPublications();
-        }
-    }, [user]);
 
     useEffect(() => {
         if (!user?.user_id) return;
 
-        if (!isOwnProfile) {
-            console.log("📥 Загружаем активные посты другого пользователя:", profileId);
-            fetchUserPublications(user); // или передай profileId, если нужно
+        if (isOwnProfile) {
+            fetchUserPublications(user);
+            fetchActivePublications();
+            fetchPendingPublications();
+            fetchArchivedPublications();
+        } else {
+            fetchUserPublications(user);
         }
     }, [user, profileId]);
 
 
-    // useEffect(() => {
-    //     if (!user?.user_id) {
-    //         console.log("⏳ Ожидание загрузки пользователя...");
-    //         return;
-    //     }
-    //
-    //     console.log("✅ User загружен:", user.user_id);
-    //
-    //     if (isOwnProfile) {
-    //         console.log("📥 Фильтруем публикации для текущего пользователя:", user.user_id);
-    //         fetchUserPublications(user);
-    //     } else {
-    //         console.log("📥 Загружаем публикации для профиля:", profileId);
-    //         fetchUserPublications(user);
-    //     }
-    // }, [user, profileId, fetchUserPublications]);
-
     if (userLoading) {
-        return <div className={styles.loader}>{t("loading")}</div>;
+        return (
+            <div className={styles.loaderWrapper}>
+                <span className={styles.loaderText}>{t("loading")}</span>
+            </div>
+        );
     }
 
     if (!user) {
@@ -111,7 +95,6 @@ const ProfilePage: React.FC = () => {
         )
     );
 
-
     return (
         <div className={styles.profileContainer}>
             <div className={styles.profileHeader}>
@@ -123,7 +106,7 @@ const ProfilePage: React.FC = () => {
 
                             {isOwnProfile && (
                                 <button className={styles.editAvatar} onClick={() => setIsEditOpen(true)}>
-                                    <IconSvg name="editIcon_profile" width="25px" height="25px" />
+                                    <img src={editIcon} alt="Edit" className={styles.editIcon_svg}/>
                                 </button>
                             )}
                         </div>
@@ -133,11 +116,15 @@ const ProfilePage: React.FC = () => {
                                 ? t("days_together_today")
                                 : t("days_together", { count: user.days_since_registration })}
                         </p>
-                        <p className={styles.bio}>{user.bio}</p>
-                        <div className={`${styles.createPostContainer}`}>
-                            <div className={styles.plusIcon} onClick={handleCreatePostClick}>+</div>
-                            <button className={styles.createPost} onClick={handleCreatePostClick}>{t("create_post")}</button>
-                        </div>
+                        <p className={styles.bio}>{user.bio || t('not_specified')}</p>
+                        {isOwnProfile && (
+                            <div className={`${styles.createPostContainer}`}>
+                                <div className={styles.plusIcon} onClick={handleCreatePostClick}>+</div>
+                                <button className={styles.createPost} onClick={handleCreatePostClick}>
+                                    {t("create_post")}
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Правая часть */}
@@ -148,11 +135,11 @@ const ProfilePage: React.FC = () => {
                                 <div className={styles.infoColumn}>
                                     <div className={styles.infoItem}>
                                         <IconSvg name="locationIcon_profile" width="23px" height="23px" />
-                                        <span>{user.city}, {user.country}</span>
+                                        <span>{user.city && user.country ? `${user.city}, ${user.country}` : t("not_specified")}</span>
                                     </div>
                                     <div className={styles.infoItem}>
                                         <IconSvg name="calendarIcon_profile" width="23px" height="23px" />
-                                        <span>{user.birth_date}</span>
+                                        <span>{user.birth_date ? user.birth_date : t("not_specified")}</span>
                                     </div>
                                 </div>
                                 <div className={styles.infoColumn}>
@@ -162,7 +149,7 @@ const ProfilePage: React.FC = () => {
                                     </div>
                                     <div className={styles.infoItem}>
                                         <IconSvg name="phoneIcon_profile" width="23px" height="23px" />
-                                        <span>{user.phone_number}</span>
+                                        <span>{user.phone_number ? user.phone_number : t("not_specified")}</span>
                                     </div>
                                 </div>
                             </div>

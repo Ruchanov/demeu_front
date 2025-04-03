@@ -326,6 +326,8 @@
   "Participant list and sports project description": "Participant list and sports project description",
   "Document confirming the need for funding to participate in a competition or event": "Document confirming the need for funding to participate in a competition or event",
   "Certificates and diplomas confirming sports achievements": "Certificates and diplomas confirming sports achievements",
-  "main_page": "Main page"
-
+  "main_page": "Main page",
+  "not_specified": "Not specified",
+  "invalid_phone": "Invalid phone number. It must start with +7 and contain 11 digits.",
+  "upload_hint": "You can attach photos related to your question"
 }

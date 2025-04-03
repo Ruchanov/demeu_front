@@ -313,6 +313,8 @@
   "Participant list and sports project description": "Қатысушылар тізімі және спорттық жоба сипаттамасы",
   "Document confirming the need for funding to participate in a competition or event": "Жарысқа немесе іс-шараға қатысу үшін қаржыландыру қажеттілігін растайтын құжат",
   "Certificates and diplomas confirming sports achievements": "Спорттық жетістіктерді растайтын сертификаттар мен дипломдар",
-  "main_page": "Басты бет"
-
+  "main_page": "Басты бет",
+  "not_specified": "Көрсетілмеген",
+  "invalid_phone": "Телефон нөмірі дұрыс емес. Ол +7 санынан басталып, 11 таңбадан тұруы керек.",
+  "upload_hint": "Сұрағыңыз болған суретті қоса аласыз"
 }

@@ -4,48 +4,112 @@ import Input from "../../shared/ui/input/input";
 import Button from "../../shared/ui/button/button";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
+import IconSvg from "../../shared/assets/icons/Icon";
 
 const ContactPage = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();  // Для перенаправления
+    const navigate = useNavigate();
+    const { token } = useAuthStore();
+    const [phoneError, setPhoneError] = useState(false);
     const [formData, setFormData] = useState({
         subject: "",
-        fullName: "",
-        phone: "",
-        email: "",
+        phone: "+7",
         message: "",
         file: null,
     });
-    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [mediaFiles, setMediaFiles] = useState([]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+
+        if (name === "phone") {
+            let digitsOnly = value.replace(/\D/g, "");
+
+            if (!digitsOnly.startsWith("7")) {
+                digitsOnly = "7" + digitsOnly;
+            }
+
+            const phone = "+7" + digitsOnly.slice(1, 11); // +7 + 10 цифр
+            setFormData({ ...formData, phone });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleFileChange = (e) => {
         setFormData({ ...formData, file: e.target.files[0] });
     };
 
-    // Валидация номера телефона
-    const validatePhone = (phone) => {
-        const phoneRegex = /^\+7\d{10}$/;
-        return phoneRegex.test(phone);
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        setMediaFiles((prev) => [...prev, ...files]);
     };
 
-    const handleSubmit = (e) => {
+    const handleDeleteImage = (index) => {
+        const updated = [...mediaFiles];
+        updated.splice(index, 1);
+        setMediaFiles(updated);
+    };
+
+
+    const removeImage = (e, index) => {
+        e.preventDefault();
+        const newFiles = [...mediaFiles];
+        newFiles.splice(index, 1);
+        setMediaFiles(newFiles);
+        setFormData({ ...formData, file: null });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validatePhone(formData.phone)) {
-            setError(t("phone_error"));
+        const isValidPhone = /^\+7\d{10}$/.test(formData.phone);
+        if (!isValidPhone) {
+            setPhoneError(true);
             return;
         }
 
-        setError("");
+        setPhoneError(false);
+        setLoading(true);
 
-        console.log("Form submitted:", formData);
+        const data = new FormData();
+        data.append("theme", formData.subject);
+        data.append("phone_number", formData.phone);
+        data.append("text", formData.message);
+        if (formData.file?.length) {
+            formData.file.forEach((file) => {
+                data.append("uploaded_images", file);
+            });
+        }
 
-        navigate("/profiles/me");
+        try {
+            const response = await fetch("http://localhost:8000/info/feedback/", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: data,
+            });
+
+            if (response.ok) {
+                // Сброс формы
+                setFormData({
+                    subject: "",
+                    phone: "+7",
+                    message: "",
+                    file: null,
+                });
+                navigate("/profiles/me");
+            } else {
+                console.error("Failed to submit form", response.status);
+            }
+        } catch (error) {
+            console.error("Network error", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -56,12 +120,12 @@ const ContactPage = () => {
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.inputWrapper}>
                     <label>{t("subject")}</label>
-                    <Input name="subject" value={formData.subject} onChange={handleChange} className={styles.inputFull} />
-                </div>
-
-                <div className={styles.inputWrapper}>
-                    <label>{t("full_name")}</label>
-                    <Input name="fullName" value={formData.fullName} onChange={handleChange} className={styles.inputFull} />
+                    <Input
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        className={styles.inputFull}
+                    />
                 </div>
 
                 <div className={styles.inputWrapper}>
@@ -70,15 +134,12 @@ const ContactPage = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className={styles.inputFull}
+                        className={`${styles.inputFull} ${phoneError ? styles.inputError : ""}`}
                         placeholder="+7XXXXXXXXXX"
                     />
-                    {error && <p className={styles.error}>{error}</p>}
-                </div>
-
-                <div className={styles.inputWrapper}>
-                    <label>{t("email")}</label>
-                    <Input name="email" value={formData.email} onChange={handleChange} className={styles.inputFull} />
+                    {phoneError && (
+                        <span className={styles.errorText}>{t("invalid_phone")}</span>
+                    )}
                 </div>
 
                 <div className={styles.inputWrapper}>
@@ -92,16 +153,45 @@ const ContactPage = () => {
                     />
                 </div>
 
-                <div className={styles.fileUploadWrapper}>
-                    <label>{t("upload_file")}</label>
-                    <div className={styles.fileInputContainer}>
-                        <input type="file" onChange={handleFileChange} className={styles.fileInput} />
-                        {formData.file && <p>{formData.file.name}</p>}
+                <div className={styles.inputWrapper}>
+                    <label className={styles.label}>{t("upload_images")}</label>
+                    <p className={styles.hintText}>{t("upload_hint")}</p>
+
+                    <div className={styles.imageContainer}>
+                        {mediaFiles.map((file, index) => (
+                            <div key={index} className={styles.imageWrapper}>
+                                <img
+                                    src={URL.createObjectURL(file)}
+                                    alt="Preview"
+                                    className={styles.imagePreview}
+                                />
+                                <button
+                                    type="button"
+                                    className={styles.deleteImage}
+                                    onClick={() => handleDeleteImage(index)}
+                                >
+                                    ✖
+                                </button>
+                            </div>
+                        ))}
+
+                        <label className={styles.addImage}>
+                            <IconSvg name="cameraIcon" width="40px" height="40px" />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageUpload}
+                                className={styles.fileInput}
+                            />
+                        </label>
                     </div>
                 </div>
 
                 <div className={styles.submitButtonWrapper}>
-                    <Button type="submit" className={styles.submitButton}>{t("send")}</Button>
+                    <Button type="submit" className={styles.submitButton} disabled={loading}>
+                        {loading ? t("sending") : t("send")}
+                    </Button>
                 </div>
             </form>
         </div>
