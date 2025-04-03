@@ -19,7 +19,7 @@ const About = () => {
                 {!isMobile &&(
                     <>
                         <div className={styles.heroLogo}>
-                            <IconSvg name="demeu_logo" width="30vw" height="30vh" />
+                            <IconSvg name="demeu_logo" width="30vw" height="40vh" />
                         </div>
                         <div className={styles.circle + " " + styles.circle1}></div>
                         <div className={styles.circle + " " + styles.circle2}></div>

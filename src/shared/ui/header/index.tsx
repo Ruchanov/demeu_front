@@ -38,8 +38,8 @@ export const Header = () => {
         {isMobile ? <IconSvg name="D_white" width="50px" height="45px" /> : <IconSvg name="D_white" width="80px" height="65px" />}
       </Link>
       <nav className={styles.nav} aria-label="Main navigation">
-        <Link to="/news" className={styles.navLink}>
-          {isMobile ? <IconSvg name="newsIcon" width="25px" height="25px"/> : <span>{t('news')}</span>}
+        <Link to="/" className={styles.navLink}>
+          {isMobile ? <IconSvg name="newsIcon" width="25px" height="25px"/> : <span>{t('main_page')}</span>}
         </Link>
         <Link to="/search" className={styles.navLink}>
           {isMobile ? <IconSvg name="searchIcon" width="25px" height="25px" /> : <span>{t('search')}</span>}
@@ -49,7 +49,7 @@ export const Header = () => {
         </Link>
         {isAuthenticated &&(
             <Link to="/favorites" className={styles.navLink}>
-              {isMobile ? <IconSvg name="favoritesIcon" width="25px" height="25px" /> : <span>{t('favorites')}</span>}
+              {isMobile ? <IconSvg name="favouriteIconWhite" width="25px" height="25px" /> : <span>{t('favorites')}</span>}
             </Link>
         )}
       </nav>

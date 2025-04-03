@@ -75,10 +75,6 @@ const CategoryPage: React.FC = () => {
                         <img src={catAni} alt={t("animals")} className={styles.icon} />
                         <p>{t("animals")}</p>
                     </div>
-                    <div className={styles.categoryCard} onClick={() => navigate(`/categories/cancer`)} >
-                        <img src={catMed} alt={t("cancer")} className={styles.icon} />
-                        <p>{t("cancer")}</p>
-                    </div>
                     <div className={styles.categoryCard} onClick={() => navigate(`/categories/general_fundraising`)}>
                         <img src={catGen} alt={t("general")} className={styles.icon} />
                         <p>{t("general")}</p>

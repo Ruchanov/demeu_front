@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { loginRequest, registerRequest} from '../api/authApi';
 import {loginRequest, registerRequest, requestPasswordReset, resetPasswordRequest} from '../api/authApi';
 import axios from "axios";
+import i18n from "i18next";
 
 interface AuthState {
     user: any | null;
@@ -54,9 +55,24 @@ export const useAuthStore = create<AuthState>((set) => ({
             });
 
             console.log("✅ Токен сохранен:", data.access_token);
-        } catch (error) {
+        } catch (error: any) {
             console.error("❌ Ошибка логина:", error);
-            set({error: error.message || 'Login failed', loading: false});
+
+            let messageFromServer = error?.error || '';
+            let errorMessage = 'auth.generic_error'; // по умолчанию
+
+            if (
+                messageFromServer.includes('Invalid password') ||
+                messageFromServer.includes('Invalid email')
+            ) {
+                errorMessage = 'auth.invalid_credentials';
+            } else if (messageFromServer.includes('Account is locked')) {
+                errorMessage = 'auth.account_locked';
+            } else if (messageFromServer.includes('Email not verified')) {
+                errorMessage = 'auth.email_not_verified';
+            }
+
+            set({ error: errorMessage, loading: false });
         }
     },
 
@@ -68,9 +84,31 @@ export const useAuthStore = create<AuthState>((set) => ({
                 successMessage: "На вашу почту отправлено письмо. Подтвердите почту и попробуйте войти.",
                 loading: false
             });
-        } catch (error) {
-            set({error: error.message || "Registration failed", loading: false});
+        } catch (error: any) {
+            console.error("❌ Ошибка регистрации:", error);
+
+            let errorMessage = 'auth.registration_failed';
+
+            // Django may return either a string or a nested "errors" object
+            const errorData = error?.errors || error;  // адаптация под {"errors": {...}} или обычный словарь
+
+            const emailError = errorData?.email;
+            const nonFieldError = errorData?.non_field_errors;
+            const errorText = Array.isArray(emailError) ? emailError[0] : emailError || nonFieldError?.[0];
+
+            if (typeof errorText === 'string') {
+                if (errorText.includes('Enter a valid email')) {
+                    errorMessage = 'auth.invalid_email';
+                } else if (errorText.includes('already exists')) {
+                    errorMessage = 'auth.email_exists';
+                } else if (errorText.includes('Failed to send verification email')) {
+                    errorMessage = 'auth.email_send_failed';
+                }
+            }
+
+            set({ error: errorMessage, loading: false });
         }
+
     },
 
     logout: () => {
@@ -83,10 +121,10 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({loading: true, error: null, successMessage: null});
         try {
             const response = await requestPasswordReset(email);
-            set({successMessage: response.message, loading: false});
-            return response;
+            set({ successMessage: i18n.t("auth.password_reset_success"), loading: false });
+            return { message: i18n.t("auth.password_reset_success") };
         } catch (error) {
-            const errorMessage = error.response?.data?.error || "Password reset request failed";
+            const errorMessage = error.response?.data?.error || i18n.t('auth.password_reset_failed');
             set({error: errorMessage, loading: false});
             return {success: false, err: errorMessage};
         }
