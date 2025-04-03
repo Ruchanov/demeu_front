@@ -279,5 +279,8 @@
   "loading": "Sending...",
   "not_specified": "Not specified",
   "invalid_phone": "Invalid phone number. It must start with +7 and contain 11 digits.",
-  "upload_hint": "You can attach photos related to your question"
+  "upload_hint": "You can attach photos related to your question",
+  "login_first": "Please log in first",
+  "donation_success": "✅ Donation successfully sent!",
+  "donation_error": "❌ Unable to send the donation"
 }
