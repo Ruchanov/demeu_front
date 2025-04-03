@@ -19,12 +19,39 @@ const AllPublicationsPage: React.FC = () => {
         recommendedPublications,
         newPublications,
         topPublications,
-        publications
+        publications,
+        fetchFavorites,
     } = usePublicationsStore();
 
     const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            if (category) {
+                await fetchPublications({ categories: [category] });
+            } else {
+                switch (type) {
+                    case "recommended":
+                        await fetchRecommendedPublications();
+                        break;
+                    case "new":
+                        await fetchNewPublications();
+                        break;
+                    case "top":
+                        await fetchTopPublications();
+                        break;
+                    default:
+                        await fetchPublications();
+                }
+            }
+            // Обновляем избранное после загрузки публикаций
+            await fetchFavorites();
+            setLoading(false);
+        };
 
+        fetchData();
+    }, [type, category, fetchRecommendedPublications, fetchNewPublications, fetchTopPublications, fetchPublications, fetchFavorites]);
     useEffect(() => {
         setLoading(true);
 

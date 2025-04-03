@@ -17,7 +17,8 @@ const PublicationCard: React.FC<Publication> = ({
                                                     created_at,
                                                     author_name,
                                                     is_favorite,
-                                                }) => {
+                                                    onDonateClick,
+}) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { toggleFavorite } = usePublicationsStore();
@@ -190,6 +191,7 @@ const PublicationCard: React.FC<Publication> = ({
                         onClick={(e) => {
                             e.stopPropagation();
                             handleOpenDonation(e);
+                            onDonateClick?.(id);
                         }}
                     >
                         {t('help_now')}

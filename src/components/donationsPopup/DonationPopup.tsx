@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styles from './donationPopup.module.scss';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
@@ -24,14 +24,33 @@ const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, o
     const [cardNumber, setCardNumber] = useState('');
     const [expiry, setExpiry] = useState('');
     const [cvv, setCvv] = useState('');
-    const [name, setName] = useState('');
+
+    const popupRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const modalRoot = document.getElementById('modal-root') || document.body;
+        const el = popupRef.current;
+        if (el && modalRoot) {
+            modalRoot.appendChild(el);
+            return () => { modalRoot.removeChild(el); };
+        }
+    }, []);
 
     const supportAmount = Math.round(amount * supportPercentage);
     const total = amount + supportAmount;
 
+    const isFormValid = () => {
+        return (
+            amount > 0 &&
+            cardNumber.replace(/\s/g, '').length === 16 &&
+            /^\d{2}\/\d{2}$/.test(expiry) &&
+            cvv.length === 3
+        );
+    };
+
     const handleDonate = async () => {
         if (!token) {
-            alert("Сначала войдите в аккаунт");
+            alert(t('login_first'));
             return;
         }
 
@@ -45,12 +64,12 @@ const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, o
                 },
                 token
             );
-            alert("✅ Пожертвование успешно отправлено!");
+            alert(t('donation_success'));
             onDonationSuccess?.();
             onClose();
         } catch (error) {
             console.error("Ошибка:", error);
-            alert("❌ Не удалось отправить пожертвование");
+            alert(t('donation_error'));
         } finally {
             setLoading(false);
         }
@@ -218,7 +237,7 @@ const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, o
                 <button
                     className={styles.confirm}
                     onClick={handleDonate}
-                    disabled={loading || amount === 0}
+                    disabled={loading || !isFormValid()}
                 >
                     {loading ? t('loading') : t('donate_now')}
                 </button>
