@@ -129,7 +129,6 @@ const CommentSection = ({ postId, onCommentChange }) => {
                                             <strong className={styles.userName}>{c.author}</strong>
                                         </div>
 
-
                                         {user?.email && c.author === user.email && (
                                             <div className={styles.actions}>
                                                 <button onClick={() => handleEditComment(c.id, c.content)} className={styles.editButton}>
