@@ -374,7 +374,7 @@ const CreatePublication = () => {
                 {step === 1 && (
                     <div className={styles.formStep}>
                         <label>{t('post_title')}</label>
-                        <Input type="text" name="title" value={formData.title} onChange={handleChange} required/>
+                        <Input type="text" name="title" className={styles.inputTitle} value={formData.title} onChange={handleChange} required/>
                         <label>{t('category')}</label>
                         <div className={styles.categoriesContainer}>
                             {categories.map((category) => {
@@ -447,10 +447,10 @@ const CreatePublication = () => {
 
                 {step === 2 && (
                     <div className={styles.secondPage}>
-                        <h3>{t('required_documents')}</h3>
 
                         {/* Required Documents List */}
                         <div className={styles.documentsList}>
+                        <h3>{t('required_documents')}</h3>
                             {documentCategories.map((category) => (
                                 <div
                                     key={category.name}

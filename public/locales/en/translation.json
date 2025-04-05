@@ -329,5 +329,39 @@
   "main_page": "Main page",
   "not_specified": "Not specified",
   "invalid_phone": "Invalid phone number. It must start with +7 and contain 11 digits.",
-  "upload_hint": "You can attach photos related to your question"
+  "upload_hint": "You can attach photos related to your question",
+  "privacy": {
+    "title": "Privacy Policy",
+    "policy_title": "Personal Data Protection Policy",
+    "policy_intro": "The DEMEU platform is designed to provide transparent and secure charitable assistance. We respect your privacy and are committed to protecting any personal data you provide when using our platform.",
+    "collect_title": "What data do we collect?",
+    "collect_text": "We collect the following data:\n- Full name, phone number, and email address;\n- Identity documents and certificates confirming eligibility for assistance;\n- Uploaded photos or videos related to your request;\n- Technical data such as IP address, browser, and language;\n- Payment details related to donations (not including card numbers).",
+    "usage_title": "How do we use your data?",
+    "usage_text": "We use data only for platform operation:\n- Verifying user identity using AI technologies;\n- Publishing support requests and managing donations;\n- Sending important updates and notifications;\n- Performing analytics to detect fraud and improve quality;\n- Meeting legal obligations in Kazakhstan.",
+    "access_title": "Who has access to your data?",
+    "access_text": "Only authorized DEMEU staff and automated systems have access to your data. We never share your personal data without your permission unless required by law.",
+    "protect_title": "How do we protect your data?",
+    "protect_text": "Your information is protected using:\n- Encrypted connections (SSL);\n- Secure servers with limited access;\n- Regular internal security audits;\n- Fully automated AI-powered document verification.",
+    "rights_title": "Your rights",
+    "rights_text": "You have the right to:\n- Request deletion or correction of your personal data;\n- Withdraw your consent at any time;\n- Request a copy of your stored data;\n- File a complaint if you believe your data was misused."
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "intro": "By using the DEMEU platform, you accept the following terms.",
+    "purpose_title": "Platform Purpose",
+    "purpose_text": "DEMEU is a non-profit platform for creating and supporting verified requests for financial and humanitarian aid.",
+    "user_rules_title": "User Responsibilities",
+    "user_rules_text": "As a user, you agree to:\n- Provide true and complete information in your requests;\n- Not post fraudulent, misleading, or spam content;\n- Respect the community and refrain from offensive behavior;\n- Avoid commercial use without written consent.",
+    "responsibility_title": "Responsibility",
+    "responsibility_text": "We do our best to moderate content but do not guarantee:\n- That every request will be published or supported;\n- That assistance will be received;\n- We may remove any post that violates rules or laws.",
+    "ip_title": "Intellectual Property",
+    "ip_text": "All content, code, and design belong to DEMEU and are protected under intellectual property law.",
+    "changes_title": "Policy Changes",
+    "changes_text": "We may update these terms. All changes will be published on this page."
+  },
+  "contact": {
+    "title": "Contact",
+    "text": "For any questions, contact us at: support@demeu.kz"
+  }
+
 }
