@@ -1,0 +1,29 @@
+/* PrivacyTermsPage.module.scss */
+.wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: sans-serif;
+  color: #222;
+  background: #fff;
+}
+
+.section {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0.3rem 0;
+    line-height: 1.5;
+  }
+}
+
+.separator {
+  margin: 3rem 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}

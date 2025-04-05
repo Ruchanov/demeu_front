@@ -3,10 +3,11 @@
   justify-content: space-between;
   align-items: stretch; // Ensures both sections take full height
   width: 100%;
-  background: #f9f9f9;
+  background: white;
   flex-direction: row;
   min-height: 100vh;
   height: auto; // ❗️ вместо height: 100vh
+
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -254,7 +255,7 @@ input {
   background: rgba(220,220,220, 0.5);
   margin-bottom: 10px;
   justify-content: center;
-
+  box-sizing: border-box;
   @media (max-width: 768px) {
     flex-wrap: wrap;
     justify-content: center;
@@ -347,6 +348,15 @@ input {
     }
   }
 }
+
+.formStep {
+  @media (max-width: 768px) {
+    width: 95%;
+    margin: 0;
+  }
+}
+
+
 .categoriesContainer {
   display: flex;
   flex-wrap: wrap;
@@ -500,6 +510,7 @@ input {
   outline: none;
   transition: box-shadow 0.3s ease-in-out;
   //margin-bottom: 10px;
+  box-sizing: border-box;
   &:focus {
     border-color: #008080;
     box-shadow: 0 0 10px rgba(0, 128, 128, 0.3);
@@ -548,7 +559,7 @@ input {
 
 
 .secondPage {
-  all: unset; /* Removes all styles, but keeps structure */
+  //all: unset; /* Removes all styles, but keeps structure */
   background: none !important; /* Removes background */
   box-shadow: none; /* Ensures no shadow */
   padding: 0; /* Removes any unnecessary spacing */
@@ -559,7 +570,10 @@ input {
     font-weight: bold;
     margin-bottom: 10px;
   }
-
+  @media (max-width: 768px) {
+    width: 95%;
+    margin: 0;
+  }
   .documentsList {
     display: flex;
     flex-direction: column;
@@ -1023,6 +1037,8 @@ input {
   @media (max-width: 768px) {
     height: auto;
     padding: 20px 0;
+    width: 95%;
+    margin: 0;
   }
 }
 
