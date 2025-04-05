@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 const statistics = [
     { label: 'statistics_successful_collections', value: 1438, target: 5000, color: '#28a745' },
     { label: 'statistics_active_collections', value: 320, target: 1000, color: '#fd7e14' },
-    { label: 'statistics_total_amount_collected', value: 246800000, target: 500000000, color: '#6f42c1' },
+    { label: 'statistics_total_amount_collected', value: 24680000, target: 50000000, color: '#6f42c1' },
     { label: 'statistics_donors_count', value: 12492, target: 20000, color: '#d63384' },
 ];
 
