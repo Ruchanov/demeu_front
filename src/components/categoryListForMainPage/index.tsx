@@ -1,37 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import IconSvg from "../../shared/assets/icons/Icon";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { categories } from "../categories/Categories";
+import useCheckMobileScreen from "../../shared/lib/mobile_check";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const CategoryList: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [visibleCount, setVisibleCount] = useState(4);
-    const [startIndex, setStartIndex] = useState(0);
+    const isMobile = useCheckMobileScreen();
+
+    const prevRef = useRef<HTMLButtonElement>(null);
+    const nextRef = useRef<HTMLButtonElement>(null);
+    const swiperRef = useRef<any>(null);
+    const [isBeginning, setIsBeginning] = useState(true);
+    const [isEnd, setIsEnd] = useState(false);
+
+    const [slidesPerView, setSlidesPerView] = useState(4);
 
     useEffect(() => {
-        const updateVisibleCount = () => {
-            setVisibleCount(Math.max(1, Math.floor(window.innerWidth / 180)));
+        const updateSlidesPerView = () => {
+            const width = window.innerWidth;
+            const itemWidth = isMobile ? 130 : 170;
+            const count = Math.max(1, Math.floor(width / itemWidth));
+            setSlidesPerView(count);
         };
 
-        updateVisibleCount();
-        window.addEventListener("resize", updateVisibleCount);
-        return () => window.removeEventListener("resize", updateVisibleCount);
-    }, []);
+        updateSlidesPerView();
+        window.addEventListener("resize", updateSlidesPerView);
+        return () => window.removeEventListener("resize", updateSlidesPerView);
+    }, [isMobile]);
 
-    const nextSlide = () => {
-        if (startIndex + visibleCount < categories.length) {
-            setStartIndex(startIndex + 1);
+    const handleSlideChange = () => {
+        if (swiperRef.current) {
+            setIsBeginning(swiperRef.current.isBeginning);
+            setIsEnd(swiperRef.current.isEnd);
         }
     };
 
-    const prevSlide = () => {
-        if (startIndex > 0) {
-            setStartIndex(startIndex - 1);
+    useEffect(() => {
+        if (swiperRef.current && swiperRef.current.params) {
+            swiperRef.current.params.navigation.prevEl = prevRef.current;
+            swiperRef.current.params.navigation.nextEl = nextRef.current;
+            swiperRef.current.navigation.destroy();
+            swiperRef.current.navigation.init();
+            swiperRef.current.navigation.update();
         }
-    };
+    }, [slidesPerView]);
 
     const handleClick = (category: string) => {
         navigate(`/publications?category=${category}`);
@@ -41,28 +62,45 @@ const CategoryList: React.FC = () => {
         <div className={styles.section}>
             <div className={styles.sectionHeader}>
                 <h2>{t("categories")}</h2>
-                <div>
+                <div className={styles.navButtons}>
                     <a href="#" className={styles.viewAll} onClick={() => navigate("/categories")}>
                         {t("view_all")}
                     </a>
-                    <button className={styles.arrow} onClick={prevSlide} disabled={startIndex === 0}>
+                    <button ref={prevRef} className={styles.arrow} disabled={isBeginning}>
                         <IconSvg name="leftArrow" />
                     </button>
-                    <button className={styles.arrow} onClick={nextSlide} disabled={startIndex + visibleCount >= categories.length}>
+                    <button ref={nextRef} className={styles.arrow} disabled={isEnd}>
                         <IconSvg name="rightArrow" />
                     </button>
                 </div>
             </div>
-            <div className={styles.categories}>
-                {categories.slice(startIndex, startIndex + visibleCount).map((cat) => (
-                    <div key={cat.value} className={styles.category} onClick={() => handleClick(cat.value)}>
-                        <div className={styles.iconCircle}>
-                            <IconSvg name={cat.icon} width="24" height="24" fill="#333" />
+
+            <Swiper
+                modules={[Navigation]}
+                spaceBetween={12}
+                slidesPerView={slidesPerView}
+                loop={false}
+                onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                    handleSlideChange();
+                }}
+                onSlideChange={handleSlideChange}
+                navigation={{
+                    prevEl: prevRef.current,
+                    nextEl: nextRef.current,
+                }}
+            >
+                {categories.map((cat) => (
+                    <SwiperSlide key={cat.value}>
+                        <div className={styles.category} onClick={() => handleClick(cat.value)}>
+                            <div className={styles.iconCircle}>
+                                <IconSvg name={cat.icon} width="24" height="24" fill="#333" />
+                            </div>
+                            <span>{t(cat.labelKey as any)}</span>
                         </div>
-                        <span>{t(cat.labelKey as any)}</span>
-                    </div>
+                    </SwiperSlide>
                 ))}
-            </div>
+            </Swiper>
         </div>
     );
 };

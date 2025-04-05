@@ -1,21 +1,37 @@
-.categorySection {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 20px 0;
+.section {
+  margin-top: 40px;
 }
+
 .sectionHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.categories {
+.navButtons {
   display: flex;
-  overflow: hidden;
-  gap: 12px;
-  padding-top: 5px;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    gap: 6px;
+  }
+}
+
+.viewAll {
+  color: #76D0C2;
+  text-decoration: none;
+  font-size: 25px;
+  margin-right: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 15px;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+
+  }
 }
 
 .category {
@@ -29,11 +45,11 @@
   height: 150px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
 
   &:hover {
     background: #C4EBE4;
     transform: translateY(-2px);
-    //box-shadow: 0 4px 10px rgba(0, 120, 190, 0.3);
   }
 
   span {
@@ -41,29 +57,18 @@
     font-size: 14px;
     color: #333;
   }
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 120px;
+
+    span {
+      font-size: 12px;
+      text-align: center;
+    }
+  }
 }
 
-.arrow {
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.arrow:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-.section {
-  margin-top: 40px;
-}
-
-.viewAll {
-  color: #76D0C2;
-  text-decoration: none;
-  font-size: 25px;
-  margin-right: 1rem;
-}
 .iconCircle {
   width: 60px;
   height: 60px;
@@ -74,4 +79,40 @@
   justify-content: center;
   margin-bottom: 8px;
   filter: drop-shadow(0px 4px 8px rgba(118, 208, 194, 0.5));
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 6px;
+  }
+}
+
+.arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 4px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 }
