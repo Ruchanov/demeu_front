@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import {Link, useNavigate} from 'react-router-dom';
 import IconSvg from '../../assets/icons/Icon';
 import styles from './style.module.scss';
 import {useAuthStore} from "../../../store/authStore";
 import useCheckMobileScreen from "../../lib/mobile_check";
+import React, { useState, useEffect, useRef } from 'react';
+
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
@@ -14,6 +15,12 @@ export const Header = () => {
   const navigate = useNavigate();
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const isMobile = useCheckMobileScreen();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
+  const languageButtonRef = useRef<HTMLButtonElement>(null);
+
+
   const handleLogout = () => {
     logout();
     localStorage.removeItem('token');
@@ -31,6 +38,31 @@ export const Header = () => {
   const handleMenuItemClick = () => {
     setIsMenuOpen(false);
   };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+          menuRef.current &&
+          !menuRef.current.contains(event.target as Node) &&
+          menuButtonRef.current &&
+          !menuButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+
+      if (
+          languageMenuRef.current &&
+          !languageMenuRef.current.contains(event.target as Node) &&
+          languageButtonRef.current &&
+          !languageButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsLanguageMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
 
   return (
     <header className={styles.header}>
@@ -55,6 +87,7 @@ export const Header = () => {
       </nav>
       <div className={styles.languageSwitcher}>
         <button
+            ref={languageButtonRef}
             className={styles.currentLanguage}
             onClick={() => {setIsLanguageMenuOpen((prev) => !prev);
                             setIsMenuOpen(false)}}
@@ -63,7 +96,7 @@ export const Header = () => {
           {currentLanguage.toUpperCase()}
         </button>
         {isLanguageMenuOpen && (
-            <div className={styles.languageMenu}>
+            <div  ref={languageMenuRef} className={styles.languageMenu}>
               <div
                   className={`${styles.languageOption} ${
                       currentLanguage === 'kz' ? styles.active : ''
@@ -94,6 +127,7 @@ export const Header = () => {
         {isAuthenticated ?(
           <div className={styles.userMenu}>
             <button
+                ref={menuButtonRef}
                 className={styles.userMenuButton}
                 onClick={handleToggleMenu}
                 aria-label="User menu"
@@ -101,7 +135,7 @@ export const Header = () => {
               <IconSvg name="menu" width="40px" height="40px" />
             </button>
             {isMenuOpen &&(
-                <div className={styles.dropdownMenu}>
+                <div ref={menuRef} className={styles.dropdownMenu}>
                   <Link to="/profiles/me" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="personIcon" width="30px" height="30px"></IconSvg>
                     {t('profile')}

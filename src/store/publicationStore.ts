@@ -22,6 +22,7 @@ interface Image {
     image: string;
 }
 
+
 interface Comment {
     id: number;
     author: string;
@@ -77,6 +78,9 @@ interface PublicationState {
     archivedPublications: Publication[];
     activePublications: Publication[];
     pendingPublications: Publication[];
+    recommendedPublications: Publication[]; // <-- добавляем
+    newPublications: Publication[];         // <-- добавляем
+    topPublications: Publication[];
     fetchArchivedPublications: () => Promise<void>;
     fetchActivePublications: () => Promise<void>;
     fetchPendingPublications: () => Promise<void>;
@@ -111,12 +115,16 @@ interface Filters {
     ordering?: string;
 }
 
+
 export const usePublicationsStore = create<PublicationState>((set, get) => ({
     publications: [],
     userPublications: [],
     archivedPublications: [],
     activePublications: [],
     pendingPublications: [],
+    recommendedPublications: [], // инициализация
+    newPublications: [],         // инициализация
+    topPublications: [],
     comments: {},
     topDonors: [],
     relatedPosts: [],
@@ -127,9 +135,6 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
     errorDonors: null,
     errorRelated: null,
     favoritePublications: [],
-    recommendedPublications: [],
-    newPublications: [],
-    topPublications: [],
 
     fetchPublications: async (filters?: Filters) => {
         set({ loading: true, error: null });
@@ -192,6 +197,7 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         if (!token) return;
         try {
             const response = await getRecommendedPublications(token);
+            const favoriteIds = new Set(get().favoritePublications.map(f => f.id));
             set({ recommendedPublications: response, loading: false });
         } catch (error) {
             set({ error: 'Failed to fetch recommended publications', loading: false });
@@ -202,6 +208,7 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         set({ loading: true, error: null });
         try {
             const response = await getNewPublications();
+            const favoriteIds = new Set(get().favoritePublications.map(f => f.id));
             set({ newPublications: response, loading: false });
         } catch (error) {
             set({ error: 'Failed to fetch new publications', loading: false });
@@ -212,12 +219,14 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
         set({ loading: true, error: null });
         try {
             const response = await getTopPublications();
+            const favoriteIds = new Set(get().favoritePublications.map(f => f.id));
             set({ topPublications: response, loading: false });
         } catch (error) {
             set({ error: 'Failed to fetch top publications', loading: false });
         }
     },
 
+    // В файле publicationStore.ts (или где у вас расположен zustand store)
     fetchFavorites: async () => {
         const token = useAuthStore.getState().token;
         if (!token) return;
@@ -236,12 +245,24 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
                     ...pub,
                     is_favorite: favoriteIds.has(pub.id),
                 })),
+                recommendedPublications: state.recommendedPublications.map((pub) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
+                newPublications: state.newPublications.map((pub) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
+                topPublications: state.topPublications.map((pub) => ({
+                    ...pub,
+                    is_favorite: favoriteIds.has(pub.id),
+                })),
             }));
-
         } catch (error) {
             console.error("Ошибка загрузки избранных:", error);
         }
     },
+
 
     toggleFavorite: async (id: number) => {
         const token = useAuthStore.getState().token;
@@ -256,6 +277,9 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             ...get().activePublications,
             ...get().pendingPublications,
             ...get().archivedPublications,
+            ...get().recommendedPublications, // добавляем сюда
+            ...get().newPublications,         // добавляем сюда
+            ...get().topPublications,
         ];
 
         const foundPost = allPosts.find(p => p.id === id);
@@ -279,6 +303,9 @@ export const usePublicationsStore = create<PublicationState>((set, get) => ({
             activePublications: updateFavoriteLocally(state.activePublications),
             pendingPublications: updateFavoriteLocally(state.pendingPublications),
             archivedPublications: updateFavoriteLocally(state.archivedPublications),
+            recommendedPublications: updateFavoriteLocally(state.recommendedPublications), // обновляем
+            newPublications: updateFavoriteLocally(state.newPublications),                 // обновляем
+            topPublications: updateFavoriteLocally(state.topPublications),
         }));
 
         try {

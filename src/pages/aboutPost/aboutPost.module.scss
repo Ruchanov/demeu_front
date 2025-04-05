@@ -288,6 +288,16 @@
   margin-bottom: 15px;
 }
 
+.description {
+  font-size: 16px;
+  text-align: justify;
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 .statusTag {
   font-size: 14px;
   font-weight: bold;
@@ -379,6 +389,8 @@
     padding: 10px;
     margin: 0 auto;
     max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .postHeader {

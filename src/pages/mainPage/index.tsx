@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const MainPage: React.FC = () => {
     const {
+        fetchFavorites,
         fetchRecommendedPublications,
         fetchNewPublications,
         fetchTopPublications,
@@ -20,10 +21,16 @@ const MainPage: React.FC = () => {
     const { t } = useTranslation();
 
     useEffect(() => {
-        fetchRecommendedPublications();
-        fetchNewPublications();
-        fetchTopPublications();
-    }, [fetchRecommendedPublications, fetchNewPublications, fetchTopPublications]);
+        // ✅ 2. Добавили вызов fetchFavorites()
+        const fetchAll = async () => {
+            await fetchFavorites(); // сперва получим избранные
+            await fetchRecommendedPublications();
+            await fetchNewPublications();
+            await fetchTopPublications();
+        };
+
+        fetchAll();
+    }, [fetchRecommendedPublications, fetchNewPublications, fetchTopPublications, fetchFavorites]);
 
     return (
         <div className={styles.container}>

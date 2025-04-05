@@ -362,6 +362,8 @@
   "contact": {
     "title": "Contact",
     "text": "For any questions, contact us at: support@demeu.kz"
-  }
-
+  },
+  "login_first": "Please log in first",
+  "donation_success": "✅ Donation successfully sent!",
+  "donation_error": "❌ Unable to send the donation"
 }
