@@ -2,32 +2,41 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px;
+    padding: 5px 10px;
+    background-color: #76D0C2;
     position: relative;
     z-index: 5;
-    background-color: #76D0C2;
-    @media(max-width: 768px) {
+
+    @media (max-width: 768px) {
         width: 100vw;
         min-width: 100%;
+        padding: 5px 8px;
     }
 }
+
+
 .nav {
     margin-left: 1.5rem;
     flex-grow: 1;
     display: flex;
+    align-items: center;
     gap: 32px;
-    flex-grow: 1;
+
     @media(max-width: 768px) {
         margin-left: 0;
         gap: 15px;
         justify-content: space-evenly;
     }
 }
+
 .navLink {
     font-size: 20px;
     text-decoration: none;
     transition: color 0.2s;
     color: white;
+
+    display: flex;
+    align-items: center;
 }
 
 .authLink {
@@ -37,16 +46,34 @@
     margin-right: 3%;
     text-decoration: none;
     transition: color 0.2s;
+    display: flex;
+    align-items: center;
 }
 
 .userMenu {
     position: relative;
+    display: flex;
+    align-items: center;
+    //margin-left: 10px;
 }
 
 .userMenuButton {
     background: none;
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+
+    svg {
+        width: 40px;
+        height: 40px;
+
+        @media (max-width: 768px) {
+            width: 30px;
+            height: 30px;
+        }
+    }
 }
 
 .dropdownMenu {
@@ -107,12 +134,16 @@
         flex-shrink: 0;
     }
 }
+
 .languageSwitcher {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
 
     .currentLanguage {
         background-color: transparent;
+        margin-top: 0;
         font-size: 18px;
         padding: 8px;
         border: none;
@@ -120,13 +151,11 @@
         color: #fff;
         display: flex;
         align-items: center;
-        gap: 8px;
-        transition: background-color 0.2s, color 0.2s;
-        margin-top: 5px;
+        gap: 6px;
+
         &::after {
             content: '▼';
-            font-size: 17px;
-            margin-left: -0.5vw; // ✅ стандартный отступ
+            font-size: 14px;
             color: #fff;
         }
 
@@ -138,16 +167,13 @@
     .languageMenu {
         position: absolute;
         top: 100%;
-        right: 1vw;
+        right: 0;
         background-color: #C4EBE4;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 10px 0;
         min-width: 120px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         z-index: 10;
-        &.open {
-            display: block;
-        }
 
         .languageOption {
             padding: 8px 16px;

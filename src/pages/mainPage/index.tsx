@@ -12,7 +12,7 @@ const MainPage: React.FC = () => {
         fetchFavorites,
         fetchRecommendedPublications,
         fetchNewPublications,
-        fetchTopPublications, // ✅ 1. Добавили сюда
+        fetchTopPublications,
         recommendedPublications,
         newPublications,
         topPublications
