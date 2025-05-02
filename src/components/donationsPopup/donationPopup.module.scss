@@ -217,25 +217,6 @@ h2 {
   }
 }
 
-.underlineInput {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #C5C2C2;
-  padding-bottom: 6px;
-
-  input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    font-size: 16px;
-    outline: none;
-    color: #111;
-
-    &::placeholder {
-      color: #bbb;
-    }
-  }
-}
 
 .row {
   display: flex;
@@ -330,3 +311,14 @@ h2 {
   transform: translateX(-50%);
   transition: left 0.2s ease;
 }
+
+.cardElementBox {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 6px;
+  min-height: 44px; // обязательно, чтобы инпут был кликабелен
+  display: flex;
+  align-items: center;
+  cursor: text;
+}
+
+

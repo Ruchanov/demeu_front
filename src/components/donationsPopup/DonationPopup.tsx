@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './donationPopup.module.scss';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
-import { createDonation } from '../../api/donationsApi';
-import IconSvg from "../../shared/assets/icons/Icon";
 import { createPortal } from 'react-dom';
+import axios from 'axios';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import IconSvg from '../../shared/assets/icons/Icon';
 
 interface DonationPopupProps {
     onClose: () => void;
@@ -15,61 +16,65 @@ interface DonationPopupProps {
 const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, onDonationSuccess }) => {
     const { t } = useTranslation();
     const token = useAuthStore.getState().token;
-    const [saveCard, setSaveCard] = useState(false);
     const quickAmounts = [500, 1000, 5000, 10000];
     const [amount, setAmount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [supportPercentage, setSupportPercentage] = useState<number>(0.21);
+    const [saveCard, setSaveCard] = useState(false);
 
-    // Card form states
-    const [cardNumber, setCardNumber] = useState('');
-    const [expiry, setExpiry] = useState('');
-    const [cvv, setCvv] = useState('');
+    const stripe = useStripe();
+    const elements = useElements();
 
     const popupRef = useRef<HTMLDivElement>(null);
     const modalRoot = document.getElementById('modal-root');
     if (!modalRoot) return null;
 
-    // useEffect(() => {
-    //     const modalRoot = document.getElementById('modal-root') || document.body;
-    //     const el = popupRef.current;
-    //     if (el && modalRoot) {
-    //         modalRoot.appendChild(el);
-    //         return () => { modalRoot.removeChild(el); };
-    //     }
-    // }, []);
-
     const supportAmount = Math.round(amount * supportPercentage);
     const total = amount + supportAmount;
 
-    const isFormValid = () => {
-        return (
-            amount > 0 &&
-            cardNumber.replace(/\s/g, '').length === 16 &&
-            /^\d{2}\/\d{2}$/.test(expiry) &&
-            cvv.length === 3
-        );
-    };
+    const isFormValid = () => amount > 0;
 
     const handleDonate = async () => {
-        if (!token) {
-            alert(t('login_first'));
+        if (!token || !stripe || !elements) {
+            alert(t('stripe_unavailable'));
             return;
         }
 
         try {
             setLoading(true);
-            await createDonation(
-                publicationId,
+
+            // Step 1: Create PaymentIntent on backend
+            const response = await axios.post(
+                `http://127.0.0.1:8000/donations/create-payment-intent/`,
                 {
                     donor_amount: amount,
                     support_percentage: Math.round(supportPercentage * 100),
+                    publication_id: publicationId
                 },
-                token
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             );
-            alert(t('donation_success'));
-            onDonationSuccess?.();
-            onClose();
+
+            const clientSecret = response.data.client_secret;
+
+            // Step 2: Confirm payment
+            const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: elements.getElement(CardElement)!,
+                }
+            });
+
+            if (result.error) {
+                console.error(result.error.message);
+                alert(t('donation_error'));
+            } else if (result.paymentIntent?.status === 'succeeded') {
+                alert(t('donation_success'));
+                onDonationSuccess?.();
+                onClose();
+            }
         } catch (error) {
             console.error("Ошибка:", error);
             alert(t('donation_error'));
@@ -108,10 +113,8 @@ const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, o
                             <span className={styles.currency}>₸</span>
                         </div>
 
-
                         <div className={styles.supportBox}>
                             <p>{t('support_demeu_description')}</p>
-
                             <input
                                 type="range"
                                 min={0}
@@ -125,16 +128,14 @@ const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, o
                                 className={styles.slider}
                                 style={{
                                     background: `linear-gradient(
-      to right,
-      #00b46e 0%,
-      #00b46e ${supportPercentage * 100 * 100 / 35}%,
-      #ddd ${supportPercentage * 100 * 100 / 35}%,
-      #ddd 100%
-    )`,
+                                      to right,
+                                      #00b46e 0%,
+                                      #00b46e ${supportPercentage * 100 * 100 / 35}%,
+                                      #ddd ${supportPercentage * 100 * 100 / 35}%,
+                                      #ddd 100%
+                                    )`,
                                 }}
                             />
-
-
                             <div className={styles.sliderValueWrapper}>
                                 <span
                                     className={styles.sliderValue}
@@ -149,65 +150,28 @@ const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, o
                             </div>
                         </div>
                     </div>
-                    <div className={styles.paymentMethod}>
-                        <h2>{t('payment_method')}</h2>
 
-                        {/* Card Number */}
+                    <div>
+                        <h2>{t('payment_method')}</h2>
                         <div className={styles.inputGroup}>
                             <label>{t('card_number')}</label>
-                            <div className={styles.underlineInput}>
-                                <input
-                                    type="text"
-                                    maxLength={19}
-                                    placeholder="0000 0000 0000 0000"
-                                    value={cardNumber}
-                                    onChange={(e) => {
-                                        const rawValue = e.target.value.replace(/\D/g, '').slice(0, 16);
-                                        const formatted = rawValue.replace(/(.{4})/g, '$1 ').trim();
-                                        setCardNumber(formatted);
-                                    }}
-                                />
-                                <IconSvg name="cardIcon2" />
-                            </div>
+                            <CardElement
+                                options={{
+                                    style: {
+                                        base: {
+                                            fontSize: '16px',
+                                            color: '#333',
+                                            fontFamily: 'inherit',
+                                            '::placeholder': { color: '#bbb' }
+                                        },
+                                        invalid: {
+                                            color: '#e5424d',
+                                        }
+                                    }
+                                }}
+                            />
                         </div>
 
-                        <div className={styles.row}>
-                            <div className={styles.inputGroup}>
-                                <label>{t('expiry')}</label>
-                                <div className={styles.underlineInput}>
-                                    <input
-                                        type="text"
-                                        maxLength={5}
-                                        placeholder="MM/YY"
-                                        value={expiry}
-                                        onChange={(e) => {
-                                            let val = e.target.value.replace(/\D/g, '').slice(0, 4);
-                                            if (val.length >= 3) {
-                                                val = val.slice(0, 2) + '/' + val.slice(2);
-                                            }
-                                            setExpiry(val);
-                                        }}
-                                    />
-                                    <IconSvg name="ddmmIcon" />
-                                </div>
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label>{t('cvv')}</label>
-                                <div className={styles.underlineInput}>
-                                    <input
-                                        type="password"
-                                        maxLength={3}
-                                        placeholder="•••"
-                                        value={cvv}
-                                        onChange={(e) => {
-                                            const digits = e.target.value.replace(/\D/g, '').slice(0, 3);
-                                            setCvv(digits);
-                                        }}
-                                    />
-                                    <IconSvg name="cvvIcon" />
-                                </div>
-                            </div>
-                        </div>
                         <div className={styles.saveCard}>
                             <label className={styles.customCheckbox}>
                                 <input
@@ -246,7 +210,7 @@ const DonationPopup: React.FC<DonationPopupProps> = ({ onClose, publicationId, o
                 </button>
             </div>
         </div>,
-    modalRoot
+        modalRoot
     );
 };
 
