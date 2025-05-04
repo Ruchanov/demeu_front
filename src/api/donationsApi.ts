@@ -43,7 +43,7 @@ export async function createPaymentIntent(
     token: string
 ): Promise<{ client_secret: string }> {
     const resp = await axios.post(
-        'http://127.0.0.1:8000/donations/create-payment-intent/',
+        `${BASE_URL}/create-payment-intent/`,
         data,
         {
             headers: {

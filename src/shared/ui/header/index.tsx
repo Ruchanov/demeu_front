@@ -140,6 +140,10 @@ export const Header = () => {
                     <IconSvg name="personIcon" width="30px" height="30px"></IconSvg>
                     {t('profile')}
                   </Link>
+                  <Link to="/certificates" className={styles.dropdownItem} onClick={handleMenuItemClick}>
+                    <IconSvg name="medalIcon" width="30px" height="30px" />
+                    {t('certificates')}
+                  </Link>
                   <Link to="/about_us" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="peopleIcon" width="30px" height="30px"></IconSvg>
                     {t('aboutUs')}
