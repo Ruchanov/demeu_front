@@ -31,3 +31,26 @@ export const createDonation = async (
     );
     return response.data;
 };
+
+export interface PaymentIntentData {
+    publication_id: number;
+    donor_amount: number;
+    support_percentage: number;
+}
+
+export async function createPaymentIntent(
+    data: PaymentIntentData,
+    token: string
+): Promise<{ client_secret: string }> {
+    const resp = await axios.post(
+        'http://127.0.0.1:8000/donations/create-payment-intent/',
+        data,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    return resp.data;
+}
