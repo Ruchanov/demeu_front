@@ -375,5 +375,13 @@
   "certificates_requirements": "Requirements:",
   "certificates_footer": "Certificates are special rewards for your donations and support",
   "certificate": "certificate",
-  "certificates": "Achievements"
+  "certificates": "Achievements",
+  "notifications": {
+    "title": "Notifications",
+    "all": "All notifications",
+    "unread": "Unread",
+    "loading": "Loading notifications...",
+    "mark_all": "Mark all as read"
+
+  }
 }

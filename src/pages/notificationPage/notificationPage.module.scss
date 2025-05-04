@@ -1,0 +1,187 @@
+html, body, #root {
+  height: 100%;
+}
+
+.pageWrapper {
+  padding: 32px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.box {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tabsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.markAllRead {
+  @extend .tab; // Наследуем стиль как у .tab
+  background-color: #4CAF50;
+  color: white;
+  min-width: 140px;
+}
+.tabsRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap; // это уже есть — для адаптивности
+  margin-bottom: 24px;
+}
+.tab {
+  flex: 1 1 auto; // позволяет кнопкам адаптироваться
+  min-width: 140px;
+  //max-width: 280px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #B8E9E1;
+  color: #034941;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #5AB5A6;
+    color: white;
+  }
+
+  &.active {
+    background-color: #76D0C2;
+    color: white;
+  }
+}
+
+.count {
+  margin-left: 8px;
+  background-color: white;
+  color: #00bcd4;
+  font-weight: bold;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 14px;
+}
+
+.markAllBtn {
+  padding: 10px 16px;
+  background-color: #f2f2f2;
+  color: #333;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #ddd;
+  }
+
+  &:disabled {
+    background-color: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
+  }
+}
+
+.active {
+  background-color: #76D0C2;
+  color: white;
+}
+
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.card:hover {
+  background: #eef7f9;
+}
+
+.unread {
+  font-weight: bold;
+  background-color: #c8facc; // ярко-зелёный фон (можно заменить на другой оттенок)
+}
+
+.card.unread:hover {
+  background-color: #c4f2c4; // чуть темнее/насыщеннее
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #00c853;
+  border-radius: 50%;
+  position: absolute;
+  top: 24px;
+  left: 10px;
+}
+
+.verb {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.target {
+  font-size: 14px;
+  color: #555;
+}
+
+.time {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

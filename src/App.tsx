@@ -19,6 +19,7 @@ import AllPublicationsPage from "./pages/AllPublicationsPage/AllPublicationsPage
 import CategoryDetailPage from "./pages/CategoryDetailPage/CategoryDetailPage";
 // import '/shared/assets/icons/sprite.svg';
 import PrivacyTermsPage from './pages/privacyTerms/PrivacyTermsPage';
+import NotificationPage from "./pages/notificationPage/notificationPage";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CertificatesPage from "./pages/SertificatesPage/CertificatesPage";
@@ -27,6 +28,8 @@ const stripePromise = loadStripe('pk_test_51RK0652fyilaIvPMKB45ecEn57csGdfFm6JXc
 
 const App = () => {
     const data = useAuthStore((state) => state.token);
+    console.log("🔥 Токен из useAuthStore:", data);
+    // console.log("🔓 Авторизован?", isAuthenticated);
     return (
         <Elements stripe={stripePromise}>
             <div>
@@ -50,7 +53,7 @@ const App = () => {
                     <Route path="/publications" element={<AllPublicationsPage />} />
                     <Route path="/rules" element={<PrivacyTermsPage />} />
                     <Route path="/certificates" element={<CertificatesPage />} />
-
+                    <Route path="/notifications" element={<NotificationPage />} />
                 </Routes>
             </div>
         </Elements>

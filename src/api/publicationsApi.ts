@@ -56,23 +56,23 @@ export const deletePublication = async (id: number, token: string) => {
     return response.data;
 };
 
-export const fetchPostById = async (id: string) => {
-    try {
-        const response = await axios.get(`${API_URL}${id}/`);
-        const post = response.data;
+export const fetchPostById = async (id: string, token: string) => {
+    const response = await axios.get(`${API_URL}${id}/`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
-        console.log("📥 Загруженный пост:", post);
+    const post = response.data;
+    console.log("📥 Загруженный пост:", post);
 
-        if (!post.image && post.images?.length) {
-            post.image = post.images[0];
-        }
-
-        return post;
-    } catch (error) {
-        console.error("❌ Ошибка загрузки поста:", error);
-        throw error;
+    if (!post.image && post.images?.length) {
+        post.image = post.images[0];
     }
+
+    return post;
 };
+
 
 export const fetchCommentsByPostId = async (postId: number) => {
     try {

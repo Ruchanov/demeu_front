@@ -5,6 +5,8 @@ import styles from './style.module.scss';
 import {useAuthStore} from "../../../store/authStore";
 import useCheckMobileScreen from "../../lib/mobile_check";
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import {fetchNotifications} from "../../../api/notificationApi";
 
 
 export const Header = () => {
@@ -19,6 +21,9 @@ export const Header = () => {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
   const languageButtonRef = useRef<HTMLButtonElement>(null);
+
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+
 
 
   const handleLogout = () => {
@@ -39,6 +44,31 @@ export const Header = () => {
     setIsMenuOpen(false);
   };
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const socket = new WebSocket(`ws://127.0.0.1:8000/ws/notifications/?token=${token}`);
+    socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data && !data.is_read) {
+          setHasUnreadNotifications(true);
+        }
+      } catch (error) {
+        console.error("Ошибка при парсинге уведомления:", error);
+      }
+    };
+    socket.onopen = () => {
+      console.log("WebSocket соединение установлено");
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket соединение закрыто");
+    };
+    return () => socket.close();
+  }, []);
+
+    useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
           menuRef.current &&
@@ -148,10 +178,14 @@ export const Header = () => {
                     <IconSvg name="peopleIcon" width="30px" height="30px"></IconSvg>
                     {t('aboutUs')}
                   </Link>
-                  <Link to="/settings" className={styles.dropdownItem} onClick={handleMenuItemClick}>
-                    <IconSvg name="settingsIcon" width="30px" height="30px"></IconSvg>
-                    {t('settings')}
+                  <Link to="/notifications" className={styles.dropdownItem} onClick={handleMenuItemClick}>
+                    <div className={styles.notificationWrapper}>
+                      <IconSvg name="notificationIcon" width="30px" height="30px" />
+                      {hasUnreadNotifications && <span className={styles.unreadDot}></span>}
+                    </div>
+                    <span>{t('notifications.title')}</span>
                   </Link>
+
                   <Link to="/contact_us" className={styles.dropdownItem} onClick={handleMenuItemClick}>
                     <IconSvg name="techSupportIcon" width="30px" height="30px"></IconSvg>
                     {t('contact_us')}
