@@ -18,5 +18,9 @@ export default defineConfig({
             symbolId: 'icon-[name]',
         }),
     ],
-    
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "src"),
+        },
+    },
 });

@@ -19,6 +19,7 @@ import AllPublicationsPage from "./pages/AllPublicationsPage/AllPublicationsPage
 import CategoryDetailPage from "./pages/CategoryDetailPage/CategoryDetailPage"
 // import '/shared/assets/icons/sprite.svg';
 import PrivacyTermsPage from './pages/privacyTerms/PrivacyTermsPage';
+import NotificationPage from "./pages/notificationPage/notificationPage";
 
 
 const App = () => {
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/publications" element={<AllPublicationsPage />} />
           <Route path="/rules" element={<PrivacyTermsPage />} />
+          <Route path="/notifications" element={<NotificationPage />} />
 
       </Routes>
     </div>
