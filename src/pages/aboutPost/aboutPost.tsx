@@ -13,6 +13,7 @@ import defaultAvatar from "../../shared/assets/images/profile_donate.png";
 import {useProfileStore} from "../../store/profileStore";
 import EditPostPopup from "../../components/editPostPopup/EditPostPopup";
 import { usePublicationsStore } from "../../store/publicationStore";
+import {useAuthStore} from "../../store/authStore";
 
 const AboutPostPage = () => {
     const { id } = useParams();
@@ -28,7 +29,8 @@ const AboutPostPage = () => {
 
     const loadPost = async () => {
         try {
-            const data = await fetchPostById(id);
+            const token = useAuthStore.getState().token;
+            const data = await fetchPostById(id, token || '');
             const favoriteIds = usePublicationsStore.getState().favoritePublications.map(pub => pub.id);
             const isFavorite = favoriteIds.includes(data.id);
 

@@ -109,6 +109,30 @@
         flex-shrink: 0;
     }
 }
+
+.notificationWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    svg {
+        margin-right: 10px;
+        flex-shrink: 0;
+        display: block;
+    }
+}
+
+.unreadDot {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 9px;
+    height: 9px;
+    background-color: red;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #C4EBE4; // немного отступа, чтобы кружок красиво смотрелся поверх иконки
+}
+
 .logoutItem {
     border-radius: 15px;
     border: none;
