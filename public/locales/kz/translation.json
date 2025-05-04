@@ -353,6 +353,17 @@
   "login_first": "Алдымен аккаунтқа кіріңіз",
   "donation_success": "✅ Қайырымдылық сәтті жіберілді!",
   "donation_error": "❌ Қайырымдылықты жіберу сәтсіз аяқталды",
+<<<<<<< HEAD
+  "certificates_title": "Марапаттар",
+  "certificates_status_received": "✅ Алынды",
+  "certificates_status_pending": "⏳ Шарттар орындалуда (көру)",
+  "certificates_date_label": "Жетістік күні",
+  "certificates_download": "⬇ Сертификатты жүктеу",
+  "certificates_unavailable": "⬇ Сертификат қолжетімсіз",
+  "certificates_requirements": "Шарттар:",
+  "certificates_footer": "Сертификаттар қайырымдылықтарыңыз бен қолдауларыңыз үшін берілген арнайы марапаттар",
+  "certificate": "сертификат",
+  "certificates": "Жетістіктер",
   "notifications": {
     "title": "Хабарландырулар",
     "all": "Барлық хабарландырулар",

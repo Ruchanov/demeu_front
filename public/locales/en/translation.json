@@ -366,6 +366,16 @@
   "login_first": "Please log in first",
   "donation_success": "✅ Donation successfully sent!",
   "donation_error": "❌ Unable to send the donation",
+  "certificates_title": "Certificates",
+  "certificates_status_received": "✅ Achieved",
+  "certificates_status_pending": "⏳ Conditions not met (view)",
+  "certificates_date_label": "Achieved on",
+  "certificates_download": "⬇ Download Certificate",
+  "certificates_unavailable": "⬇ Certificate Unavailable",
+  "certificates_requirements": "Requirements:",
+  "certificates_footer": "Certificates are special rewards for your donations and support",
+  "certificate": "certificate",
+  "certificates": "Achievements",
   "notifications": {
     "title": "Notifications",
     "all": "All notifications",
@@ -374,5 +384,4 @@
     "mark_all": "Mark all as read"
 
   }
-
 }

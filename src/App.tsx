@@ -22,6 +22,7 @@ import PrivacyTermsPage from './pages/privacyTerms/PrivacyTermsPage';
 import NotificationPage from "./pages/notificationPage/notificationPage";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import CertificatesPage from "./pages/SertificatesPage/CertificatesPage";
 
 const stripePromise = loadStripe('pk_test_51RK0652fyilaIvPMKB45ecEn57csGdfFm6JXc2leu3BpD4YoDTGYR8rEhuztLZtyJ6xduBY9G51fMXFcQozNVbvk00pBmgeydn');
 
@@ -51,6 +52,7 @@ const App = () => {
                     <Route path="/favorites" element={<FavoritesPage />} />
                     <Route path="/publications" element={<AllPublicationsPage />} />
                     <Route path="/rules" element={<PrivacyTermsPage />} />
+                    <Route path="/certificates" element={<CertificatesPage />} />
                     <Route path="/notifications" element={<NotificationPage />} />
                 </Routes>
             </div>

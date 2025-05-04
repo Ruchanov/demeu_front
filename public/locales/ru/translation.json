@@ -351,6 +351,17 @@
   "login_first": "Сначала войдите в аккаунт",
   "donation_success": "✅ Пожертвование успешно отправлено!",
   "donation_error": "❌ Не удалось отправить пожертвование",
+<<<<<<< HEAD
+  "certificates_title": "Сертификаты",
+  "certificates_status_received": "✅ Получено",
+  "certificates_status_pending": "⏳ Условия не выполнены (показать)",
+  "certificates_date_label": "Дата достижения",
+  "certificates_download": "⬇ Скачать сертификат",
+  "certificates_unavailable": "⬇ Сертификат недоступен",
+  "certificates_requirements": "Условия:",
+  "certificates_footer": "Сертификаты выдаются за вашу благотворительность и поддержку",
+  "certificate": "сертификат",
+  "certificates": "Достижения",
   "notifications": {
     "title": "Уведомления",
     "all": "Все уведомления",
@@ -359,5 +370,4 @@
     "mark_all": "Пометить все как прочитанные"
 
   }
-
 }
