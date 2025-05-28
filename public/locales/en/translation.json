@@ -381,7 +381,8 @@
     "all": "All notifications",
     "unread": "Unread",
     "loading": "Loading notifications...",
-    "mark_all": "Mark all as read"
-
+    "mark_all": "Mark all as read",
+    "empty": "No new notifications",
+    "show_all": "Show all"
   }
 }

@@ -7,6 +7,7 @@ import useCheckMobileScreen from "../../lib/mobile_check";
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {fetchNotifications} from "../../../api/notificationApi";
+import { useLocation } from 'react-router-dom';
 
 
 export const Header = () => {
@@ -21,6 +22,7 @@ export const Header = () => {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
   const languageButtonRef = useRef<HTMLButtonElement>(null);
+  const location = useLocation();
 
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
 
@@ -43,6 +45,13 @@ export const Header = () => {
   const handleMenuItemClick = () => {
     setIsMenuOpen(false);
   };
+
+  useEffect(() => {
+    if (location.pathname === '/notifications') {
+      setHasUnreadNotifications(false);
+    }
+  }, [location.pathname]);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) return;

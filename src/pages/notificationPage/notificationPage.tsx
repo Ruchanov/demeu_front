@@ -21,7 +21,7 @@ const NotificationPage = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-
+    const [showAll, setShowAll] = useState(false);
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
@@ -59,13 +59,16 @@ const NotificationPage = () => {
     const handleClick = async (notif: Notification) => {
         try {
             const token = useAuthStore.getState().token;
+            console.log("▶️ Переход по уведомлению:", notif.url);
             if (!notif.is_read) {
                 await markAsRead(notif.id, token || '');
                 setNotifications((prev) =>
                     prev.map((n) => (n.id === notif.id ? { ...n, is_read: true } : n))
                 );
             }
-            navigate(notif.url);
+            const path = new URL(notif.url, window.location.origin).pathname;
+            navigate(path);
+
         } catch (err) {
             console.error('Ошибка при переходе и отметке как прочитанного:', err);
         }
@@ -102,13 +105,12 @@ const NotificationPage = () => {
                     ) : filtered.length === 0 ? (
                         <p>{t('notifications.empty')}</p>
                     ) : (
-                        filtered.map((notif) => (
+                        (showAll ? filtered : filtered.slice(0, 5)).map((notif) => (
                             <div
                                 key={notif.id}
                                 className={`${styles.card} ${!notif.is_read ? styles.unread : ''}`}
                                 onClick={() => handleClick(notif)}
                             >
-                            {/*{!notif.is_read && <span className={styles.dot} />}*/}
                                 <div>
                                     <div className={styles.verb}>{notif.verb}</div>
                                     <div className={styles.target}>{notif.target}</div>
@@ -116,8 +118,18 @@ const NotificationPage = () => {
                                 <div className={styles.time}>{getRelativeTime(notif.created_at)}</div>
                             </div>
                         ))
-                    )}
+
+                        )}
                 </div>
+                {!showAll && filtered.length > 5 && (
+                    <div className={styles.showAllContainer}>
+                        <button className={styles.showAllBtn} onClick={() => setShowAll(true)}>
+                            {t('notifications.show_all')}
+                        </button>
+                    </div>
+                )}
+
+
             </div>
         </div>
     );
