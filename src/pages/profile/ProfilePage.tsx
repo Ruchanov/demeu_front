@@ -12,6 +12,9 @@ import { useTranslation } from "react-i18next";
 import defaultAvatar from "../../shared/assets/images/profile_default.png";
 import { useNavigate } from 'react-router-dom';
 import editIcon from '../../shared/assets/icons/editIcon_profile.svg';
+import { fetchCertificateByUserId } from "../../api/certificatesApi";
+import { useAuthStore } from "../../store/authStore";
+import {Certificate} from "../SertificatesPage/sertificate";
 
 const ProfilePage: React.FC = () => {
     const { user, fetchUserProfile, loading: userLoading } = useProfileStore();
@@ -32,7 +35,8 @@ const ProfilePage: React.FC = () => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const navigate = useNavigate();
     const [selectedTab, setSelectedTab] = useState<"active" | "pending" | "archived">("active");
-
+    const token = useAuthStore.getState().token;
+    const [userCertificate, setUserCertificate] = useState<Certificate | null>(null);
     const isOwnProfile = window.location.pathname.includes("/profiles/me");
     const handleCreatePostClick = () => {
         navigate('/create_publication');
@@ -56,6 +60,18 @@ const ProfilePage: React.FC = () => {
         }
     }, [user, profileId]);
 
+    useEffect(() => {
+        const loadCertificate = async () => {
+            if (!user?.user_id || !token) return;
+            try {
+                const cert = await fetchCertificateByUserId(user.user_id, token);
+                setUserCertificate(cert);
+            } catch (e) {
+                setUserCertificate(null);
+            }
+        };
+        loadCertificate();
+    }, [user, token]);
 
     if (userLoading) {
         return (
@@ -94,7 +110,14 @@ const ProfilePage: React.FC = () => {
             <p className={styles.noPosts}>{t("no_posts")}</p>
         )
     );
-
+    const glowClass =
+        userCertificate?.level === "gold"
+            ? styles["glow-gold"]
+            : userCertificate?.level === "silver"
+                ? styles["glow-silver"]
+                : userCertificate?.level === "bronze"
+                    ? styles["glow-bronze"]
+                    : "";
     return (
         <div className={styles.profileContainer}>
             <div className={styles.profileHeader}>
@@ -102,7 +125,9 @@ const ProfilePage: React.FC = () => {
                     {/* Левая часть */}
                     <div className={styles.leftSection}>
                         <div className={styles.avatarWrapper}>
-                            <img src={avatarUrl} alt="User Avatar" className={styles.avatar} />
+                            <div className={`${styles.avatarWrapper} ${styles[userCertificate?.level || ""]}`}>
+                                <img src={avatarUrl} alt="User Avatar" className={styles.avatar} />
+                            </div>
 
                             {isOwnProfile && (
                                 <button className={styles.editAvatar} onClick={() => setIsEditOpen(true)}>

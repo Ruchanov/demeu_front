@@ -4,21 +4,29 @@ import { useAuthStore } from '../../store/authStore';
 import { useProfileStore } from '../../store/profileStore';
 import { fetchCertificateByUserId } from '../../api/certificatesApi';
 import { useTranslation } from 'react-i18next';
+import {Certificate} from "./sertificate";
 
-interface Certificate {
-    user_id: number;
-    user_name: string;
-    level: 'gold' | 'silver' | 'bronze';
-    certificate_url: string;
-    achieved_at?: string;
-}
+
 
 const ALL_LEVELS: Array<'bronze' | 'silver' | 'gold'> = ['bronze', 'silver', 'gold'];
 
 const levelRequirements: Record<string, string[]> = {
-    bronze: ['7 күн тіркелгеннен кейін', 'Кем дегенде 3 қайырымдылық'],
-    silver: ['30 күн тіркелгеннен кейін', '3 пікір', 'Кем дегенде 5 қайырымдылық', 'Жалпы сома 30 000 тг'],
-    gold: ['90 күн тіркелгеннен кейін', '10 пікір', 'Кем дегенде 10 қайырымдылық', 'Жалпы сома 50 000 тг'],
+    bronze: [
+        'cert.requirement.bronze.1',
+        'cert.requirement.bronze.2'
+    ],
+    silver: [
+        'cert.requirement.silver.1',
+        'cert.requirement.silver.2',
+        'cert.requirement.silver.3',
+        'cert.requirement.silver.4'
+    ],
+    gold: [
+        'cert.requirement.gold.1',
+        'cert.requirement.gold.2',
+        'cert.requirement.gold.3',
+        'cert.requirement.gold.4'
+    ]
 };
 
 const CertificatesPage: React.FC = () => {
@@ -100,7 +108,7 @@ const CertificatesPage: React.FC = () => {
                                     <h4>{t('certificates_requirements')}</h4>
                                     <ul>
                                         {levelRequirements[level].map((req, idx) => (
-                                            <li key={idx}>{req}</li>
+                                            <li key={idx}>{t(req)}</li>
                                         ))}
                                     </ul>
                                 </div>

@@ -384,5 +384,26 @@
     "mark_all": "Mark all as read",
     "empty": "No new notifications",
     "show_all": "Show all"
+  },
+  "cert": {
+    "requirement": {
+      "bronze": {
+        "1": "After 7 days of registration",
+        "2": "At least 3 donations"
+      },
+      "silver": {
+        "1": "After 30 days of registration",
+        "2": "3 comments",
+        "3": "At least 5 donations",
+        "4": "Total amount 30,000 KZT"
+      },
+      "gold": {
+        "1": "After 90 days of registration",
+        "2": "10 comments",
+        "3": "At least 10 donations",
+        "4": "Total amount 50,000 KZT"
+      }
+    }
   }
+
 }

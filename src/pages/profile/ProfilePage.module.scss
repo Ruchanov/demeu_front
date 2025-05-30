@@ -403,3 +403,29 @@
   }
 
 }
+.avatarWrapper {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  //padding: 5px;
+  box-sizing: content-box;
+
+  &.gold {
+    border: 5px solid #FFD700;
+  }
+
+  &.silver {
+    border: 5px solid #C0C0C0;
+  }
+
+  &.bronze {
+    border: 5px solid #CD7F32;
+  }
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
